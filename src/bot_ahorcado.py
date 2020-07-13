@@ -49,13 +49,13 @@ class BotTelegramAhorcado(BotTelegram):
                 else:
                     lista_errores.append(letra)
                 self.enviar_mensaje(bot, usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
-            if len(lista_errores) == 6:
-                del self.datos_usuarios[usuario]
-                self.enviar_mensaje(bot, usuario, "HAS PERIDO")
-                self.enviar_mensaje(bot, usuario, "LA PALABRA ERA: {}".format(palabra))
-                self.enviar_mensaje(bot, usuario, "Ingresa /jugar para comenzar de nuevo.".format(nombre))
-            elif len(lista_aciertos) == len(set(palabra)):
-                del self.datos_usuarios[usuario]
-                self.enviar_mensaje(bot, usuario, "FELICITACIONES, HAS GANADO.")
-                self.enviar_mensaje(bot, usuario, "Ingresa /jugar para comenzar de nuevo.".format(nombre))
+                if len(lista_errores) == 6:
+                    del self.datos_usuarios[usuario]
+                    self.enviar_mensaje(bot, usuario, "HAS PERIDO")
+                    self.enviar_mensaje(bot, usuario, "LA PALABRA ERA: {}".format(palabra))
+                    self.enviar_mensaje(bot, usuario, "Ingresa /jugar para comenzar de nuevo.".format(nombre))
+                elif len(lista_aciertos) == len(set(palabra)):
+                    del self.datos_usuarios[usuario]
+                    self.enviar_mensaje(bot, usuario, "FELICITACIONES, HAS GANADO.")
+                    self.enviar_mensaje(bot, usuario, "Ingresa /jugar para comenzar de nuevo.".format(nombre))
 
