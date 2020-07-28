@@ -1,4 +1,15 @@
-# BOT PARA JUGAR AL AHORCADO - TELEGRAM
+# BOT PARA TELEGRAM CON JUEGOS CLÁSICOS
+
+## PARA PROBARLO Ingresá a [Bot de Juegos Clásicos](https://t.me/juegos_clasicos_bot)
+
+### LISTA ACTUALIZADA DE JUEGOS
+
++ Por ahora los juegos disponibles en el bot son:
+    - Ahorcado.
+    - Mastermind (muertos y heridos).
++ En un futuro:
+    - Piedras, papel o tijeras.
+    - Buscaminas.
 
 ## Detalles a tener en cuenta:
 
