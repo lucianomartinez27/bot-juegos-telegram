@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-def plantilla_ahorcado(lista_errores, lista_aciertos, palabra):
+
+def plantilla_ahorcado(lista_errores : list, lista_aciertos : list, palabra : str) -> str:
     """
     plantilla que crea a partir de una palabra y dos listas con aciertos y errores
     la figura del juego del ahorcado.
@@ -30,3 +31,7 @@ def plantilla_ahorcado(lista_errores, lista_aciertos, palabra):
         else:
             plantilla += letra
     return plantilla
+
+
+def letra_valida(letra: str) -> bool:
+    return letra.isalpha() and len(letra) == 1

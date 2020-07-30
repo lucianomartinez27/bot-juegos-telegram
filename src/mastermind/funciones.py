@@ -49,6 +49,12 @@ def contar_muertos_y_heridos(n_usuario, n_computadora):
         i += 1
     return muertos, heridos
 
+def partida_ganada(n_usuario, n_computadora):
+    return contar_muertos_y_heridos(n_usuario, n_computadora) == (4, 0)
+
+def partida_perdida(lista_intentos):
+    return len(lista_intentos) > 14
+
 def chequear_numero(n_computadora, n_usuario, lista_intentos, lista_resultados):
     """comprueba el número de muertos y heridos que obtuvo el usuario"""
     
