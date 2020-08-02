@@ -28,7 +28,11 @@ class BotTelegramAhorcado(BotTelegram):
             datafile.write(json.dumps(self.datos_usuarios))
 
     def jugar(self, update, context):
-        id_usuario = update.callback_query.message.chat_id
+        try:
+            id_usuario = update.callback_query.message.chat_id
+        except AttributeError:
+            id_usuario = update.message.chat_id
+
         bot = context.bot
         self.generar_datos(id_usuario)
         palabra = self.datos_usuarios[str(id_usuario)]['palabra']
@@ -55,12 +59,11 @@ class BotTelegramAhorcado(BotTelegram):
                 lista_errores.append(letra)
             self.enviar_mensaje(bot, usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
             if len(lista_errores) == 6:
-                del self.datos_usuarios[str(usuario)]
-                self.enviar_mensaje(bot, usuario, "HAS PERIDO\nA PALABRA ERA: {}".format(palabra))
+                self.enviar_mensaje(bot, usuario, "Has perdido\nLa palabra era: {}".format(palabra))
                 self.enviar_mensaje(bot, usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
                 self.datos_usuarios[str(usuario)]['partida_terminada'] = True
             elif len(lista_aciertos) == len(set(palabra)):
-                self.enviar_mensaje(bot, usuario, "FELICITACIONES, HAS GANADO.")
+                self.enviar_mensaje(bot, usuario, "Felicitaciones, hasta ganado!.")
                 self.enviar_mensaje(bot, usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
                 self.datos_usuarios[str(usuario)]['partida_terminada'] = True
             with open('ahorcado/data.json', 'w') as datafile:

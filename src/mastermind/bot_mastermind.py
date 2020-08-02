@@ -56,7 +56,7 @@ class BotMastermind(BotTelegram):
                                     .format(nombre))
                 self.enviar_mensaje(bot, usuario, "Para cambiar de juego, usa /juegos.")
                 self.datos_usuarios[str(usuario)]['partida_terminada'] = True
-            elif partida_perdida:
+            elif partida_perdida(lista_intentos):
                 self.enviar_mensaje(bot, usuario, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
                                                    nuevo? (Si o No)".format(nombre, "".join(numeros_computadora)))
                 self.enviar_mensaje(bot, usuario, "Para cambiar de juego, usa /juegos.")

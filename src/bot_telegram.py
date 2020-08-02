@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Librerias telegram
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackQueryHandler
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackQueryHandler, ConversationHandler
 
 # Registro de actividades
 import logging
@@ -54,13 +54,22 @@ class BotTelegram:
         """
         self.dispatcher.add_handler(CommandHandler(comando, funcion))
           
-    def contestar_consulta(self, funcion):
+    def contestar_consulta(self, funcion, patron=None):
         """Función que espera que el usuario presione un botón que se despliega en el chat de telegram y ejecuta la
         función que se pase como parámetro.
         Parametro:
             funcion: función que se ejecuta al presionar un botón (InlineKeyboardButton) en el chat.
                 Tipo: (fn)"""
-        self.dispatcher.add_handler(CallbackQueryHandler(funcion))
+        self.dispatcher.add_handler(CallbackQueryHandler(funcion, pattern=patron))
+
+    def contestar_consulta_por_estado(self, funcion, estados):
+        conv_handler = ConversationHandler(
+            entry_points=[CommandHandler('start', funcion)],
+            states=estados,
+            fallbacks=[CommandHandler('start', funcion)]
+        )
+
+        self.dispatcher.add_handler(conv_handler)
     
     def contestar_mensaje(self, funcion):
         """ Espera cualquier cosa en el chat que no sea un comando (mensajes) y ejecuta la función que se pase como
