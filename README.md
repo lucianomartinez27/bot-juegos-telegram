@@ -7,9 +7,9 @@
 + Por ahora los juegos disponibles en el bot son:
     - Ahorcado.
     - Mastermind (muertos y heridos).
+    - Buscaminas.
 + En un futuro:
     - Piedras, papel o tijeras.
-    - Buscaminas.
 
 ## Detalles a tener en cuenta:
 
