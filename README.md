@@ -21,9 +21,14 @@ La estructura de keys.py es la siguiente:
 ```
 TOKEN_TELEGRAM = "TOKEN"
 ```
-### Enlaces útiles:
+### Enlaces que me fueron útiles
+
+##### Para el bot:
 * [Documentación Python-Telegram-Bot](https://python-telegram-bot.readthedocs.io/en/stable/)
-* [Bots de Telegram en Python - Medium](https://medium.com/@goyoregalado/bots-de-telegram-en-python-134b964fcdf7)
+* [Bots de Telegram 
+en Python - Medium](https://medium.com/@goyoregalado/bots-de-telegram-en-python-134b964fcdf7)
+##### Para alguno de los juegos:
+* [Invent Your Own Computer Games with Python](http://inventwithpython.com/invent4thed/)
 
 #### Requirements
     * python-telegram-bot
