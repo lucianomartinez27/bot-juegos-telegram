@@ -42,36 +42,32 @@ class BotTelegramAhorcado(BotTelegram):
     def responder_mensaje(self, update, context):
         letra = update.message.text.upper()
         bot = context.bot
-        usuario = update.message.chat_id
+        id_usuario = update.message.chat_id
         nombre = update.message.chat.first_name
-        lista_errores = self.datos_usuarios[str(usuario)]['errores']
-        palabra = self.datos_usuarios[str(usuario)]['palabra']
-        lista_aciertos = self.datos_usuarios[str(usuario)]['adivinadas']
+        lista_errores = self.datos_usuarios[str(id_usuario)]['errores']
+        palabra = self.datos_usuarios[str(id_usuario)]['palabra']
+        lista_aciertos = self.datos_usuarios[str(id_usuario)]['adivinadas']
+        partida_terminada = self.datos_usuarios[str(id_usuario)]['partida_terminada']
 
-        if not self.datos_usuarios[str(usuario)]['partida_terminada']:
+        if not partida_terminada:
             if not letra_valida(letra):
-                self.enviar_mensaje(bot, usuario, "POR FAVOR, INGRESA UNA LETRA.")
+                self.enviar_mensaje(bot, id_usuario, "POR FAVOR, INGRESA UNA LETRA.")
             elif letra in lista_aciertos or letra in lista_errores:
-                self.enviar_mensaje(bot, usuario, 'YA HAS ELEGIDO ESA LETRA.')
+                self.enviar_mensaje(bot, id_usuario, 'YA HAS ELEGIDO ESA LETRA.')
             elif letra in palabra:
                 lista_aciertos.append(letra)
             else:
                 lista_errores.append(letra)
-            self.enviar_mensaje(bot, usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
+            self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
             if len(lista_errores) == 6:
-                self.enviar_mensaje(bot, usuario, "Has perdido\nLa palabra era: {}".format(palabra))
-                self.enviar_mensaje(bot, usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
-                self.datos_usuarios[str(usuario)]['partida_terminada'] = True
+                self.enviar_mensaje(bot, id_usuario, "Has perdido\nLa palabra era: {}".format(palabra))
+                self.enviar_mensaje(bot, id_usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
+                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             elif len(lista_aciertos) == len(set(palabra)):
-                self.enviar_mensaje(bot, usuario, "Felicitaciones, hasta ganado!.")
-                self.enviar_mensaje(bot, usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
-                self.datos_usuarios[str(usuario)]['partida_terminada'] = True
+                self.enviar_mensaje(bot, id_usuario, "Felicitaciones, hasta ganado!.")
+                self.enviar_mensaje(bot, id_usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
+                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             with open('ahorcado/data.json', 'w') as datafile:
                 datafile.write(json.dumps(self.datos_usuarios))
         else:
-            if letra.upper().startswith('S'):
-                self.jugar(update, context)
-            elif letra.upper().startswith('N'):
-                self.enviar_mensaje(bot, usuario, "Para jugar a otro juego puedes usar /juegos")
-            else:
-                self.enviar_mensaje(bot, usuario, "Por favor, ingresa sí o no.")
+            self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

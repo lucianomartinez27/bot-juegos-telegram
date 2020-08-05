@@ -27,7 +27,7 @@ class BotTelegram:
         # Dispatcher: está al pendiente de todas las ventanas donde se encuentra el bot.
         self.dispatcher = self.updater.dispatcher
         
-    def enviar_mensaje(self, bot, id_usuario, mensaje, parse_mode=None):
+    def enviar_mensaje(self, bot, id_usuario, mensaje, parse_mode=None) -> object:
         """Función que envía un mensaje desde un bot y a un usuario en particular.
         Parámetros:
             bot: objeto Bot de el módulo telegram.

@@ -57,8 +57,6 @@ def tablero_unicode(tablero):
     return tablero_u
 
 def despejar_tablero(fila, col, t_oculto, t_visible):
-
-
     se_puede_destapar = t_visible[fila][col] == u"\U00002B1C"
     t_visible[fila][col] = dic_unicode[t_oculto[fila][col]]
     if t_oculto[fila][col] == 0 and se_puede_destapar:
@@ -82,4 +80,3 @@ def descubrir_tablero(t_visible, t_oculto):
         for i in range(len(t_visible)):
             for j in range(len(t_visible[0])):
                 t_visible[i][j] = dic_unicode[t_oculto[i][j]]
-        return

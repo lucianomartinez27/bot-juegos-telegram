@@ -5,6 +5,7 @@ from bot_telegram import BotTelegram
 from ahorcado.bot_ahorcado import BotTelegramAhorcado
 from mastermind.bot_mastermind import BotMastermind
 from buscaminas.bot_buscaminas import BotBuscaminas
+from tic_tac_toe.bot_tictactoe import BotTicTacToe
 
 # Para crear boton en telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -12,12 +13,10 @@ import json
 
 
 class BotDeJuegosTelegram(BotTelegram):
-    ESTADO_1, ESTADO_2 = 1, 2
     def __init__(self, nombre, token):
         BotTelegram.__init__(self, nombre, token)
         self.diccionario_de_juegos = {"ahorcado": BotTelegramAhorcado(), "buscaminas": BotBuscaminas(),
-                                      "mastermind": BotMastermind()}
-        self.estados = None
+                                      "mastermind": BotMastermind(), "Ta-Te-Ti": BotTicTacToe()}
         try:
             with open('data.json', 'r') as datafile:
                 self.datos_usuarios = json.load(datafile)
@@ -30,6 +29,7 @@ class BotDeJuegosTelegram(BotTelegram):
         bot = context.bot
         id_usuario = update.message.chat_id
         nombre_usuario = update.message.chat.first_name
+        self.logger.info("Se ha iniciado un nuevo usuario. ID: {}. Nombre:".format(id_usuario, nombre_usuario))
         self.datos_usuarios[str(id_usuario)] = {"juego_actual": None, "estado": {}}
         with open('data.json', 'r+') as datafile:
             datafile.write(json.dumps(self.datos_usuarios))
@@ -42,7 +42,7 @@ class BotDeJuegosTelegram(BotTelegram):
         opciones = [[InlineKeyboardButton(juego.capitalize(), callback_data=juego)] for juego in self.diccionario_de_juegos.keys()]
 
         update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
-        return self.ESTADO_1
+        self.logger.info("Se ha iniciado un nuevo juego")
 
     def seleccionar_juego(self, update, context):
         # Datos que devuelve Telegram

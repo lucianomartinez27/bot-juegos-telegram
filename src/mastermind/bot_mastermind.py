@@ -71,10 +71,5 @@ class BotMastermind(BotTelegram):
                 datafile.write(json.dumps(self.datos_usuarios))
 
         else:
-            if mensaje.upper().startswith('S'):
-                self.jugar(update, context)
-            elif mensaje.upper().startswith('N'):
-                del self.datos_usuarios[str(usuario)]
-                self.enviar_mensaje(bot, usuario, "Para jugar a otro juego puedes usar /juegos")
             else:
-                self.enviar_mensaje(bot, usuario, "Por favor, ingresa sí o no.")
+            self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
