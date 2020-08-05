@@ -43,27 +43,27 @@ class BotMastermind(BotTelegram):
     def responder_mensaje(self, update, context):
         mensaje = update.message.text
         bot = context.bot
-        usuario = update.message.chat_id
+        id_usuario = update.message.chat_id
         nombre = update.message.chat.first_name
 
-        numeros_computadora = self.datos_usuarios[str(usuario)]['numeros_computadora']
-        lista_resultados = self.datos_usuarios[str(usuario)]['lista_resultados']
-        lista_intentos = self.datos_usuarios[str(usuario)]['lista_intentos']
+        numeros_computadora = self.datos_usuarios[str(id_usuario)]['numeros_computadora']
+        lista_resultados = self.datos_usuarios[str(id_usuario)]['lista_resultados']
+        lista_intentos = self.datos_usuarios[str(id_usuario)]['lista_intentos']
 
-        if not self.datos_usuarios[str(usuario)]['partida_terminada']:
+        if not self.datos_usuarios[str(id_usuario)]['partida_terminada']:
             if partida_ganada(mensaje, numeros_computadora):
-                self.enviar_mensaje(bot, usuario, "Felicidades, {}, GANASTE!!\n ¿Quieres jugar de nuevo? (Si o No)"\
+                self.enviar_mensaje(bot, id_usuario, "Felicidades, {}, GANASTE!!\n ¿Quieres jugar de nuevo? (Si o No)"\
                                     .format(nombre))
-                self.enviar_mensaje(bot, usuario, "Para cambiar de juego, usa /juegos.")
-                self.datos_usuarios[str(usuario)]['partida_terminada'] = True
+                self.enviar_mensaje(bot, id_usuario, "Para cambiar de juego, usa /juegos.")
+                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             elif partida_perdida(lista_intentos):
-                self.enviar_mensaje(bot, usuario, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
+                self.enviar_mensaje(bot, id_usuario, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
                                                    nuevo? (Si o No)".format(nombre, "".join(numeros_computadora)))
-                self.enviar_mensaje(bot, usuario, "Para cambiar de juego, usa /juegos.")
-                self.datos_usuarios[str(usuario)]['partida_terminada'] = True
+                self.enviar_mensaje(bot, id_usuario, "Para cambiar de juego, usa /juegos.")
+                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             else:
                 if comprobar_numero(mensaje, lista_intentos):
-                    self.enviar_mensaje(bot, usuario,
+                    self.enviar_mensaje(bot, id_usuario,
                                         chequear_numero(numeros_computadora, mensaje, lista_intentos, lista_resultados))
                 else:
                     self.enviar_mensaje(bot, usuario, "El número es incorrecto o ya has intentado con él.")
@@ -71,5 +71,4 @@ class BotMastermind(BotTelegram):
                 datafile.write(json.dumps(self.datos_usuarios))
 
         else:
-            else:
             self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
