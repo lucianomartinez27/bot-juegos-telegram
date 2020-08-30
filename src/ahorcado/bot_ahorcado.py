@@ -3,20 +3,15 @@
 
 import random
 import json
-from bot_telegram import BotTelegram
+from src.bot_base import BotBase
 from .funciones import plantilla_ahorcado, letra_valida
 
 
-class BotTelegramAhorcado(BotTelegram):
+class BotTelegramAhorcado(BotBase):
     def __init__(self):
         self.lista_palabras = "escopeta mandarina vasija perro zanahoria manzana computadora".upper().split()
-        self.datos_usuarios = {}
-        try:
-            with open('ahorcado/data.json', 'r+') as datafile:
-                self.datos_usuarios = json.load(datafile)
-        except (FileNotFoundError, json.decoder.JSONDecodeError):
-            with open('ahorcado/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+        super(BotTelegramAhorcado, self).__init__()
+
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo
         self.datos_usuarios[str(id_usuario)] = {}
@@ -24,8 +19,7 @@ class BotTelegramAhorcado(BotTelegram):
         self.datos_usuarios[str(id_usuario)]['errores'] = []
         self.datos_usuarios[str(id_usuario)]['adivinadas'] = []
         self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        with open('ahorcado/data.json', 'w') as datafile:
-            datafile.write(json.dumps(self.datos_usuarios))
+        self.data_manager.save_info(self.datos_usuarios)
 
     def jugar(self, update, context):
         try:
@@ -67,7 +61,6 @@ class BotTelegramAhorcado(BotTelegram):
                 self.enviar_mensaje(bot, id_usuario, "Felicitaciones, hasta ganado!.")
                 self.enviar_mensaje(bot, id_usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
                 self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
-            with open('ahorcado/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+            self.data_manager.save_info(self.datos_usuarios)
         else:
             self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

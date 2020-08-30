@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from src.bot_telegram import BotTelegram
+from src.bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from .funciones import crear_tablero, despejar_tablero, tablero_visible_inicial, verificar_tablero, descubrir_tablero
 import json
 
 
-class BotBuscaminas(BotTelegram):
+class BotBuscaminas(BotBase):
     def __init__(self):
-        self.datos_usuarios = {}
-        try:
-            with open('buscaminas/data.json', 'r+') as datafile:
-                self.datos_usuarios = json.load(datafile)
-        except (FileNotFoundError, json.decoder.JSONDecodeError):
-            with open('buscaminas/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+        super(BotBuscaminas, self).__init__()
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo
@@ -25,8 +19,7 @@ class BotBuscaminas(BotTelegram):
         t_oculto = self.datos_usuarios[str(id_usuario)]['tablero_oculto'] = crear_tablero(8, 8, bombas)
         self.datos_usuarios[str(id_usuario)]['tablero_visible'] = tablero_visible_inicial(t_oculto)
         self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        with open('buscaminas/data.json', 'w') as datafile:
-            datafile.write(json.dumps(self.datos_usuarios))
+        self.data_manager.save_info(self.datos_usuarios)
 
     def jugar(self, update, context):
         id_usuario = update.callback_query.message.chat_id
@@ -57,8 +50,7 @@ class BotBuscaminas(BotTelegram):
                 descubrir_tablero(t_visible, t_oculto)
                 self.enviar_mensaje(bot, id_usuario, "ganaste bobo")
                 self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
-            with open('buscaminas/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+            self.data_manager.save_info(self.datos_usuarios)
             try:
                 keyboard = [[InlineKeyboardButton(t_visible[i][j], callback_data="{} {}".format(i, j))
                              for j in range(len(t_visible[0]))] for i in range(len(t_visible))]

@@ -2,20 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import json
-from src.bot_telegram import BotTelegram
+from src.bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.error import BadRequest
-from tic_tac_toe.funciones import chequear_letra_jugador, obtener_jugada_computadora, tablero_completo, es_ganador
+from src.tic_tac_toe.funciones import chequear_letra_jugador, obtener_jugada_computadora, tablero_completo, es_ganador
 
-class BotTicTacToe(BotTelegram):
+class BotTicTacToe(BotBase):
     def __init__(self):
-        self.datos_usuarios = {}
-        try:
-            with open('tic_tac_toe/data.json', 'r+') as datafile:
-                self.datos_usuarios = json.load(datafile)
-        except (FileNotFoundError, json.decoder.JSONDecodeError):
-            with open('tic_tac_toe/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+        super(BotTicTacToe, self).__init__()
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo
@@ -24,8 +18,7 @@ class BotTicTacToe(BotTelegram):
         self.datos_usuarios[str(id_usuario)]['letra_jugador'] = ''
         self.datos_usuarios[str(id_usuario)]['letra_computadora'] = ''
         self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        with open('buscaminas/data.json', 'w') as datafile:
-            datafile.write(json.dumps(self.datos_usuarios))
+        self.data_manager.save_info(self.datos_usuarios)
 
     def jugar(self, update, context):
         id_usuario = update.callback_query.message.chat_id
@@ -88,8 +81,7 @@ class BotTicTacToe(BotTelegram):
                 if es_ganador(tablero, letra_pc):
                     self.enviar_mensaje(bot, id_usuario, "perdiste")
                     self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
-            with open('tic_tac_toe/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+            self.data_manager.save_info(self.datos_usuarios)
 
             try:
                 opciones = [[InlineKeyboardButton(tablero[i], callback_data="{}".format(i))

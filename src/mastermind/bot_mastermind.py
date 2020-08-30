@@ -6,20 +6,15 @@ Juego : MUERTOS Y HERIDOS - MASTERMIND
 """
 
 import json
-from bot_telegram import BotTelegram
+from src.bot_base import BotBase
 from src.mastermind.funciones import generar_numero, comprobar_numero \
 , chequear_numero, partida_ganada, partida_perdida
 
 
-class BotMastermind(BotTelegram):
+class BotMastermind(BotBase):
     def __init__(self):
-        self.datos_usuarios = {}
-        try:
-            with open('mastermind/data.json', 'r+') as datafile:
-                self.datos_usuarios = json.load(datafile)
-        except (FileNotFoundError, json.decoder.JSONDecodeError):
-            with open('mastermind/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+        super(BotMastermind, self).__init__()
+
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo
         self.datos_usuarios[str(id_usuario)] = {}
@@ -27,8 +22,7 @@ class BotMastermind(BotTelegram):
         self.datos_usuarios[str(id_usuario)]['lista_resultados'] = []
         self.datos_usuarios[str(id_usuario)]['lista_intentos'] = []
         self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        with open('mastermind/data.json', 'w') as datafile:
-            datafile.write(json.dumps(self.datos_usuarios))
+        self.data_manager.save_info(self.datos_usuarios)
 
     def jugar(self, update, context):
         id_usuario = update.callback_query.message.chat_id
@@ -67,8 +61,7 @@ class BotMastermind(BotTelegram):
                                         chequear_numero(numeros_computadora, mensaje, lista_intentos, lista_resultados))
                 else:
                     self.enviar_mensaje(bot, usuario, "El número es incorrecto o ya has intentado con él.")
-            with open('mastermind/data.json', 'w') as datafile:
-                datafile.write(json.dumps(self.datos_usuarios))
+            self.data_manager.save_info(self.datos_usuarios)
 
         else:
             self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

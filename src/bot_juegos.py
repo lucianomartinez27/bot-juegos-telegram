@@ -17,8 +17,8 @@ import json
 class BotDeJuegosTelegram(BotTelegram):
     def __init__(self, nombre, token):
         BotTelegram.__init__(self, nombre, token)
-        self.diccionario_de_juegos = {"ahorcado": BotTelegramAhorcado(), "buscaminas": BotBuscaminas(),
-                                      "mastermind": BotMastermind(), "Ta-Te-Ti": BotTicTacToe()}
+        self.decalogo_de_juegos = {"ahorcado": BotTelegramAhorcado(), "buscaminas": BotBuscaminas(),
+                                   "mastermind": BotMastermind(), "Ta-Te-Ti": BotTicTacToe()}
         self.data_manager = DataManager(os.path.abspath(''))
         self.datos_usuarios = self.data_manager.generate_info(dict())
 
@@ -26,16 +26,17 @@ class BotDeJuegosTelegram(BotTelegram):
         bot = context.bot
         id_usuario = update.message.chat_id
         nombre_usuario = update.message.chat.first_name
-        self.logger.info("Se ha iniciado un nuevo usuario. ID: {}. Nombre:".format(id_usuario, nombre_usuario))
+        self.logger.info("Se ha iniciado un nuevo usuario. ID: {}. Nombre: {}".format(id_usuario, nombre_usuario))
         self.datos_usuarios[str(id_usuario)] = {"juego_actual": None, "estado": {}}
         self.data_manager.save_info(self.datos_usuarios)
 
         self.enviar_mensaje(bot, id_usuario, "Hola {}, bienvenido al bot de juegos. Utiliza /juegos para\
         ver la lista de juegos.".format(nombre_usuario))
 
-    def juegos(self, update, context):
+    def mostrar_juegos(self, update, context):
 
-        opciones = [[InlineKeyboardButton(juego.capitalize(), callback_data=juego)] for juego in self.diccionario_de_juegos.keys()]
+        opciones = [[InlineKeyboardButton(juego.capitalize(), callback_data=juego)] for juego in
+                    self.decalogo_de_juegos.keys()]
 
         update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
         self.logger.info("Se ha iniciado un nuevo juego")
@@ -52,22 +53,20 @@ class BotDeJuegosTelegram(BotTelegram):
             self.datos_usuarios[str(usuario)] = {"juego_actual": juego}
             self.data_manager.save_info(self.datos_usuarios)
 
-        self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente."\
+        self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
                             .format(juego.capitalize()))
 
-        self.diccionario_de_juegos[juego].jugar(update, context)
+        self.decalogo_de_juegos[juego].jugar(update, context)
 
     def responder_boton_segun_juego(self, update, context):
         usuario = update.callback_query.message.chat_id
         juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-        self.diccionario_de_juegos[juego].responder_boton(update, context)
+        self.decalogo_de_juegos[juego].responder_boton(update, context)
 
     def responder_mensaje_segun_juego(self, update, context):
         usuario = update.message.chat_id
         juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-        self.diccionario_de_juegos[juego].responder_mensaje(update, context)
-
-
+        self.decalogo_de_juegos[juego].responder_mensaje(update, context)
 
 
 

@@ -9,7 +9,7 @@ patron = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
 if __name__ == '__main__':
     bot_juegos = BotDeJuegosTelegram("BotAhorcado", TOKEN_TELEGRAM)
     bot_juegos.esperar_comando("start", bot_juegos.start)
-    bot_juegos.esperar_comando("juegos", bot_juegos.juegos)
+    bot_juegos.esperar_comando("juegos", bot_juegos.mostrar_juegos)
     bot_juegos.contestar_consulta(bot_juegos.seleccionar_juego, patron)
     bot_juegos.contestar_consulta(bot_juegos.responder_boton_segun_juego)
 
