@@ -16,8 +16,9 @@ class DataManager:
         with open(self.path, 'r+') as datafile:
             json.dump(data, datafile)
 
-    def generate_info(self):
+    def generate_info(self, default_info):
         try:
-            self.load_info()
+            return self.load_info()
         except (FileNotFoundError, json.decoder.JSONDecodeError):
-            self.save_info(dict())
+            self.save_info(default_info)
+            return default_info
