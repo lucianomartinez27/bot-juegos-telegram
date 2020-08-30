@@ -13,7 +13,7 @@ class DataManager:
             return json.load(datafile)
 
     def save_info(self, data):
-        with open(self.path, 'r+') as datafile:
+        with open(self.path, 'w') as datafile:
             json.dump(data, datafile)
 
     def generate_info(self, default_info):
