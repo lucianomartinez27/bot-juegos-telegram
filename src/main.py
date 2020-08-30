@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from bot_juegos import BotDeJuegosTelegram
-from config.keys import TOKEN_TELEGRAM
+from src.bot_juegos import BotDeJuegosTelegram
+from src.config.keys import TOKEN_TELEGRAM
 import re
 patron = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
 
