@@ -5,7 +5,7 @@
 def plantilla_ahorcado(lista_errores : list, lista_aciertos : list, palabra : str) -> str:
     """
     plantilla que crea a partir de una palabra y dos listas con aciertos y errores
-    la figura del juego del ahorcado.
+    la figura del juego del Ahorcado.
     Parámetro:
         lista_errores: lista con las letras que
     """

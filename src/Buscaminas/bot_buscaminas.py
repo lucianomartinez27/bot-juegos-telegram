@@ -5,12 +5,15 @@ from src.bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from .funciones import crear_tablero, despejar_tablero, tablero_visible_inicial, verificar_tablero, descubrir_tablero
-import json
+import os
 
 
 class BotBuscaminas(BotBase):
     def __init__(self):
-        super(BotBuscaminas, self).__init__()
+        super(BotBuscaminas, self).__init__(os.path.abspath(self.nombre()))
+
+    def nombre(self):
+        return 'Buscaminas'
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo

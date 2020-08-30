@@ -2,23 +2,29 @@
 # -*- coding: utf-8 -*-
 
 from src.bot_telegram import BotTelegram
-from src.ahorcado.bot_ahorcado import BotTelegramAhorcado
-from src.mastermind.bot_mastermind import BotMastermind
-from src.buscaminas.bot_buscaminas import BotBuscaminas
-from src.tic_tac_toe.bot_tictactoe import BotTicTacToe
+from src.Ahorcado.bot_ahorcado import BotTelegramAhorcado
+from src.Mastermind.bot_mastermind import BotMastermind
+from src.Buscaminas.bot_buscaminas import BotBuscaminas
+from src.TaTeTi.bot_tictactoe import BotTicTacToe
 from src.utils.data_manager import DataManager
 import os
 
 # Para crear boton en telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-import json
 
+bot_mastermind = BotMastermind()
+bot_buscaminas = BotBuscaminas()
+bot_tictactoe = BotTicTacToe()
+bot_ahorcado = BotTelegramAhorcado()
 
 class BotDeJuegosTelegram(BotTelegram):
     def __init__(self, nombre, token):
         BotTelegram.__init__(self, nombre, token)
-        self.decalogo_de_juegos = {"ahorcado": BotTelegramAhorcado(), "buscaminas": BotBuscaminas(),
-                                   "mastermind": BotMastermind(), "Ta-Te-Ti": BotTicTacToe()}
+        self.decalogo_de_juegos = {bot_ahorcado.nombre(): bot_ahorcado,
+                                   bot_buscaminas.nombre(): bot_buscaminas,
+                                   bot_mastermind.nombre(): bot_mastermind,
+                                   bot_tictactoe.nombre(): bot_tictactoe}
+
         self.data_manager = DataManager(os.path.abspath(''))
         self.datos_usuarios = self.data_manager.generate_info(dict())
 
@@ -35,7 +41,7 @@ class BotDeJuegosTelegram(BotTelegram):
 
     def mostrar_juegos(self, update, context):
 
-        opciones = [[InlineKeyboardButton(juego.capitalize(), callback_data=juego)] for juego in
+        opciones = [[InlineKeyboardButton(juego, callback_data=juego)] for juego in
                     self.decalogo_de_juegos.keys()]
 
         update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
@@ -46,15 +52,11 @@ class BotDeJuegosTelegram(BotTelegram):
         juego = update.callback_query.data
         usuario = update.callback_query.message.chat_id
         bot = context.bot
-        try:
-            self.datos_usuarios[str(usuario)]["juego_actual"] = juego
-            self.data_manager.save_info(self.datos_usuarios)
-        except KeyError:
-            self.datos_usuarios[str(usuario)] = {"juego_actual": juego}
-            self.data_manager.save_info(self.datos_usuarios)
+        self.datos_usuarios[str(usuario)] = {"juego_actual": juego}
+        self.data_manager.save_info(self.datos_usuarios)
 
         self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
-                            .format(juego.capitalize()))
+                            .format(juego))
 
         self.decalogo_de_juegos[juego].jugar(update, context)
 

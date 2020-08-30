@@ -5,11 +5,16 @@ import json
 from src.bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
 from telegram.error import BadRequest
-from src.tic_tac_toe.funciones import chequear_letra_jugador, obtener_jugada_computadora, tablero_completo, es_ganador
+from src.TaTeTi.funciones import chequear_letra_jugador, obtener_jugada_computadora, tablero_completo, es_ganador
+import os
+
 
 class BotTicTacToe(BotBase):
     def __init__(self):
-        super(BotTicTacToe, self).__init__()
+        super(BotTicTacToe, self).__init__(os.path.abspath(self.nombre()))
+
+    def nombre(self):
+        return 'TaTeTi'
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo

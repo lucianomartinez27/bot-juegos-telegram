@@ -3,13 +3,12 @@
 
 from src.bot_telegram import BotTelegram
 from src.utils.data_manager import DataManager
-import os
 
 
 class BotBase(BotTelegram):
 
-    def __init__(self):
-        self.data_manager = DataManager(os.path.abspath(''))
+    def __init__(self, path):
+        self.data_manager = DataManager(path)
         self.datos_usuarios = self.data_manager.generate_info(dict())
 
 

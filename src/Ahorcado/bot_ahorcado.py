@@ -5,12 +5,17 @@ import random
 import json
 from src.bot_base import BotBase
 from .funciones import plantilla_ahorcado, letra_valida
+import os
 
 
 class BotTelegramAhorcado(BotBase):
     def __init__(self):
         self.lista_palabras = "escopeta mandarina vasija perro zanahoria manzana computadora".upper().split()
-        super(BotTelegramAhorcado, self).__init__()
+        print(os.path.abspath('Ahorcado'))
+        super(BotTelegramAhorcado, self).__init__(os.path.abspath(self.nombre()))
+
+    def nombre(self):
+        return 'Ahorcado'
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo

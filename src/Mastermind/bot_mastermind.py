@@ -7,13 +7,16 @@ Juego : MUERTOS Y HERIDOS - MASTERMIND
 
 import json
 from src.bot_base import BotBase
-from src.mastermind.funciones import generar_numero, comprobar_numero \
+from src.Mastermind.funciones import generar_numero, comprobar_numero \
 , chequear_numero, partida_ganada, partida_perdida
-
+import os
 
 class BotMastermind(BotBase):
     def __init__(self):
-        super(BotMastermind, self).__init__()
+        super(BotMastermind, self).__init__(os.path.abspath(self.nombre()))
+
+    def nombre(self):
+        return 'Mastermind'
 
     def generar_datos(self, id_usuario):
         # id_usuario se convierte en string porque las claves json deben ser de ese tipo
