@@ -11,16 +11,18 @@ class BotBase(BotTelegram):
         self.data_manager = DataManager(path)
         self.datos_usuarios = self.data_manager.generate_info(dict())
 
+    def es_inline(self):
+        return False
 
     def no_entiendo_mensaje(self):
         return "Disculpa, no entiendo tu mensaje."
 
     def responder_mensaje(self, update, context):
-        usuario = update.message.chat_id
+        usuario = self.generar_id_usuario(update)
         bot = context.bot
         self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
 
     def responder_boton(self, update, context):
-        usuario = update.callback_query.message.chat_id
+        usuario = self.generar_id_usuario(update)
         bot = context.bot
         self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())

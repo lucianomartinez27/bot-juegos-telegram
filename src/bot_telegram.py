@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 # Librerias telegram
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackQueryHandler, ConversationHandler
+from telegram.ext import Updater, MessageHandler, CommandHandler,\
+                         Filters, CallbackQueryHandler, ConversationHandler,\
+                         InlineQueryHandler
 
 # Registro de actividades
 import logging
@@ -79,3 +81,32 @@ class BotTelegram:
             Tipo:: (fn)"""
         mensaje_recibido = MessageHandler(Filters.text & (~Filters.command), funcion)
         self.dispatcher.add_handler(mensaje_recibido)
+
+    def contestar_inlinemode(self, comando, patron=None):
+        self.dispatcher.add_handler(InlineQueryHandler(comando, pattern=patron))
+
+    def generar_id_usuario(self, update):
+        try:
+            id = update.callback_query.message.chat_id
+        except:
+            try:
+                id = update.message.chat_id
+            except:
+                try:
+                    id = update.inline_query.from_user.id
+                except:
+                    id = update.callback_query.from_user.id
+        return id
+
+    def generar_id_mensaje(self, update):
+        try:
+            id = update.callback_query.message.message_id
+        except:
+            try:
+                id = update.message.message_id
+            except:
+                try:
+                    id = update.inline_query.from_user.message_id
+                except:
+                    id = update.callback_query.inline_message_id
+        return id

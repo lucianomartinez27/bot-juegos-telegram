@@ -5,15 +5,14 @@
 Juego : MUERTOS Y HERIDOS - MASTERMIND
 """
 
-import json
 from src.bot_base import BotBase
-from src.Mastermind.funciones import generar_numero, comprobar_numero \
+from src.juegos.Mastermind.funciones import generar_numero, comprobar_numero \
 , chequear_numero, partida_ganada, partida_perdida
 import os
 
 class BotMastermind(BotBase):
     def __init__(self):
-        super(BotMastermind, self).__init__(os.path.abspath(self.nombre()))
+        super(BotMastermind, self).__init__(os.path.abspath('juegos/'+self.nombre()))
 
     def nombre(self):
         return 'Mastermind'

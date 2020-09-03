@@ -10,7 +10,7 @@ import os
 
 class BotBuscaminas(BotBase):
     def __init__(self):
-        super(BotBuscaminas, self).__init__(os.path.abspath(self.nombre()))
+        super(BotBuscaminas, self).__init__(os.path.abspath('juegos/'+self.nombre()))
 
     def nombre(self):
         return 'Buscaminas'

@@ -12,7 +12,7 @@ class BotTelegramAhorcado(BotBase):
     def __init__(self):
         self.lista_palabras = "escopeta mandarina vasija perro zanahoria manzana computadora".upper().split()
         print(os.path.abspath('Ahorcado'))
-        super(BotTelegramAhorcado, self).__init__(os.path.abspath(self.nombre()))
+        super(BotTelegramAhorcado, self).__init__(os.path.abspath('juegos/'+self.nombre()))
 
     def nombre(self):
         return 'Ahorcado'
