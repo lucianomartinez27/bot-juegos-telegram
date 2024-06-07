@@ -2,11 +2,12 @@
 #-*- coding: utf-8 -*-
 
 import json
+import os
 
 
 class DataManager:
     def __init__(self, path):
-        self.path = path+'/data.json'
+        self.path = os.path.join(path, 'data.json')
 
     def load_info(self):
         with open(self.path, 'r') as datafile:

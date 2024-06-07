@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from src.bot_juegos import BotDeJuegosTelegram
-from src.config.keys import TOKEN_TELEGRAM
+from bot_juegos import BotDeJuegosTelegram
+from config.keys import TOKEN_TELEGRAM
 import re
 patron = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
 patron_inline = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+[_]+ [1-9]")
@@ -16,3 +16,4 @@ if __name__ == '__main__':
     bot_juegos.contestar_consulta(bot_juegos.responder_boton_segun_juego)
     bot_juegos.contestar_mensaje(bot_juegos.responder_mensaje_segun_juego)
     bot_juegos.contestar_inlinemode(bot_juegos.mostrar_juegos_inline)
+    bot_juegos.run()

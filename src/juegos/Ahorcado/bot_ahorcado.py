@@ -3,7 +3,7 @@
 
 import random
 import json
-from src.bot_base import BotBase
+from bot_base import BotBase
 from .funciones import plantilla_ahorcado, letra_valida
 import os
 
@@ -12,7 +12,7 @@ class BotTelegramAhorcado(BotBase):
     def __init__(self):
         self.lista_palabras = "escopeta mandarina vasija perro zanahoria manzana computadora".upper().split()
         print(os.path.abspath('Ahorcado'))
-        super(BotTelegramAhorcado, self).__init__(os.path.abspath('juegos/'+self.nombre()))
+        super(BotTelegramAhorcado, self).__init__(__file__)
 
     def nombre(self):
         return 'Ahorcado'
@@ -26,7 +26,7 @@ class BotTelegramAhorcado(BotBase):
         self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
         self.data_manager.save_info(self.datos_usuarios)
 
-    def jugar(self, update, context):
+    async def jugar(self, update, context):
         try:
             id_usuario = update.callback_query.message.chat_id
         except AttributeError:
@@ -35,10 +35,10 @@ class BotTelegramAhorcado(BotBase):
         bot = context.bot
         self.generar_datos(id_usuario)
         palabra = self.datos_usuarios[str(id_usuario)]['palabra']
-        self.enviar_mensaje(bot, id_usuario, "Ingrese una letra como mensaje para jugar:")
-        self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado([], [], palabra))
+        await self.enviar_mensaje(bot, id_usuario, "Ingrese una letra como mensaje para jugar:")
+        await self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado([], [], palabra))
 
-    def responder_mensaje(self, update, context):
+    async def responder_mensaje(self, update, context):
         letra = update.message.text.upper()
         bot = context.bot
         id_usuario = update.message.chat_id
@@ -50,22 +50,22 @@ class BotTelegramAhorcado(BotBase):
 
         if not partida_terminada:
             if not letra_valida(letra):
-                self.enviar_mensaje(bot, id_usuario, "POR FAVOR, INGRESA UNA LETRA.")
+                await self.enviar_mensaje(bot, id_usuario, "POR FAVOR, INGRESA UNA LETRA.")
             elif letra in lista_aciertos or letra in lista_errores:
-                self.enviar_mensaje(bot, id_usuario, 'YA HAS ELEGIDO ESA LETRA.')
+                await self.enviar_mensaje(bot, id_usuario, 'YA HAS ELEGIDO ESA LETRA.')
             elif letra in palabra:
                 lista_aciertos.append(letra)
             else:
                 lista_errores.append(letra)
-            self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
+            await self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
             if len(lista_errores) == 6:
-                self.enviar_mensaje(bot, id_usuario, "Has perdido\nLa palabra era: {}".format(palabra))
-                self.enviar_mensaje(bot, id_usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
+                await self.enviar_mensaje(bot, id_usuario, "Has perdido\nLa palabra era: {}".format(palabra))
+                await self.enviar_mensaje(bot, id_usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
                 self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             elif len(lista_aciertos) == len(set(palabra)):
-                self.enviar_mensaje(bot, id_usuario, "Felicitaciones, hasta ganado!.")
-                self.enviar_mensaje(bot, id_usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
+                await self.enviar_mensaje(bot, id_usuario, "Felicitaciones, hasta ganado!.")
+                await self.enviar_mensaje(bot, id_usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
                 self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
             self.data_manager.save_info(self.datos_usuarios)
         else:
-            self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

@@ -1,13 +1,13 @@
 #!/usr/bin/env/python3
 # -*- coding: utf-8 -*-
 
-from src.bot_telegram import BotTelegram
-from src.juegos.Ahorcado.bot_ahorcado import BotTelegramAhorcado
-from src.juegos.Mastermind.bot_mastermind import BotMastermind
-from src.juegos.Buscaminas.bot_buscaminas import BotBuscaminas
-from src.juegos.TaTeTi.bot_tictactoe import BotTicTacToe
-from src.juegos.TaTeTi_MultiPlayer.bot_tateti_inline import BotTaTeTiInLine
-from src.utils.data_manager import DataManager
+from bot_telegram import BotTelegram
+from juegos.Ahorcado.bot_ahorcado import BotTelegramAhorcado
+from juegos.Mastermind.bot_mastermind import BotMastermind
+from juegos.Buscaminas.bot_buscaminas import BotBuscaminas
+from juegos.TaTeTi.bot_tictactoe import BotTicTacToe
+from juegos.TaTeTi_MultiPlayer.bot_tateti_inline import BotTaTeTiInLine
+from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
 
@@ -35,7 +35,7 @@ class BotDeJuegosTelegram(BotTelegram):
         self.data_manager = DataManager(os.path.abspath(''))
         self.datos_usuarios = self.data_manager.generate_info(dict())
 
-    def start(self, update, context):
+    async def start(self, update, context):
         bot = context.bot
         id_usuario = self.generar_id_usuario(update)
         nombre_usuario = update.message.chat.first_name
@@ -44,10 +44,10 @@ class BotDeJuegosTelegram(BotTelegram):
         self.enviar_mensaje(bot, id_usuario, "Hola {}, bienvenido al bot de juegos. Utiliza /juegos para\
         ver la lista de juegos.".format(nombre_usuario))
 
-    def mostrar_juegos(self, update, context):
+    async def mostrar_juegos(self, update, context):
         opciones = [[InlineKeyboardButton(juego.nombre(), callback_data=juego.nombre())] for juego in
                     self.decalogo_de_juegos.values() if not juego.es_inline()]
-        update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
+        await update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
         self.logger.info("Se ha iniciado un nuevo juego")
 
     def mostrar_juegos_inline(self, update, context):
@@ -65,7 +65,7 @@ class BotDeJuegosTelegram(BotTelegram):
 
         update.inline_query.answer(resultados)
 
-    def seleccionar_juego(self, update, context):
+    async def seleccionar_juego(self, update, context):
         # Datos que devuelve Telegram
         juego = update.callback_query.data
         usuario = self.generar_id_usuario(update)
@@ -73,22 +73,22 @@ class BotDeJuegosTelegram(BotTelegram):
         self.datos_usuarios[str(usuario)] = {"juego_actual": juego}
         self.data_manager.save_info(self.datos_usuarios)
 
-        self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
+        await self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
                             .format(juego))
 
-        self.decalogo_de_juegos[juego].jugar(update, context)
+        await self.decalogo_de_juegos[juego].jugar(update, context)
 
-    def responder_boton_segun_juego(self, update, context):
+    async def responder_boton_segun_juego(self, update, context):
         try:
             usuario = self.generar_id_usuario(update)
             juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-            self.decalogo_de_juegos[juego].responder_boton(update, context)
+            await self.decalogo_de_juegos[juego].responder_boton(update, context)
         except KeyError:
             # Solucionar luego este hardcodeo
             self.decalogo_de_juegos['TaTeTi_MultiPlayer'].responder_boton(update, context)
 
-    def responder_mensaje_segun_juego(self, update, context):
+    async def responder_mensaje_segun_juego(self, update, context):
         usuario = self.generar_id_usuario(update)
         juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-        self.decalogo_de_juegos[juego].responder_mensaje(update, context)
+        await self.decalogo_de_juegos[juego].responder_mensaje(update, context)
 

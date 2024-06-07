@@ -1,11 +1,11 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 import os
-from src.juegos.TaTeTi.bot_tictactoe import BotTicTacToe
+from juegos.TaTeTi.bot_tictactoe import BotTicTacToe
 
 
 class BotTaTeTiInLine(BotTicTacToe):
     def __init__(self):
-        super(BotTicTacToe, self).__init__(os.path.abspath('juegos/' + self.nombre()))
+        super(BotTicTacToe, self).__init__(__file__)
 
     def es_inline(self):
         return True
