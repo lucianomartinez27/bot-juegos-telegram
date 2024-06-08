@@ -85,7 +85,7 @@ class BotDeJuegosTelegram(BotTelegram):
             await self.decalogo_de_juegos[juego].responder_boton(update, context)
         except KeyError:
             # Solucionar luego este hardcodeo
-            self.decalogo_de_juegos['TaTeTi_MultiPlayer'].responder_boton(update, context)
+            await self.decalogo_de_juegos['TaTeTi_MultiPlayer'].responder_boton(update, context)
 
     async def responder_mensaje_segun_juego(self, update, context):
         usuario = self.generar_id_usuario(update)

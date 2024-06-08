@@ -18,12 +18,12 @@ class BotBase(BotTelegram):
     def no_entiendo_mensaje(self):
         return "Disculpa, no entiendo tu mensaje."
 
-    def responder_mensaje(self, update, context):
+    async def responder_mensaje(self, update, context):
         usuario = self.generar_id_usuario(update)
         bot = context.bot
-        self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
+        await self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
 
-    def responder_boton(self, update, context):
+    async def responder_boton(self, update, context):
         usuario = self.generar_id_usuario(update)
         bot = context.bot
-        self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
+        await self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
