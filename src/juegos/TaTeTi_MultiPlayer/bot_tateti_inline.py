@@ -27,18 +27,19 @@ class BotTaTeTiInLine(BotTicTacToe):
         casilla = int(update.callback_query.data)
         id_usuario = str(self.generar_id_usuario(update))
         bot = context.bot
-        id_mensaje = update.callback_query.inline_message_id
-        self.datos_usuarios.setdefault(id_mensaje, self.generar_datos(id_usuario))
+        id_inline_mensaje = update.callback_query.inline_message_id
+        self.datos_usuarios.setdefault(id_inline_mensaje, self.generar_datos(id_usuario))
         self.data_manager.save_info(self.datos_usuarios)
-        self.asignar_letra_a_oponente(id_mensaje, id_usuario)
+        self.asignar_letra_a_oponente(id_inline_mensaje, id_usuario)
 
-        letra = self.datos_usuarios[id_mensaje]['usuarios'][id_usuario]['letra_jugador']
-        tablero = self.datos_usuarios[id_mensaje]['tablero']
-        await self.marcar_casillero(bot, casilla, id_mensaje, letra, tablero)
+        letra = self.datos_usuarios[id_inline_mensaje]['usuarios'][id_usuario]['letra_jugador']
+        tablero = self.datos_usuarios[id_inline_mensaje]['tablero']
+        await self.marcar_casillero(bot, casilla, id_usuario, id_inline_mensaje, letra, tablero)
 
-    async def marcar_casillero(self, bot, casilla, id_mensaje, letra, tablero):
+    async def marcar_casillero(self, bot, casilla, id_usuario, id_mensaje, letra, tablero):
         if self.es_el_turno_del_jugador(letra, tablero):
-            await self.actualizar_tablero(bot, casilla, id_mensaje, letra, tablero)
+            tablero[casilla] = letra
+            await self.actualizar_tablero(bot, tablero, None, None, id_mensaje)
 
     def es_el_turno_del_jugador(self, letra, tablero):
         return letra == 'X' and tablero.count(' ') % 2 != 0 or \
@@ -50,6 +51,6 @@ class BotTaTeTiInLine(BotTicTacToe):
 
     def solo_ha_jugado_x(self, id_mensaje, id_usuario):
         return self.datos_usuarios[id_mensaje]['tablero'].count('X') == 1 and \
-               self.datos_usuarios[id_mensaje]['tablero'].count('O' == 0) \
+               self.datos_usuarios[id_mensaje]['tablero'].count('O')  == 0 \
                and id_usuario not in self.datos_usuarios[id_mensaje]['usuarios'] \
-               and len(self.datos_usuarios[id_mensaje]['usuarios'] < 2)
+               and len(self.datos_usuarios[id_mensaje]['usuarios']) < 2

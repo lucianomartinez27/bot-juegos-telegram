@@ -67,15 +67,12 @@ class BotTicTacToe(BotBase):
                 await self.jugar(update, context)
 
     async def actualizar_tablero(self, bot, tablero, chat_id=None, id_mensaje=None, id_mensaje_inline=None):
-        try:
-            opciones = [[InlineKeyboardButton(tablero[i], callback_data="{}".format(i))
-                         for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
-            await bot.edit_message_reply_markup(chat_id=chat_id,
-                                          message_id=id_mensaje,
-                                          inline_message_id=id_mensaje_inline,
-                                          reply_markup=InlineKeyboardMarkup(opciones))
-        except BadRequest as error:
-            print(error)
+        opciones = [[InlineKeyboardButton(tablero[i], callback_data="{}".format(i))
+                        for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
+        await bot.edit_message_reply_markup(chat_id=chat_id,
+                                        inline_message_id=id_mensaje_inline,
+                                        reply_markup=InlineKeyboardMarkup(opciones))
+
 
     async def responder_boton(self, update, context):
         casilla = int(update.callback_query.data)
