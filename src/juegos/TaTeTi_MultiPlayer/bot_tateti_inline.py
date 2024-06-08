@@ -23,7 +23,7 @@ class BotTaTeTiInLine(BotTicTacToe):
                      for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
         return InlineKeyboardMarkup(opciones)
 
-    def responder_boton(self, update, context):
+    async def responder_boton(self, update, context):
         casilla = int(update.callback_query.data)
         id_usuario = str(self.generar_id_usuario(update))
         bot = context.bot
@@ -34,11 +34,11 @@ class BotTaTeTiInLine(BotTicTacToe):
 
         letra = self.datos_usuarios[id_mensaje]['usuarios'][id_usuario]['letra_jugador']
         tablero = self.datos_usuarios[id_mensaje]['tablero']
-        self.marcar_casillero(bot, casilla, id_mensaje, letra, tablero)
+        await self.marcar_casillero(bot, casilla, id_mensaje, letra, tablero)
 
-    def marcar_casillero(self, bot, casilla, id_mensaje, letra, tablero):
+    async def marcar_casillero(self, bot, casilla, id_mensaje, letra, tablero):
         if self.es_el_turno_del_jugador(letra, tablero):
-            self.actualizar_tablero(bot, casilla, id_mensaje, letra, tablero)
+            await self.actualizar_tablero(bot, casilla, id_mensaje, letra, tablero)
 
     def es_el_turno_del_jugador(self, letra, tablero):
         return letra == 'X' and tablero.count(' ') % 2 != 0 or \
