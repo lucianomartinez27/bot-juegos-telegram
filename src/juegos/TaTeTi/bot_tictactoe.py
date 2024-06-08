@@ -70,6 +70,7 @@ class BotTicTacToe(BotBase):
         opciones = [[InlineKeyboardButton(tablero[i], callback_data="{}".format(i))
                         for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
         await bot.edit_message_reply_markup(chat_id=chat_id,
+                                        message_id=id_mensaje,
                                         inline_message_id=id_mensaje_inline,
                                         reply_markup=InlineKeyboardMarkup(opciones))
 
