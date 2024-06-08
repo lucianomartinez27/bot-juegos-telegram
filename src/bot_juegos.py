@@ -50,7 +50,7 @@ class BotDeJuegosTelegram(BotTelegram):
         await update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
         self.logger.info("Se ha iniciado un nuevo juego")
 
-    def mostrar_juegos_inline(self, update, context):
+    async def mostrar_juegos_inline(self, update, context):
         resultados = []
         for juego in self.decalogo_de_juegos.values():
             if juego.es_inline():
@@ -63,7 +63,7 @@ class BotDeJuegosTelegram(BotTelegram):
         self.datos_usuarios[str(id_usuario)]['juego_actual'] = 'TaTeTi_MultiPlayer'
         self.data_manager.save_info(self.datos_usuarios)
 
-        update.inline_query.answer(resultados)
+        await update.inline_query.answer(resultados)
 
     async def seleccionar_juego(self, update, context):
         # Datos que devuelve Telegram
