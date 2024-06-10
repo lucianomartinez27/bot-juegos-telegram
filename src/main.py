@@ -8,6 +8,7 @@ import re
 patron = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
 patron_inline = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+[_]+ [1-9]")
 
+import threading
 import http.server
 import socketserver
 
@@ -22,11 +23,13 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 PORT = 8000
 
-with socketserver.TCPServer(("", PORT), SimpleHTTPRequestHandler) as httpd:
-    print(f"Serving on port {PORT}")
-    httpd.serve_forever()
+def run_http_server():
+    with socketserver.TCPServer(("", PORT), SimpleHTTPRequestHandler) as httpd:
+        print(f"Serving on port {PORT}")
+        httpd.serve_forever()
 
 if __name__ == '__main__':
+
     bot_juegos = BotDeJuegosTelegram("BotAhorcado", TOKEN_TELEGRAM)
     bot_juegos.handle_command("start", bot_juegos.start)
     bot_juegos.handle_command("juegos", bot_juegos.mostrar_juegos)
@@ -34,4 +37,9 @@ if __name__ == '__main__':
     bot_juegos.handle_query(bot_juegos.responder_boton_segun_juego)
     bot_juegos.handle_message(bot_juegos.responder_mensaje_segun_juego)
     bot_juegos.handle_inline_mode(bot_juegos.mostrar_juegos_inline)
+
+    http_thread = threading.Thread(target=run_http_server)
+    http_thread.daemon = True
+    http_thread.start()
+
     bot_juegos.run()
