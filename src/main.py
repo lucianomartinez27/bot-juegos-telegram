@@ -21,7 +21,7 @@ class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(404)
 
-PORT = 8000
+PORT = 8080
 
 def run_http_server():
     with socketserver.TCPServer(("", PORT), SimpleHTTPRequestHandler) as httpd:
