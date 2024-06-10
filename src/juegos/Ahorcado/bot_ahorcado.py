@@ -4,7 +4,7 @@
 import random
 import json
 from bot_base import BotBase
-from .funciones import plantilla_ahorcado, letra_valida
+from .funciones import hangman_template, is_valid_letter
 import os
 
 
@@ -14,58 +14,58 @@ class BotTelegramAhorcado(BotBase):
         print(os.path.abspath('Ahorcado'))
         super(BotTelegramAhorcado, self).__init__(__file__)
 
-    def nombre(self):
+    def name(self):
         return 'Ahorcado'
 
-    def generar_datos(self, id_usuario):
-        # id_usuario se convierte en string porque las claves json deben ser de ese tipo
-        self.datos_usuarios[str(id_usuario)] = {}
-        self.datos_usuarios[str(id_usuario)]['palabra'] = random.choice(self.lista_palabras)
-        self.datos_usuarios[str(id_usuario)]['errores'] = []
-        self.datos_usuarios[str(id_usuario)]['adivinadas'] = []
-        self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        self.data_manager.save_info(self.datos_usuarios)
+    def generate_game_state(self, user_id):
+        # user_id se convierte en string porque las claves json deben ser de ese tipo
+        self.users_data[str(user_id)] = {}
+        self.users_data[str(user_id)]['word'] = random.choice(self.lista_palabras)
+        self.users_data[str(user_id)]['errors'] = []
+        self.users_data[str(user_id)]['guessed'] = []
+        self.users_data[str(user_id)]['game_finished'] = False
+        self.data_manager.save_info(self.users_data)
 
-    async def jugar(self, update, context):
+    async def play(self, update, context):
         try:
-            id_usuario = update.callback_query.message.chat_id
+            user_id = update.callback_query.message.chat_id
         except AttributeError:
-            id_usuario = update.message.chat_id
+            user_id = update.message.chat_id
 
         bot = context.bot
-        self.generar_datos(id_usuario)
-        palabra = self.datos_usuarios[str(id_usuario)]['palabra']
-        await self.enviar_mensaje(bot, id_usuario, "Ingrese una letra como mensaje para jugar:")
-        await self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado([], [], palabra))
+        self.generate_game_state(user_id)
+        word = self.users_data[str(user_id)]['word']
+        await self.send_message(bot, user_id, "Ingrese una letra como mensaje para jugar:")
+        await self.send_message(bot, user_id, hangman_template([], [], word))
 
-    async def responder_mensaje(self, update, context):
+    async def answer_message(self, update, context):
         letra = update.message.text.upper()
         bot = context.bot
-        id_usuario = update.message.chat_id
-        nombre = update.message.chat.first_name
-        lista_errores = self.datos_usuarios[str(id_usuario)]['errores']
-        palabra = self.datos_usuarios[str(id_usuario)]['palabra']
-        lista_aciertos = self.datos_usuarios[str(id_usuario)]['adivinadas']
-        partida_terminada = self.datos_usuarios[str(id_usuario)]['partida_terminada']
+        user_id = update.message.chat_id
+        name = update.message.chat.first_name
+        errors = self.users_data[str(user_id)]['errors']
+        word = self.users_data[str(user_id)]['word']
+        guessed = self.users_data[str(user_id)]['guessed']
+        game_finished = self.users_data[str(user_id)]['game_finished']
 
-        if not partida_terminada:
-            if not letra_valida(letra):
-                await self.enviar_mensaje(bot, id_usuario, "POR FAVOR, INGRESA UNA LETRA.")
-            elif letra in lista_aciertos or letra in lista_errores:
-                await self.enviar_mensaje(bot, id_usuario, 'YA HAS ELEGIDO ESA LETRA.')
-            elif letra in palabra:
-                lista_aciertos.append(letra)
+        if not game_finished:
+            if not is_valid_letter(letra):
+                await self.send_message(bot, user_id, "POR FAVOR, INGRESA UNA LETRA.")
+            elif letra in guessed or letra in errors:
+                await self.send_message(bot, user_id, 'YA HAS ELEGIDO ESA LETRA.')
+            elif letra in word:
+                guessed.append(letra)
             else:
-                lista_errores.append(letra)
-            await self.enviar_mensaje(bot, id_usuario, plantilla_ahorcado(lista_errores, lista_aciertos, palabra))
-            if len(lista_errores) == 6:
-                await self.enviar_mensaje(bot, id_usuario, "Has perdido\nLa palabra era: {}".format(palabra))
-                await self.enviar_mensaje(bot, id_usuario, "{}, ¿quieres jugar de nuevo? (Si o No)".format(nombre))
-                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
-            elif len(lista_aciertos) == len(set(palabra)):
-                await self.enviar_mensaje(bot, id_usuario, "Felicitaciones, hasta ganado!.")
-                await self.enviar_mensaje(bot, id_usuario, "¿{}, quieres jugar de nuevo? (Si o No)".format(nombre))
-                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
-            self.data_manager.save_info(self.datos_usuarios)
+                errors.append(letra)
+            await self.send_message(bot, user_id, hangman_template(errors, guessed, word))
+            if len(errors) == 6:
+                await self.send_message(bot, user_id, "Has perdido\nLa palabra era: {}".format(word))
+                await self.send_message(bot, user_id, "{}, ¿quieres jugar de nuevo? (Si o No)".format(name))
+                self.users_data[str(user_id)]['game_finished'] = True
+            elif len(guessed) == len(set(word)):
+                await self.send_message(bot, user_id, "Felicitaciones, hasta ganado!.")
+                await self.send_message(bot, user_id, "¿{}, quieres jugar de nuevo? (Si o No)".format(name))
+                self.users_data[str(user_id)]['game_finished'] = True
+            self.data_manager.save_info(self.users_data)
         else:
-            await self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

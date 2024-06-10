@@ -5,8 +5,8 @@ import os
 from bot_juegos import BotDeJuegosTelegram
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
 import re
-patron = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
-patron_inline = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+[_]+ [1-9]")
+pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
+inline_pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+[_]+ [1-9]")
 
 import threading
 import http.server
@@ -30,16 +30,16 @@ def run_http_server():
 
 if __name__ == '__main__':
 
-    bot_juegos = BotDeJuegosTelegram("BotAhorcado", TOKEN_TELEGRAM)
-    bot_juegos.handle_command("start", bot_juegos.start)
-    bot_juegos.handle_command("juegos", bot_juegos.mostrar_juegos)
-    bot_juegos.handle_query(bot_juegos.seleccionar_juego, patron)
-    bot_juegos.handle_query(bot_juegos.responder_boton_segun_juego)
-    bot_juegos.handle_message(bot_juegos.responder_mensaje_segun_juego)
-    bot_juegos.handle_inline_mode(bot_juegos.mostrar_juegos_inline)
+    gamesBot = BotDeJuegosTelegram("BotAhorcado", TOKEN_TELEGRAM)
+    gamesBot.handle_command("start", gamesBot.start)
+    gamesBot.handle_command("juegos", gamesBot.display_games)
+    gamesBot.handle_query(gamesBot.select_game, pattern)
+    gamesBot.handle_query(gamesBot.answer_button_by_game)
+    gamesBot.handle_message(gamesBot.answer_message_by_game)
+    gamesBot.handle_inline_mode(gamesBot.display_inline_games)
 
     http_thread = threading.Thread(target=run_http_server)
     http_thread.daemon = True
     http_thread.start()
 
-    bot_juegos.run()
+    gamesBot.run()

@@ -10,20 +10,20 @@ class BotBase(BotTelegram):
 
     def __init__(self, file):
         self.data_manager = DataManager(os.path.dirname(file))
-        self.datos_usuarios = self.data_manager.generate_info(dict())
+        self.users_data = self.data_manager.generate_info(dict())
 
-    def es_inline(self):
+    def is_inline_game(self):
         return False
 
-    def no_entiendo_mensaje(self):
+    def do_not_understand_message(self):
         return "Disculpa, no entiendo tu mensaje."
 
-    async def responder_mensaje(self, update, context):
-        usuario = self.generar_id_usuario(update)
+    async def answer_message(self, update, context):
+        usuario = self.get_user_id(update)
         bot = context.bot
-        await self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
+        await self.send_message(bot, usuario, self.do_not_understand_message())
 
-    async def responder_boton(self, update, context):
-        usuario = self.generar_id_usuario(update)
+    async def answer_button(self, update, context):
+        usuario = self.get_user_id(update)
         bot = context.bot
-        await self.enviar_mensaje(bot, usuario, self.no_entiendo_mensaje())
+        await self.send_message(bot, usuario, self.do_not_understand_message())

@@ -12,16 +12,16 @@ import logging
 
 class BotTelegram:
 
-    def __init__(self, nombre, token):
+    def __init__(self, name, token):
         self.app = ApplicationBuilder().token(token).build()
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-        self.logger = logging.getLogger(nombre)
+        self.logger = logging.getLogger(name)
 
     def run(self):
         self.app.run_polling()
 
-    async def enviar_mensaje(self, bot, id_usuario, mensaje, parse_mode=None) -> object:
-        await bot.send_message(chat_id=id_usuario, text=mensaje, parse_mode=parse_mode)
+    async def send_message(self, bot, user_id, mensaje, parse_mode=None) -> object:
+        await bot.send_message(chat_id=user_id, text=mensaje, parse_mode=parse_mode)
 
     def handle_command(self, comando, callback):
 
@@ -37,7 +37,7 @@ class BotTelegram:
     def handle_inline_mode(self, comando, patron=None):
         self.app.add_handler(InlineQueryHandler(comando, pattern=patron))
 
-    def generar_id_usuario(self, update):
+    def get_user_id(self, update):
         try:
             id = update.callback_query.message.chat_id
         except:
@@ -50,7 +50,7 @@ class BotTelegram:
                     id = update.callback_query.from_user.id
         return id
 
-    def generar_id_mensaje(self, update):
+    def get_message_id(self, update):
         try:
             id = update.callback_query.message.message_id
         except:

@@ -7,50 +7,48 @@ class BotTaTeTiInLine(BotTicTacToe):
     def __init__(self):
         super(BotTicTacToe, self).__init__(__file__)
 
-    def es_inline(self):
+    def is_inline_game(self):
         return True
 
-    def nombre(self):
+    def name(self):
         return 'TaTeTi_MultiPlayer'
 
-    def generar_datos(self, id_usuario):
-        # id_usuario se convierte en string porque las claves json deben ser de ese tipo
-        return {'usuarios': {id_usuario: {'letra_jugador': 'X'}}, 'tablero': [" " for i in range(9)],
-                'partida_terminada': False}
+    def generate_game_state(self, user_id):
+        # user_id se convierte en string porque las claves json deben ser de ese tipo
+        return {'users': {user_id: {'player_symbol': 'X'}}, 'board': [" " for i in range(9)],
+                'game_finished': False}
 
-    def generar_markup(self, update, context):
-        opciones = [[InlineKeyboardButton(" ", callback_data="{}".format(i))
+    def generate_markup(self, update, context):
+        options = [[InlineKeyboardButton(" ", callback_data="{}".format(i))
                      for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
-        return InlineKeyboardMarkup(opciones)
+        return InlineKeyboardMarkup(options)
 
-    async def responder_boton(self, update, context):
-        casilla = int(update.callback_query.data)
-        id_usuario = str(self.generar_id_usuario(update))
+    async def answer_button(self, update, context):
+        square = int(update.callback_query.data)
+        user_id = str(self.get_user_id(update))
         bot = context.bot
-        id_inline_mensaje = update.callback_query.inline_message_id
-        self.datos_usuarios.setdefault(id_inline_mensaje, self.generar_datos(id_usuario))
-        self.data_manager.save_info(self.datos_usuarios)
-        self.asignar_letra_a_oponente(id_inline_mensaje, id_usuario)
+        inline_message_id = self.get_message_id(update)
+        self.users_data.setdefault(inline_message_id, self.generate_game_state(user_id))
+        self.data_manager.save_info(self.users_data)
+        self.assign_symbol_to_opponent(inline_message_id, user_id)
 
-        letra = self.datos_usuarios[id_inline_mensaje]['usuarios'][id_usuario]['letra_jugador']
-        tablero = self.datos_usuarios[id_inline_mensaje]['tablero']
-        await self.marcar_casillero(bot, casilla, id_usuario, id_inline_mensaje, letra, tablero)
+        letra = self.users_data[inline_message_id]['users'][user_id]['player_symbol']
+        board = self.users_data[inline_message_id]['board']
+        await self.mark_square(bot, square, user_id, inline_message_id, letra, board)
 
-    async def marcar_casillero(self, bot, casilla, id_usuario, id_mensaje, letra, tablero):
-        if self.es_el_turno_del_jugador(letra, tablero):
-            tablero[casilla] = letra
-            await self.actualizar_tablero(bot, tablero, None, None, id_mensaje)
+    async def mark_square(self, bot, casilla, user_id, message_id, letra, board):
+        if self.is_players_turn(letra, board):
+            board[casilla] = letra
+            await self.update_board(bot, board, None, None, message_id)
 
-    def es_el_turno_del_jugador(self, letra, tablero):
-        return letra == 'X' and tablero.count(' ') % 2 != 0 or \
-               tablero.count(' ') % 2 == 0 and letra == 'O'
+    def is_players_turn(self, letra, board):
+        return letra == 'X' and board.count(' ') % 2 != 0 or \
+               board.count(' ') % 2 == 0 and letra == 'O'
 
-    def asignar_letra_a_oponente(self, id_mensaje, id_usuario):
-        if self.solo_ha_jugado_x(id_mensaje, id_usuario):
-            self.datos_usuarios[id_mensaje]['usuarios'].update({id_usuario: {'letra_jugador': 'O'}})
+    def assign_symbol_to_opponent(self, message_id, user_id):
+        if self.there_has_been_just_one_movement(message_id):
+            self.users_data[message_id]['users'].update({user_id: {'player_symbol': 'O'}})
 
-    def solo_ha_jugado_x(self, id_mensaje, id_usuario):
-        return self.datos_usuarios[id_mensaje]['tablero'].count('X') == 1 and \
-               self.datos_usuarios[id_mensaje]['tablero'].count('O')  == 0 \
-               and id_usuario not in self.datos_usuarios[id_mensaje]['usuarios'] \
-               and len(self.datos_usuarios[id_mensaje]['usuarios']) < 2
+    def there_has_been_just_one_movement(self, message_id):
+        return self.users_data[message_id]['board'].count('X') == 1 and \
+               self.users_data[message_id]['board'].count('O')

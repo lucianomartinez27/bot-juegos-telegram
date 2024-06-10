@@ -25,70 +25,69 @@ bot_tateti_inline = BotTaTeTiInLine()
 
 
 class BotDeJuegosTelegram(BotTelegram):
-    def __init__(self, nombre, token):
-        BotTelegram.__init__(self, nombre, token)
-        self.decalogo_de_juegos = {bot_ahorcado.nombre(): bot_ahorcado,
-                                   bot_buscaminas.nombre(): bot_buscaminas,
-                                   bot_mastermind.nombre(): bot_mastermind,
-                                   bot_tictactoe.nombre(): bot_tictactoe,
-                                   bot_tateti_inline.nombre(): bot_tateti_inline}
+    def __init__(self, name, token):
+        BotTelegram.__init__(self, name, token)
+        self.game_catalog = {bot_ahorcado.name(): bot_ahorcado,
+                                   bot_buscaminas.name(): bot_buscaminas,
+                                   bot_mastermind.name(): bot_mastermind,
+                                   bot_tictactoe.name(): bot_tictactoe,
+                                   bot_tateti_inline.name(): bot_tateti_inline}
         self.data_manager = DataManager(os.path.abspath(''))
-        self.datos_usuarios = self.data_manager.generate_info(dict())
+        self.user_data = self.data_manager.generate_info(dict())
 
     async def start(self, update, context):
         bot = context.bot
-        id_usuario = self.generar_id_usuario(update)
-        nombre_usuario = update.message.chat.first_name
-        self.datos_usuarios[str(id_usuario)] = {"juego_actual": None, "estado": {}}
-        self.data_manager.save_info(self.datos_usuarios)
-        self.enviar_mensaje(bot, id_usuario, "Hola {}, bienvenido al bot de juegos. Utiliza /juegos para\
-        ver la lista de juegos.".format(nombre_usuario))
+        user_id = self.get_user_id(update)
+        user_name = update.message.chat.first_name
+        self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}}
+        self.data_manager.save_info(self.user_data)
+        self.send_message(bot, user_id, "Hola {}, bienvenido al bot de juegos. Utiliza /juegos para\
+        ver la lista de juegos.".format(user_name))
 
-    async def mostrar_juegos(self, update, context):
-        opciones = [[InlineKeyboardButton(juego.nombre(), callback_data=juego.nombre())] for juego in
-                    self.decalogo_de_juegos.values() if not juego.es_inline()]
-        await update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(opciones))
+    async def display_games(self, update, context):
+        games = [[InlineKeyboardButton(game.name(), callback_data=game.name())] for game in
+                    self.game_catalog.values() if not game.is_inline_game()]
+        await update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(games))
         self.logger.info("Se ha iniciado un nuevo juego")
 
-    async def mostrar_juegos_inline(self, update, context):
-        resultados = []
-        for juego in self.decalogo_de_juegos.values():
-            if juego.es_inline():
-                resultados.append((InlineQueryResultArticle(
+    async def display_inline_games(self, update, context):
+        inline_games = []
+        for game in self.game_catalog.values():
+            if game.is_inline_game():
+                inline_games.append((InlineQueryResultArticle(
                     id=uuid4(),
-                    title=juego.nombre(),
-                    input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(juego.nombre())),
-                    reply_markup=juego.generar_markup(update, context))))
-        id_usuario = self.generar_id_usuario(update)
-        self.datos_usuarios[str(id_usuario)]['juego_actual'] = 'TaTeTi_MultiPlayer'
-        self.data_manager.save_info(self.datos_usuarios)
+                    title=game.name(),
+                    input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(game.name())),
+                    reply_markup=game.generate_markup(update, context))))
+        user_id = self.get_user_id(update)
+        self.user_data[str(user_id)]['juego_actual'] = 'TaTeTi_MultiPlayer'
+        self.data_manager.save_info(self.user_data)
 
-        await update.inline_query.answer(resultados)
+        await update.inline_query.answer(inline_games)
 
-    async def seleccionar_juego(self, update, context):
-        # Datos que devuelve Telegram
-        juego = update.callback_query.data
-        usuario = self.generar_id_usuario(update)
+    async def select_game(self, update, context):
+        selected_game = update.callback_query.data
+        user = self.get_user_id(update)
         bot = context.bot
-        self.datos_usuarios[str(usuario)] = {"juego_actual": juego}
-        self.data_manager.save_info(self.datos_usuarios)
+        self.user_data[str(user)] = {"juego_actual": selected_game}
+        self.data_manager.save_info(self.user_data)
 
-        await self.enviar_mensaje(bot, usuario, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
-                            .format(juego))
+        await self.send_message(bot, user, "Elegiste jugar al {}. Para cambiar de juego puedes usar /juegos nuevamente." \
+                            .format(selected_game))
 
-        await self.decalogo_de_juegos[juego].jugar(update, context)
+        await self.game_catalog[selected_game].play(update, context)
 
-    async def responder_boton_segun_juego(self, update, context):
+    async def answer_button_by_game(self, update, context):
         try:
-            usuario = self.generar_id_usuario(update)
-            juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-            await self.decalogo_de_juegos[juego].responder_boton(update, context)
+            user = self.get_user_id(update)
+            current_game = self.user_data[str(user)]["juego_actual"]
+            await self.game_catalog[current_game].answer_button(update, context)
         except KeyError:
             # Solucionar luego este hardcodeo
-            await self.decalogo_de_juegos['TaTeTi_MultiPlayer'].responder_boton(update, context)
+            await self.game_catalog['TaTeTi_MultiPlayer'].answer_button(update, context)
 
-    async def responder_mensaje_segun_juego(self, update, context):
-        usuario = self.generar_id_usuario(update)
-        juego = self.datos_usuarios[str(usuario)]["juego_actual"]
-        await self.decalogo_de_juegos[juego].responder_mensaje(update, context)
+    async def answer_message_by_game(self, update, context):
+        user_id = self.get_user_id(update)
+        current_game = self.user_data[str(user_id)]["juego_actual"]
+        await self.game_catalog[current_game].answer_message(update, context)
 

@@ -2,36 +2,36 @@
 # -*- coding: utf-8 -*-
 
 
-def plantilla_ahorcado(lista_errores : list, lista_aciertos : list, palabra : str) -> str:
+def hangman_template(errors : list, guessed : list, word : str) -> str:
     """
-    plantilla que crea a partir de una palabra y dos listas con aciertos y errores
+    plantilla que crea a partir de una palabra y dos listas con aciertos y errors
     la figura del juego del Ahorcado.
     Parámetro:
         lista_errores: lista con las letras que
     """
 
-    persona = ("O", "|", "/", "\\", "/ '", "\\")
-    horca = ["  ", "  ", "  ", "  ", "  ", "  "]
+    person = ("O", "|", "/", "\\", "/ '", "\\")
+    gallow = ["  ", "  ", "  ", "  ", "  ", "  "]
 
-    for i in range(len(lista_errores)):
-        horca[i] = persona[i]
+    for i in range(len(errors)):
+        gallow[i] = person[i]
 
-    plantilla = "*-------*\n"
-    plantilla += "||      |    \n"
-    plantilla += "||     {0}    \n".format(horca[0])
-    plantilla += "||   {1} {0} {2}  \n".format(horca[1], horca[2], horca[3])
-    plantilla += "||   {0} {1}   \n".format(horca[4], horca[5])
-    plantilla += "||           \n"
-    plantilla += "||=========\n\n"
+    gallow_template = "*-------*\n"
+    gallow_template += "||      |    \n"
+    gallow_template += "||     {0}    \n".format(gallow[0])
+    gallow_template += "||   {1} {0} {2}  \n".format(gallow[1], gallow[2], gallow[3])
+    gallow_template += "||   {0} {1}   \n".format(gallow[4], gallow[5])
+    gallow_template += "||           \n"
+    gallow_template += "||=========\n\n"
 
-    plantilla += "Palabra:"
-    for letra in palabra:
-        if letra not in lista_aciertos:
-            plantilla += " _"
+    gallow_template += "word:"
+    for letter in word:
+        if letter not in guessed:
+            gallow_template += " _"
         else:
-            plantilla += letra
-    return plantilla
+            gallow_template += letter
+    return gallow_template
 
 
-def letra_valida(letra: str) -> bool:
+def is_valid_letter(letra: str) -> bool:
     return letra.isalpha() and len(letra) == 1

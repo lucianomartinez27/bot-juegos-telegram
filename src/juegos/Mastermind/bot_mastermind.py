@@ -14,56 +14,56 @@ class BotMastermind(BotBase):
     def __init__(self):
         super(BotMastermind, self).__init__(__file__)
 
-    def nombre(self):
+    def name(self):
         return 'Mastermind'
 
-    def generar_datos(self, id_usuario):
-        # id_usuario se convierte en string porque las claves json deben ser de ese tipo
-        self.datos_usuarios[str(id_usuario)] = {}
-        self.datos_usuarios[str(id_usuario)]['numeros_computadora'] = generar_numero()
-        self.datos_usuarios[str(id_usuario)]['lista_resultados'] = []
-        self.datos_usuarios[str(id_usuario)]['lista_intentos'] = []
-        self.datos_usuarios[str(id_usuario)]['partida_terminada'] = False
-        self.data_manager.save_info(self.datos_usuarios)
+    def generate_game_state(self, user_id):
+        # user_id se convierte en string porque las claves json deben ser de ese tipo
+        self.users_data[str(user_id)] = {}
+        self.users_data[str(user_id)]['numeros_computadora'] = generar_numero()
+        self.users_data[str(user_id)]['lista_resultados'] = []
+        self.users_data[str(user_id)]['lista_intentos'] = []
+        self.users_data[str(user_id)]['game_finished'] = False
+        self.data_manager.save_info(self.users_data)
 
-    async def jugar(self, update, context):
-        id_usuario = update.callback_query.message.chat_id
+    async def play(self, update, context):
+        user_id = update.callback_query.message.chat_id
         bot = context.bot
-        self.generar_datos(id_usuario)
-        await self.enviar_mensaje(bot, id_usuario, 'MUERTOS Y HERIDOS (MASTERMIND)')
-        await self.enviar_mensaje(bot, id_usuario,
+        self.generate_game_state(user_id)
+        await self.send_message(bot, user_id, 'MUERTOS Y HERIDOS (MASTERMIND)')
+        await self.send_message(bot, user_id,
                             'Adivina un número de 4 dígitos, si aciertas el número, pero no la posición\n'
                             'tienes un herido. Si aciertas el número y su posición tienes un muerto.')
-        await self.enviar_mensaje(bot, id_usuario, 'Para ganar necesitas conseguir 4 muertos. Tendrás 15 intentos.')
+        await self.send_message(bot, user_id, 'Para ganar necesitas conseguir 4 muertos. Tendrás 15 intentos.')
 
-    async def responder_mensaje(self, update, context):
+    async def answer_message(self, update, context):
         mensaje = update.message.text
         bot = context.bot
-        id_usuario = update.message.chat_id
-        nombre = update.message.chat.first_name
+        user_id = update.message.chat_id
+        name = update.message.chat.first_name
 
-        numeros_computadora = self.datos_usuarios[str(id_usuario)]['numeros_computadora']
-        lista_resultados = self.datos_usuarios[str(id_usuario)]['lista_resultados']
-        lista_intentos = self.datos_usuarios[str(id_usuario)]['lista_intentos']
+        numeros_computadora = self.users_data[str(user_id)]['numeros_computadora']
+        lista_resultados = self.users_data[str(user_id)]['lista_resultados']
+        lista_intentos = self.users_data[str(user_id)]['lista_intentos']
 
-        if not self.datos_usuarios[str(id_usuario)]['partida_terminada']:
+        if not self.users_data[str(user_id)]['game_finished']:
             if partida_ganada(mensaje, numeros_computadora):
-                await self.enviar_mensaje(bot, id_usuario, "Felicidades, {}, GANASTE!!\n ¿Quieres jugar de nuevo? (Si o No)"\
-                                    .format(nombre))
-                await self.enviar_mensaje(bot, id_usuario, "Para cambiar de juego, usa /juegos.")
-                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
+                await self.send_message(bot, user_id, "Felicidades, {}, GANASTE!!\n ¿Quieres jugar de nuevo? (Si o No)"\
+                                    .format(name))
+                await self.send_message(bot, user_id, "Para cambiar de juego, usa /juegos.")
+                self.users_data[str(user_id)]['game_finished'] = True
             elif partida_perdida(lista_intentos):
-                await self.enviar_mensaje(bot, id_usuario, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
-                                                   nuevo? (Si o No)".format(nombre, "".join(numeros_computadora)))
-                await self.enviar_mensaje(bot, id_usuario, "Para cambiar de juego, usa /juegos.")
-                self.datos_usuarios[str(id_usuario)]['partida_terminada'] = True
+                await self.send_message(bot, user_id, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
+                                                   nuevo? (Si o No)".format(name, "".join(numeros_computadora)))
+                await self.send_message(bot, user_id, "Para cambiar de juego, usa /juegos.")
+                self.users_data[str(user_id)]['game_finished'] = True
             else:
                 if comprobar_numero(mensaje, lista_intentos):
-                    await self.enviar_mensaje(bot, id_usuario,
+                    await self.send_message(bot, user_id,
                                         chequear_numero(numeros_computadora, mensaje, lista_intentos, lista_resultados))
                 else:
-                    await self.enviar_mensaje(bot, id_usuario, "El número es incorrecto o ya has intentado con él.")
-            self.data_manager.save_info(self.datos_usuarios)
+                    await self.send_message(bot, user_id, "El número es incorrecto o ya has intentado con él.")
+            self.data_manager.save_info(self.users_data)
 
         else:
-            await self.enviar_mensaje(bot, id_usuario, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")

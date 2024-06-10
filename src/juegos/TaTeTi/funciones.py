@@ -12,13 +12,13 @@ def chequear_letra_jugador(letra):
         return None
 
 
-def hacer_jugada(tablero, letra, jugada):
-    tablero[jugada] = letra
+def hacer_jugada(board, letra, jugada):
+    board[jugada] = letra
 
 
 def es_ganador(ta, le):
-    # Dado un tablero y la letra de un jugador, devuelve True (verdadero) si el mismo ha ganado.
-    # Utilizamos reempplazamos tablero por ta y letra por le para no escribir tanto
+    # Dado un board y la letra de un jugador, devuelve True (verdadero) si el mismo ha ganado.
+    # Utilizamos reempplazamos board por ta y letra por le para no escribir tanto
     return ((ta[6] == le and ta[7] == le and ta[8] == le) or  # horizontal superior
             (ta[3] == le and ta[4] == le and ta[5] == le) or  # horizontal medio
             (ta[0] == le and ta[1] == le and ta[2] == le) or  # horizontal inferior
@@ -29,74 +29,74 @@ def es_ganador(ta, le):
             (ta[8] == le and ta[4] == le and ta[0] == le))  # diagonal
 
 
-def obtener_duplicado_tablero(tablero):
-    # Duplica la lista del tablero y devuelve el duplicado
-    return tablero[:]
+def obtener_duplicado_tablero(board):
+    # Duplica la lista del board y devuelve el duplicado
+    return board[:]
 
 
-def hay_espacio_libre(tablero, jugada):
-    # Devuelte true si hay espacio paraefectuar la jugada en el tablero.
-    return tablero[jugada] == " "
+def hay_espacio_libre(board, jugada):
+    # Devuelte true si hay espacio paraefectuar la jugada en el board.
+    return board[jugada] == " "
 
 
-def elegir_azar_de_lista(tablero, listaJugada):
-    # Devuelve una jugada válida en el tablero de la lista recibida.
+def elegir_azar_de_lista(board, listaJugada):
+    # Devuelve una jugada válida en el board de la lista recibida.
     # Devuelve None si no hay ninguna jugada válida.
 
     jugadas_posibles = []
     for i in listaJugada:
-        if hay_espacio_libre(tablero, i):
+        if hay_espacio_libre(board, i):
             jugadas_posibles.append(i)
 
     if len(jugadas_posibles) != 0:
         return random.choice(jugadas_posibles)
 
 
-def obtener_jugada_computadora(tablero, letra_computadora):
-    # Dado un tablero y la letra de la computadora, determina que jugada efectuar.
+def obtener_jugada_computadora(board, letra_computadora):
+    # Dado un board y la letra de la computadora, determina que jugada efectuar.
     if letra_computadora == 'X':
-        letra_jugador = 'O'
+        player_symbol = 'O'
     else:
-        letra_jugador = 'X'
+        player_symbol = 'X'
 
     # Aquí está nuestro algoritmo para nuestra IA (Inteligencia Artificial) del TATETI
     # Primero, verifica si podemos ganar en la próxima jugada.
     for i in range(9):
-        copia = obtener_duplicado_tablero(tablero)
+        copia = obtener_duplicado_tablero(board)
         if hay_espacio_libre(copia, i):
             hacer_jugada(copia, letra_computadora, i)
             if es_ganador(copia, letra_computadora):
-                tablero[i] = letra_computadora
+                board[i] = letra_computadora
                 return
 
     # Verifica si el jugador podría ganar en su próxima jugada, y lo bloquea.
     for i in range(9):
-        copia = obtener_duplicado_tablero(tablero)
+        copia = obtener_duplicado_tablero(board)
         if hay_espacio_libre(copia, i):
-            hacer_jugada(copia, letra_jugador, i)
-            if es_ganador(copia, letra_jugador):
-                tablero[i] = letra_computadora
+            hacer_jugada(copia, player_symbol, i)
+            if es_ganador(copia, player_symbol):
+                board[i] = letra_computadora
                 return
 
     # Intenta ocupar una de las esquinas de estar libre.
-    jugada = elegir_azar_de_lista(tablero, [0, 2, 6, 8])
+    jugada = elegir_azar_de_lista(board, [0, 2, 6, 8])
     if jugada != None:
-        tablero[jugada] = letra_computadora
+        board[jugada] = letra_computadora
         return
 
     # De estar libre, intenta ocupar el centro.
-    if hay_espacio_libre(tablero, 4):
-        tablero[4] = letra_computadora
+    if hay_espacio_libre(board, 4):
+        board[4] = letra_computadora
         return
 
     # Ocupa alguno de los lados.
-    i = elegir_azar_de_lista(tablero, [1, 3, 5, 7])
-    tablero[i] = letra_computadora
+    i = elegir_azar_de_lista(board, [1, 3, 5, 7])
+    board[i] = letra_computadora
 
 
-def tablero_completo(tablero):
-    # D evuelve True si cada espacio del tablero fue ocupado, caso contrario devuelve False.
+def tablero_completo(board):
+    # D evuelve True si cada espacio del board fue ocupado, caso contrario devuelve False.
     for i in range(9):
-        if hay_espacio_libre(tablero, i):
+        if hay_espacio_libre(board, i):
             return False
     return True
