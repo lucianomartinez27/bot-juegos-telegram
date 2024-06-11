@@ -53,8 +53,7 @@ class BotMastermind(BotBase):
                 await self.send_message(bot, user_id, "Para cambiar de juego, usa /juegos.")
                 self.users_data[str(user_id)]['game_finished'] = True
             elif partida_perdida(lista_intentos):
-                await self.send_message(bot, user_id, "Lo siento, {}, PERDISTE!!\n El número era {}\n¿Quieres jugar de \
-                                                   nuevo? (Si o No)".format(name, "".join(numeros_computadora)))
+                await self.send_message(bot, user_id, "Lo siento, {}, PERDISTE!!\n El número era {}".format(name, "".join(numeros_computadora)))
                 await self.send_message(bot, user_id, "Para cambiar de juego, usa /juegos.")
                 self.users_data[str(user_id)]['game_finished'] = True
             else:
