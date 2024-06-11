@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Librerias telegram
-from telegram.ext import ApplicationBuilder, Updater, MessageHandler, CommandHandler,\
-                         filters, CallbackQueryHandler, ConversationHandler,\
+from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler,\
+                         filters, CallbackQueryHandler, \
                          InlineQueryHandler
 
 # Registro de actividades

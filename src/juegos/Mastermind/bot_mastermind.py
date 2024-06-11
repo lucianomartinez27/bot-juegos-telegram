@@ -8,7 +8,7 @@ Juego : MUERTOS Y HERIDOS - MASTERMIND
 from bot_base import BotBase
 from juegos.Mastermind.funciones import generar_numero, comprobar_numero \
 , chequear_numero, partida_ganada, partida_perdida
-import os
+
 
 class BotMastermind(BotBase):
     def __init__(self):

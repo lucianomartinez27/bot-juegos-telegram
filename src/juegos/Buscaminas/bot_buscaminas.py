@@ -5,7 +5,7 @@ from bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
 from .funciones import crear_tablero, despejar_tablero, tablero_visible_inicial, verificar_tablero, descubrir_tablero
-import os
+
 
 
 class BotBuscaminas(BotBase):
