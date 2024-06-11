@@ -18,6 +18,9 @@ class BotBase(BotTelegram):
     def do_not_understand_message(self):
         return "Disculpa, no entiendo tu mensaje."
 
+    async def game_finished_message(self, bot, user_id):
+        await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+
     async def answer_message(self, update, context):
         usuario = self.get_user_id(update)
         bot = context.bot

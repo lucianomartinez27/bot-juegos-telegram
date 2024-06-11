@@ -66,4 +66,4 @@ class BotTelegramAhorcado(BotBase):
                 self.users_data[str(user_id)]['game_finished'] = True
             self.data_manager.save_info(self.users_data)
         else:
-            await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.game_finished_message(bot, user_id)

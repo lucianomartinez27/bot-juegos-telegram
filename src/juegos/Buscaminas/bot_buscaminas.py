@@ -46,12 +46,12 @@ class BotBuscaminas(BotBase):
         if not game_finished:
             despejar_tablero(int(x), int(y), t_oculto, t_visible)
             if t_oculto[int(x)][int(y)] == 9:
-                await self.send_message(bot, user_id, "perdiste bobo")
+                await self.send_message(bot, user_id, "Perdiste")
                 descubrir_tablero(t_visible, t_oculto)
                 self.users_data[str(user_id)]['game_finished'] = True
             if verificar_tablero(t_visible, bombas):
                 descubrir_tablero(t_visible, t_oculto)
-                await self.send_message(bot, user_id, "ganaste bobo")
+                await self.send_message(bot, user_id, "Ganaste")
                 self.users_data[str(user_id)]['game_finished'] = True
             self.data_manager.save_info(self.users_data)
             try:
@@ -62,4 +62,4 @@ class BotBuscaminas(BotBase):
             except BadRequest:
                 pass
         else:
-            await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.game_finished_message(bot, user_id)

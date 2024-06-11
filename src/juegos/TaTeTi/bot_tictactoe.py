@@ -107,4 +107,4 @@ class BotTicTacToe(BotBase):
             else:
                 await self.send_message(bot, user_id, "Esa casilla ya está ocupada, por favor elige otra.")
         else:
-            await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+            await self.game_finished_message(bot, user_id)
