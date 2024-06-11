@@ -1,3 +1,4 @@
+import json
 import random
 from utils.errors import ModelError
 
@@ -8,6 +9,19 @@ class HangManGame:
 		self.errors = []
 		self.guessed = []
 		self.game_finished = False
+	
+	def to_json(self):
+		return json.dumps(self.__dict__)
+	
+	@classmethod
+	def from_json(cls, json_str):
+			data = json.loads(json_str)
+			game = cls()
+			game._word = data['_word']
+			game.errors = data['errors']
+			game.guessed = data['guessed']
+			game.game_finished = data['game_finished']
+			return game
 
 	def template(self) -> str:
 		person = ("O", "|", "/", "\\", "/ '", "\\")

@@ -8,13 +8,17 @@ from utils.errors import ModelError
 class BotTelegramAhorcado(BotBase):
     def __init__(self):
         super(BotTelegramAhorcado, self).__init__(__file__)
+        self.users_data = {key: HangManGame.from_json(value) for key, value in self.users_data.items()}
 
     def name(self):
         return 'Ahorcado'
 
     def generate_game_state(self, user_id):
         self.users_data[str(user_id)] = HangManGame()
-        #self.data_manager.save_info(self.users_data)
+        self.save_all_games()
+
+    def save_all_games(self):
+        self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
 
     def get_game(self, user_id: int):
         return self.users_data[str(user_id)]
@@ -43,6 +47,6 @@ class BotTelegramAhorcado(BotBase):
 
         if not game.is_finished():
             await self.process_user_action(bot, user_id, try_letter)
-            #self.data_manager.save_info(self.users_data)
+            self.save_all_games()
         else:
             await self.game_finished_message(bot, user_id)
