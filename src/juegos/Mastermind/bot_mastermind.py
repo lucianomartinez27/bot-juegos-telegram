@@ -48,7 +48,7 @@ class BotMastermind(BotBase):
 
         if not self.users_data[str(user_id)]['game_finished']:
             if partida_ganada(mensaje, numeros_computadora):
-                await self.send_message(bot, user_id, "Felicidades, {}, GANASTE!!\n ¿Quieres jugar de nuevo? (Si o No)"\
+                await self.send_message(bot, user_id, "Felicidades, {}, GANASTE!!\n "\
                                     .format(name))
                 await self.send_message(bot, user_id, "Para cambiar de juego, usa /juegos.")
                 self.users_data[str(user_id)]['game_finished'] = True

@@ -58,11 +58,9 @@ class BotTelegramAhorcado(BotBase):
             await self.send_message(bot, user_id, hangman_template(errors, guessed, word))
             if len(errors) == 6:
                 await self.send_message(bot, user_id, "Has perdido\nLa palabra era: {}".format(word))
-                await self.send_message(bot, user_id, "{}, ¿quieres jugar de nuevo? (Si o No)".format(name))
                 self.users_data[str(user_id)]['game_finished'] = True
             elif len(guessed) == len(set(word)):
                 await self.send_message(bot, user_id, "Felicitaciones, hasta ganado!.")
-                await self.send_message(bot, user_id, "¿{}, quieres jugar de nuevo? (Si o No)".format(name))
                 self.users_data[str(user_id)]['game_finished'] = True
             self.data_manager.save_info(self.users_data)
         else:
