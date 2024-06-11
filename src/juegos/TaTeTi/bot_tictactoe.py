@@ -3,7 +3,6 @@
 
 from bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
-from telegram.error import BadRequest
 from juegos.TaTeTi.funciones import chequear_letra_jugador, obtener_jugada_computadora, tablero_completo, es_ganador, hay_espacio_libre
 
 

@@ -1,5 +1,4 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
-import os
 from juegos.TaTeTi.bot_tictactoe import BotTicTacToe
 
 
