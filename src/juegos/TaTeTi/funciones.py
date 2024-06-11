@@ -52,9 +52,9 @@ def elegir_azar_de_lista(board, listaJugada):
         return random.choice(jugadas_posibles)
 
 
-def obtener_jugada_computadora(board, letra_computadora):
+def obtener_jugada_computadora(board, computer_symbol):
     # Dado un board y la letra de la computadora, determina que jugada efectuar.
-    if letra_computadora == 'X':
+    if computer_symbol == 'X':
         player_symbol = 'O'
     else:
         player_symbol = 'X'
@@ -64,10 +64,10 @@ def obtener_jugada_computadora(board, letra_computadora):
     for i in range(9):
         copia = obtener_duplicado_tablero(board)
         if hay_espacio_libre(copia, i):
-            hacer_jugada(copia, letra_computadora, i)
-            if es_ganador(copia, letra_computadora):
-                board[i] = letra_computadora
-                return
+            hacer_jugada(copia, computer_symbol, i)
+            if es_ganador(copia, computer_symbol):
+                board[i] = computer_symbol
+                return board
 
     # Verifica si el jugador podría ganar en su próxima jugada, y lo bloquea.
     for i in range(9):
@@ -75,23 +75,25 @@ def obtener_jugada_computadora(board, letra_computadora):
         if hay_espacio_libre(copia, i):
             hacer_jugada(copia, player_symbol, i)
             if es_ganador(copia, player_symbol):
-                board[i] = letra_computadora
-                return
-
+                board[i] = computer_symbol
+                return board
+    
+    copia = obtener_duplicado_tablero(board)
     # Intenta ocupar una de las esquinas de estar libre.
     jugada = elegir_azar_de_lista(board, [0, 2, 6, 8])
     if jugada != None:
-        board[jugada] = letra_computadora
-        return
+        board[jugada] = computer_symbol
+        return board
 
     # De estar libre, intenta ocupar el centro.
     if hay_espacio_libre(board, 4):
-        board[4] = letra_computadora
-        return
+        board[4] = computer_symbol
+        return board
 
     # Ocupa alguno de los lados.
     i = elegir_azar_de_lista(board, [1, 3, 5, 7])
-    board[i] = letra_computadora
+    board[i] = computer_symbol
+    return board
 
 
 def tablero_completo(board):
