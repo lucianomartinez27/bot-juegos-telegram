@@ -3,25 +3,15 @@
 
 from bot_base import BotBase
 from .hangman import HangManGame 
-from utils.errors import ModelError
 
 class BotTelegramAhorcado(BotBase):
     def __init__(self):
         super(BotTelegramAhorcado, self).__init__(__file__)
-        self.users_data = {key: HangManGame.from_json(value) for key, value in self.users_data.items()}
+        self.users_data = { key: HangManGame.from_json(value) for key, value in self.users_data.items() }
+        self.Game = HangManGame
 
     def name(self):
         return 'Ahorcado'
-
-    def generate_game_state(self, user_id):
-        self.users_data[str(user_id)] = HangManGame()
-        self.save_all_games()
-
-    def save_all_games(self):
-        self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
-
-    def get_game(self, user_id: int):
-        return self.users_data[str(user_id)]
     
     async def play(self, update, context):
         user_id = self.get_user_id(update)

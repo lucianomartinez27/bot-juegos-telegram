@@ -12,9 +12,20 @@ class BotBase(BotTelegram):
     def __init__(self, file):
         self.data_manager = DataManager(os.path.dirname(file))
         self.users_data = self.data_manager.generate_info(dict())
+        self.Game = None
+
+    def save_all_games(self):
+        self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
+    
+    def generate_game_state(self, user_id):
+        self.users_data[str(user_id)] = self.Game()
+        self.save_all_games()
 
     def is_inline_game(self):
         return False
+
+    def get_game(self, user_id: int):
+        return self.users_data[str(user_id)]
 
     def do_not_understand_message(self):
         return "Disculpa, no entiendo tu mensaje."
