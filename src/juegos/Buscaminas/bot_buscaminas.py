@@ -4,7 +4,7 @@
 from bot_base import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import BadRequest
-from .funciones import crear_tablero, despejar_tablero, tablero_visible_inicial, verificar_tablero, descubrir_tablero
+from .funciones import create_board, show_board_hints, tablero_visible_inicial, minesweeper_finished, reveal_board
 
 
 
@@ -19,7 +19,7 @@ class BotBuscaminas(BotBase):
         # user_id se convierte en string porque las claves json deben ser de ese tipo
         self.users_data[str(user_id)] = {}
         bombas = self.users_data[str(user_id)]['bombas'] = 10
-        t_oculto = self.users_data[str(user_id)]['tablero_oculto'] = crear_tablero(8, 8, bombas)
+        t_oculto = self.users_data[str(user_id)]['tablero_oculto'] = create_board(8, 8, bombas)
         self.users_data[str(user_id)]['tablero_visible'] = tablero_visible_inicial(t_oculto)
         self.users_data[str(user_id)]['game_finished'] = False
         self.data_manager.save_info(self.users_data)
@@ -44,13 +44,13 @@ class BotBuscaminas(BotBase):
         bombas = self.users_data[str(user_id)]['bombas']
         game_finished = self.users_data[str(user_id)]['game_finished']
         if not game_finished:
-            despejar_tablero(int(x), int(y), t_oculto, t_visible)
+            show_board_hints(int(x), int(y), t_oculto, t_visible)
             if t_oculto[int(x)][int(y)] == 9:
                 await self.send_message(bot, user_id, "Perdiste")
-                descubrir_tablero(t_visible, t_oculto)
+                reveal_board(t_visible, t_oculto)
                 self.users_data[str(user_id)]['game_finished'] = True
-            if verificar_tablero(t_visible, bombas):
-                descubrir_tablero(t_visible, t_oculto)
+            if minesweeper_finished(t_visible, bombas):
+                reveal_board(t_visible, t_oculto)
                 await self.send_message(bot, user_id, "Ganaste")
                 self.users_data[str(user_id)]['game_finished'] = True
             self.data_manager.save_info(self.users_data)
