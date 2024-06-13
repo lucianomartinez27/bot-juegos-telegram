@@ -17,9 +17,9 @@ import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 bot_mastermind = BotMastermind()
-bot_buscaminas = BotBuscaminas()
 bot_tictactoe = BotTicTacToe()
 bot_ahorcado = BotTelegramAhorcado()
+bot_buscaminas = BotBuscaminas()
 
 bot_tateti_inline = BotTaTeTiInLine()
 
