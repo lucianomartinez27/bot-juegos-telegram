@@ -5,8 +5,8 @@
 Juego : MUERTOS Y HERIDOS - MASTERMIND
 """
 
-from bot_base import BotBase
-from juegos.Mastermind.mastermind import MasterMind
+from base_bot import BotBase
+from games.Mastermind.mastermind import MasterMind
 
 
 class BotMastermind(BotBase):

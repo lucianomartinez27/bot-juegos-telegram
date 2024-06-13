@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from bot_telegram import BotTelegram
+from telegram_bot import BotTelegram
 from utils.data_manager import DataManager
 from utils.errors import ModelError
 

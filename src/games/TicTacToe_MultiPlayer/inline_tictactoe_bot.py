@@ -1,5 +1,5 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
-from juegos.TaTeTi.bot_tictactoe import BotTicTacToe
+from games.TicTacToe.tictactoe_bot import BotTicTacToe
 
 
 class BotTaTeTiInLine(BotTicTacToe):

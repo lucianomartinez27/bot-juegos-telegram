@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from bot_base import BotBase
+from base_bot import BotBase
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from .minesweeper import Minesweeper
 

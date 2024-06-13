@@ -1,12 +1,12 @@
 #!/usr/bin/env/python3
 # -*- coding: utf-8 -*-
 
-from bot_telegram import BotTelegram
-from juegos.Ahorcado.bot_ahorcado import BotTelegramAhorcado
-from juegos.Mastermind.bot_mastermind import BotMastermind
-from juegos.Buscaminas.bot_buscaminas import BotBuscaminas
-from juegos.TaTeTi.bot_tictactoe import BotTicTacToe
-from juegos.TaTeTi_MultiPlayer.bot_tateti_inline import BotTaTeTiInLine
+from telegram_bot import BotTelegram
+from games.Hangman.hangman_bot import BotTelegramAhorcado
+from games.Mastermind.bot_mastermind import BotMastermind
+from games.Minesweeper.minesweeper_bot import BotBuscaminas
+from games.TicTacToe.tictactoe_bot import BotTicTacToe
+from games.TicTacToe_MultiPlayer.inline_tictactoe_bot import BotTaTeTiInLine
 from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
