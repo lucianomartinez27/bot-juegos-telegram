@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from bot_juegos import BotDeJuegosTelegram
+from games_bot import BotDeJuegosTelegram
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
 import re
 pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
