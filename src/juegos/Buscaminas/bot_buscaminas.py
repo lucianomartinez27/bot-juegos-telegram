@@ -35,6 +35,11 @@ class BotBuscaminas(BotBase):
             self.save_all_games()
             await bot.edit_message_reply_markup(chat_id=user_id, message_id=message_id,
                                             reply_markup=InlineKeyboardMarkup(self.board_markup(game)))
+            if game.finished():
+                if game.is_winner():
+                    await self.send_message(bot, user_id, "Ganaste")
+                else:
+                    await self.send_message(bot, user_id, "Perdiste")
             
 
     def board_markup(self, game):

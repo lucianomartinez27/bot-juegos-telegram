@@ -19,7 +19,7 @@ class Minesweeper:
 		self.num_of_cols = num_of_cols
 		self.hidden_board = [[0 for column in range(num_of_rows)] for row in range (num_of_cols)]
 		self.visible_board = self.create_visible_board()
-		self.game_finished = False
+		self.game_status = 'playing'
 		self.place_bombs()
 
 	def to_json(self):
@@ -32,7 +32,7 @@ class Minesweeper:
 			game.num_of_bombs = data['num_of_bombs']
 			game.hidden_board = data['hidden_board']
 			game.visible_board = data['visible_board']
-			game.game_finished = data['game_finished']
+			game.game_status = data['game_status']
 
 			return game
 
@@ -40,16 +40,16 @@ class Minesweeper:
 		return self.visible_board
 	
 	def finished(self):
-		return self.game_finished
+		return self.game_status != 'playing'
 	
 	def mark_cell(self, row_number, column_number):
 		self.show_board_hints(row_number, column_number)
 		if self.is_bomb(row_number, column_number):
 			self.reveal_board()
-			self.game_finished = True
-		if self.is_winner():
+			self.game_status = 'lose'
+		if self.no_cell_to_be_mark():
 			self.reveal_board()
-			self.game_finished = True
+			self.game_status = 'win'
 		
 
 	def is_bomb(self, row_number, column_number):
@@ -95,14 +95,17 @@ class Minesweeper:
 					if self.hidden_board[row_sibling][column_sibling] != MINE_CODE:
 						self.show_board_hints(row_sibling, column_sibling)
 
-	def is_winner(self):
+	def no_cell_to_be_mark(self):
 		num_of_cells = self.num_of_rows * self.num_of_cols
 		for row_number in range(self.num_of_rows):
 			for column_number in range(self.num_of_cols):
 				if self.visible_board[row_number][column_number] != HIDDEN_CELL:
 					num_of_cells -= 1
 		return (num_of_cells - self.num_of_bombs) == 0
-
+	
+	def is_winner(self):
+		return self.game_status == 'win'
+	
 	def reveal_board(self):
 		for row_number in range(self.num_of_cols):
 			for column_number in range(self.num_of_rows):

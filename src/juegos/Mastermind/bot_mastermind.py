@@ -24,7 +24,7 @@ class BotMastermind(BotBase):
         self.generate_game_state(user_id)
         await self.send_message(bot, user_id, 'MUERTOS Y HERIDOS (MASTERMIND)')
         await self.send_message(bot, user_id,
-                            'Adivina un número de 4 dígitos (ninguno repetido), si aciertas el número, pero no la posición\n'
+                            'Adivina un número de 4 dígitos (ninguno repetido), si aciertas el número, pero no la posición '
                             'tienes un herido. Si aciertas el número y su posición tienes un muerto.')
         await self.send_message(bot, user_id, 'Para ganar necesitas conseguir 4 muertos. Tendrás 15 intentos.')
 
