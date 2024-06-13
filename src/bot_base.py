@@ -48,5 +48,6 @@ class BotBase(BotTelegram):
            await callback()
         except ModelError as error:
             await self.send_message(bot, user_id, error.message)
-        except:
+        except Exception  as error:
+            print(error)
             await self.send_message(bot, user_id, "Ocurrió un error inesperado, por favor intenta nuevamente")
