@@ -50,6 +50,8 @@ class BotTaTeTiInLine(BotTicTacToe):
                 self.make_opponent_movement(game)
 
             if game.finished():
+                context.user_data["player_symbol"] = None
+                context.user_data["opposite_symbol"] = None
                 if game.is_winner(player_symbol):
                     await self.send_message(bot, user_id, 'Ganaste')
                 elif game.is_winner(opposite_symbol):
