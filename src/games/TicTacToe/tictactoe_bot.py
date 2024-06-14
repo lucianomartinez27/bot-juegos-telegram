@@ -35,11 +35,11 @@ class BotTicTacToe(BotBase):
         await update.message.reply_text('Ta-Te-Ti:', reply_markup=self.generate_markup(update, context))
 
     async def answer_message(self, update, context):
-        message = update.message.text
+        symbol = update.message.text
         user_id = self.get_user_id(update)
         game = self.get_game(user_id)
         if not game.started():
-            game.get_players_symbols(message)
+            game.get_players_symbols(symbol)
             if game.computer_plays_first():
                 game.make_computer_movement()    
             await self.generate_board(update, context)
@@ -52,6 +52,8 @@ class BotTicTacToe(BotBase):
                                         inline_message_id=id_mensaje_inline,
                                         reply_markup=InlineKeyboardMarkup(opciones))
 
+    def get_player_symbols(self, game, context):
+        return [game.player_symbol, game.computer_symbol]
 
     async def answer_button(self, update, context):
         cell = int(update.callback_query.data)
@@ -60,15 +62,17 @@ class BotTicTacToe(BotBase):
         message_id = self.get_message_id(update)
         game = self.get_game(user_id)
 
+        player_symbol = self.get_player_symbols(game, context)
+
         if game.finished():
             await self.game_finished_message(bot, user_id)
         else:
-            game.mark_cell(game.player_symbol, cell)            
+            game.mark_cell(player_symbol, cell)            
             if not game.finished():
-                game.make_computer_movement()
+                self.make_opponent_movement(game)
 
             if game.finished():
-                if game.is_winner(game.player_symbol):
+                if game.is_winner(player_symbol):
                     await self.send_message(bot, user_id, 'Ganaste')
                 elif game.is_winner(game.computer_symbol):
                     await self.send_message(bot, user_id, 'Perdiste')
@@ -76,6 +80,9 @@ class BotTicTacToe(BotBase):
                     await self.send_message(bot, user_id, 'Empataste')
             self.save_all_games()
             await self.update_board(bot, game.board, user_id, message_id)
+
+    def make_opponent_movement(self, game):
+        game.make_computer_movement()
             
         
            

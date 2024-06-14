@@ -9,6 +9,7 @@ class TicTacToeGame:
 	def __init__(self) -> None:
 		self.board = [" " for i in range(9)]
 		self.game_finished = False
+		self.last_movement_symbol = ''
 
 	def to_json(self):
 		return json.dumps(self.__dict__)
@@ -19,7 +20,24 @@ class TicTacToeGame:
 			game = cls()
 			game.board = data['board']
 			game.game_finished = data['game_finished']
+			game.last_movement_symbol = data['last_movement_symbol']
 			return game
+	
+	def no_movement_done(self):
+		return (self.board.count('X') == 0) and (self.board.count('O') == 0)
+	
+	def just_one_movement_done(self):
+		return (self.board.count('X') == 1) and (self.board.count('O') == 0)
+	
+	def get_players_symbols(self, player_symbol):
+		if player_symbol.upper() == 'X':
+			self.player_symbol = 'X'
+			self.computer_symbol = 'O'
+		elif player_symbol.upper() == 'O':
+			self.player_symbol = 'O'
+			self.computer_symbol = 'X'
+		else:
+				raise ModelError("Símbolo incorrecto, por favor elige X o O")
 	
 	def finished(self):
 		return self.game_finished
@@ -73,12 +91,15 @@ class TicTacToeGame:
 		return True
 	
 	def mark_cell(self, symbol, cell):
-		if (self.is_empty_cell(cell)):
-			self.board[cell] = symbol
-			if self.is_winner(symbol) or self.is_full_board():
-				self.game_finished = True
-		else:
+		if not self.is_empty_cell(cell):
 			raise ModelError("Esa casilla ya está ocupada, por favor elige otra.")
+		if self.last_movement_symbol == symbol:
+			raise ModelError("Debes esperar a que tu oponente marque una casilla.")
+		
+		self.last_movement_symbol = symbol
+		self.board[cell] = symbol
+		if self.is_winner(symbol) or self.is_full_board():
+			self.game_finished = True
 	
 
 class AgainstComputerTicTacToe(TicTacToeGame):
@@ -90,6 +111,7 @@ class AgainstComputerTicTacToe(TicTacToeGame):
 	
 	@classmethod
 	def from_json(cls, json_str):
+			game = super()
 			data = json.loads(json_str)
 			game = cls()
 			game.board = data['board']
@@ -100,16 +122,6 @@ class AgainstComputerTicTacToe(TicTacToeGame):
 	
 	def started(self):
 		return self.player_symbol != ''
-	
-	def get_players_symbols(self, player_symbol):
-		if player_symbol.upper() == 'X':
-			self.player_symbol = 'X'
-			self.computer_symbol = 'O'
-		elif player_symbol.upper() == 'O':
-			self.player_symbol = 'O'
-			self.computer_symbol = 'X'
-		else:
-				raise ModelError("Símbolo incorrecto, por favor elige X o O")
 	
 	def computer_plays_first(self):
 		return self.computer_symbol == 'X'
@@ -151,3 +163,23 @@ class AgainstComputerTicTacToe(TicTacToeGame):
 		cell = self.find_random_cell_from([1, 3, 5, 7])
 		self.mark_cell(self.computer_symbol, cell)
 	
+	class AgainstHumanTicTacToe(TicTacToeGame):
+		def __init__(self):
+			super(TicTacToeGame, self).__init__()
+			
+	
+		@classmethod
+		def from_json(cls, json_str):
+				game = super()
+				data = json.loads(json_str)
+				game = cls()
+				game.board = data['board']
+				game.game_finished = data['game_finished']
+				game.player_1_symbol = data['player_1_symbol']
+				game.player_2_symbol = data['player_2_symbol']
+				return game
+
+		def started(self):
+			return self.last_movement_symbol != ''
+
+		

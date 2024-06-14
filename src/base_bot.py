@@ -17,9 +17,10 @@ class BotBase(BotTelegram):
     def save_all_games(self):
         self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
     
-    def generate_game_state(self, user_id):
-        self.users_data[str(user_id)] = self.Game()
+    def generate_game_state(self, id):
+        self.users_data[str(id)] = self.Game()
         self.save_all_games()
+        return self.users_data[str(id)]
 
     def is_inline_game(self):
         return False

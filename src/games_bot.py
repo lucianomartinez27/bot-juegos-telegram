@@ -60,7 +60,7 @@ class BotDeJuegosTelegram(BotTelegram):
                     input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(game.name())),
                     reply_markup=game.generate_markup(update, context))))
         user_id = self.get_user_id(update)
-        self.user_data.setdefault(str(user_id), {'juego_actual': 'TaTeTi_MultiPlayer'})
+        self.user_data[str(user_id)] = {'juego_actual': 'TaTeTi_MultiPlayer'}
         self.data_manager.save_info(self.user_data)
 
         await update.inline_query.answer(inline_games)
