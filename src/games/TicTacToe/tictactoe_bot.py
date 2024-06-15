@@ -62,7 +62,7 @@ class BotTicTacToe(BotBase):
         message_id = self.get_message_id(update)
         game = self.get_game(user_id)
 
-        player_symbol = self.get_player_symbols(game, context)
+        [player_symbol, computer_symbol] = self.get_player_symbols(game, context)
 
         if game.finished():
             await self.game_finished_message(bot, user_id)
@@ -74,7 +74,7 @@ class BotTicTacToe(BotBase):
             if game.finished():
                 if game.is_winner(player_symbol):
                     await self.send_message(bot, user_id, 'Ganaste')
-                elif game.is_winner(game.computer_symbol):
+                elif game.is_winner(computer_symbol):
                     await self.send_message(bot, user_id, 'Perdiste')
                 else: #isTie
                     await self.send_message(bot, user_id, 'Empataste')
