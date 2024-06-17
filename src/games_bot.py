@@ -52,13 +52,13 @@ class BotDeJuegosTelegram(BotTelegram):
 
     async def display_inline_games(self, update, context):
         inline_games = []
-        for game in self.game_catalog.values():
-            if game.is_inline_game():
-                inline_games.append((InlineQueryResultArticle(
+        for bot_game in self.game_catalog.values():
+            if bot_game.is_inline_game():
+                inline_games.append(InlineQueryResultArticle(
                     id=uuid4(),
-                    title=game.name(),
-                    input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(game.name())),
-                    reply_markup=game.generate_markup(update, context))))
+                    title=bot_game.name(),
+                    input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(bot_game.name())),
+                    reply_markup=bot_game.generate_inline_markup()))
         user_id = self.get_user_id(update)
         self.user_data[str(user_id)] = {'juego_actual': 'TaTeTi_MultiPlayer'}
         self.data_manager.save_info(self.user_data)

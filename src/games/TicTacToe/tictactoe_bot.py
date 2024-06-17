@@ -25,14 +25,13 @@ class BotTicTacToe(BotBase):
                          reply_markup=ReplyKeyboardMarkup(custom_keyboard))
 
 
-    def generate_markup(self, update, context):
-        user_id = self.get_user_id(update)
-        board_buttons = [[InlineKeyboardButton(self.get_game(user_id).board[i], callback_data="{}".format(i))
+    def generate_markup(self, game):
+        board_buttons = [[InlineKeyboardButton(game.board[i], callback_data="{}".format(i))
                      for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
         return InlineKeyboardMarkup(board_buttons)
 
-    async def generate_board(self, update, context):
-        await update.message.reply_text('Ta-Te-Ti:', reply_markup=self.generate_markup(update, context))
+    async def generate_board(self, update, game):
+        await update.message.reply_text('Ta-Te-Ti:', reply_markup=self.generate_markup(game))
 
     async def answer_message(self, update, context):
         symbol = update.message.text
@@ -42,15 +41,13 @@ class BotTicTacToe(BotBase):
             game.get_players_symbols(symbol)
             if game.computer_plays_first():
                 game.make_computer_movement()    
-            await self.generate_board(update, context)
+            await self.generate_board(update, game)
 
-    async def update_board(self, bot, board, chat_id=None, message_id=None, id_mensaje_inline=None):
-        opciones = [[InlineKeyboardButton(board[i], callback_data="{}".format(i))
-                        for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
+    async def update_board(self, bot, game, chat_id=None, message_id=None, id_mensaje_inline=None):
         await bot.edit_message_reply_markup(chat_id=chat_id,
                                         message_id=message_id,
                                         inline_message_id=id_mensaje_inline,
-                                        reply_markup=InlineKeyboardMarkup(opciones))
+                                        reply_markup=self.generate_markup(game))
 
     def get_player_symbols(self, game, context):
         return [game.player_symbol, game.computer_symbol]
@@ -79,7 +76,7 @@ class BotTicTacToe(BotBase):
                 else: #isTie
                     await self.send_message(bot, user_id, 'Empataste')
             self.save_all_games()
-            await self.update_board(bot, game.board, user_id, message_id)
+            await self.update_board(bot, game, user_id, message_id)
 
     def make_opponent_movement(self, game):
         game.make_computer_movement()

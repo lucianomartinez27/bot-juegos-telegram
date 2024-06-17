@@ -15,7 +15,7 @@ class BotTaTeTiInLine(BotTicTacToe):
     def name(self):
         return 'TaTeTi_MultiPlayer'
 
-    def generate_markup(self, update, context):
+    def generate_inline_markup(self):
         options = [[InlineKeyboardButton(" ", callback_data="{}".format(i))
                      for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
         return InlineKeyboardMarkup(options)
@@ -28,13 +28,7 @@ class BotTaTeTiInLine(BotTicTacToe):
         self.users_data.setdefault(self.get_message_id(update), self.generate_game_state(user_id))
         message_id = self.get_message_id(update)
         game = self.get_game(message_id)
-        if not context.user_data.get("player_symbol"):
-            if game.no_movement_done():
-                context.user_data["player_symbol"] = 'X'
-                context.user_data["opposite_symbol"] = 'O'
-            elif game.just_one_movement_done():
-                context.user_data["player_symbol"] = 'O'
-                context.user_data["opposite_symbol"] = 'X'
+        self.reset_player_symbols(context, game)
        
         cell = int(update.callback_query.data)
         bot = context.bot
@@ -45,23 +39,30 @@ class BotTaTeTiInLine(BotTicTacToe):
         if game.finished():
             await self.game_finished_message(bot, user_id)
         else:
-            game.mark_cell(player_symbol, cell)            
+            game.mark_cell(player_symbol, cell)
             if not game.finished():
                 self.make_opponent_movement(game)
-
+            await self.update_board(bot, game, user_id, message_id)
             if game.finished():
                 context.user_data["player_symbol"] = None
                 context.user_data["opposite_symbol"] = None
                 if game.is_winner(player_symbol):
-                    await self.send_message(bot, user_id, 'Ganaste')
+                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'X ganó', reply_markup=self.generate_markup(game))
                 elif game.is_winner(opposite_symbol):
-                    await self.send_message(bot, user_id, 'Perdiste')
+                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'O ganó', reply_markup=self.generate_markup(game))
                 else: #isTie
-                    await self.send_message(bot, user_id, 'Empataste')
+                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'Fue un empate', reply_markup=self.generate_markup(game))
             self.save_all_games()
-            await self.update_board(bot, game.board, user_id, message_id)
+
+    def reset_player_symbols(self, context, game):
+        if game.no_movement_done():
+            context.user_data["player_symbol"] = 'X'
+            context.user_data["opposite_symbol"] = 'O'
+        elif game.just_one_movement_done() and not (context.user_data.get("player_symbol") == 'X'):
+            context.user_data["player_symbol"] = 'O'
+            context.user_data["opposite_symbol"] = 'X'
     
-    def update_board(self, bot, board, chat_id=None, message_id=None, id_mensaje_inline=None):
+    def update_board(self, bot, board, chat_id=None, message_id=None):
         return super().update_board(bot, board, None, None, message_id)
     
     def make_opponent_movement(self, game):
