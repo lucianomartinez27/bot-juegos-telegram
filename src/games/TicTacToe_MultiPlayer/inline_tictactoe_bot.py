@@ -47,9 +47,9 @@ class BotTaTeTiInLine(BotTicTacToe):
                 context.user_data["player_symbol"] = None
                 context.user_data["opposite_symbol"] = None
                 if game.is_winner(player_symbol):
-                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'X ganó', reply_markup=self.generate_markup(game))
+                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= player_symbol + ' ganó', reply_markup=self.generate_markup(game))
                 elif game.is_winner(opposite_symbol):
-                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'O ganó', reply_markup=self.generate_markup(game))
+                    await context.bot.edit_message_caption(inline_message_id=message_id, caption= opposite_symbol + ' ganó', reply_markup=self.generate_markup(game))
                 else: #isTie
                     await context.bot.edit_message_caption(inline_message_id=message_id, caption= 'Fue un empate', reply_markup=self.generate_markup(game))
             self.save_all_games()
