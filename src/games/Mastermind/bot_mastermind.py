@@ -16,7 +16,7 @@ class BotMastermind(BotBase):
         self.Game = MasterMind
 
     def name(self):
-        return 'Mastermind'
+        return '- Mastermind'
 
     async def play(self, update, context):
         user_id = update.callback_query.message.chat_id

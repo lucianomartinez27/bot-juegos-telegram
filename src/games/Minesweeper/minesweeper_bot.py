@@ -13,7 +13,7 @@ class BotBuscaminas(BotBase):
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
     def name(self):
-        return 'Buscaminas'
+        return '- Buscaminas'
 
     async def play(self, update, context):
         user_id = update.callback_query.message.chat_id

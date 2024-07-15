@@ -5,7 +5,7 @@ import os
 from games_bot import BotDeJuegosTelegram
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
 import re
-pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
+pattern = re.compile(r"[-] [a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
 inline_pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ]+[_]+ [1-9]")
 
 import threading

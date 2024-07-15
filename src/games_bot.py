@@ -7,6 +7,7 @@ from games.Mastermind.bot_mastermind import BotMastermind
 from games.Minesweeper.minesweeper_bot import BotBuscaminas
 from games.TicTacToe.tictactoe_bot import BotTicTacToe
 from games.TicTacToe_MultiPlayer.inline_tictactoe_bot import BotTaTeTiInLine
+from games.RockPaperScissor.rock_paper_scissor_bot import BotRockPaperScissor
 from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
@@ -20,7 +21,7 @@ bot_mastermind = BotMastermind()
 bot_tictactoe = BotTicTacToe()
 bot_ahorcado = BotTelegramAhorcado()
 bot_buscaminas = BotBuscaminas()
-
+bot_rps = BotRockPaperScissor()
 bot_tateti_inline = BotTaTeTiInLine()
 
 
@@ -31,7 +32,9 @@ class BotDeJuegosTelegram(BotTelegram):
                                    bot_buscaminas.name(): bot_buscaminas,
                                    bot_mastermind.name(): bot_mastermind,
                                    bot_tictactoe.name(): bot_tictactoe,
-                                   bot_tateti_inline.name(): bot_tateti_inline}
+                                   bot_tateti_inline.name(): bot_tateti_inline,
+                                   bot_rps.name(): bot_rps}
+        
         self.data_manager = DataManager(os.path.abspath(''))
         self.user_data = self.data_manager.generate_info(dict())
 

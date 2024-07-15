@@ -11,7 +11,7 @@ class BotTelegramAhorcado(BotBase):
         self.Game = HangManGame
 
     def name(self):
-        return 'Ahorcado'
+        return '- Ahorcado'
     
     async def play(self, update, context):
         user_id = self.get_user_id(update)

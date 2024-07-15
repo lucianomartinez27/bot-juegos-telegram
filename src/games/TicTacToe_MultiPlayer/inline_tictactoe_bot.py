@@ -13,7 +13,7 @@ class BotTaTeTiInLine(BotTicTacToe):
         return True
 
     def name(self):
-        return 'TaTeTi_MultiPlayer'
+        return '- TaTeTi_MultiPlayer'
 
     def generate_inline_markup(self):
         options = [[InlineKeyboardButton(" ", callback_data="{}".format(i))
