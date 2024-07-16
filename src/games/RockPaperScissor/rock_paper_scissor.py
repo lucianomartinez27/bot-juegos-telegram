@@ -50,15 +50,23 @@ class RockPaperScissorGame:
     def __init__(self, player_one, player_two) -> None:
         self.player_one = player_one
         self.player_two = player_two
+        self.last_winner = None
 
     def play(self):
-        return self.player_one.play_against(self.player_two)
+        self.last_winner = self.player_one.play_against(self.player_two)
+        return self.last_winner
     
     def player_one_choice(self):
         return self.player_one.name
     
     def player_two_choice(self):
         return self.player_two.name
+    
+    def last_winner_is(self, a_player):
+        return self.last_winner == a_player.name
+    
+    def last_winner_is_player_one(self):
+        return self.last_winner_is(self.player_one)
     
     @staticmethod
     def element(name):

@@ -35,8 +35,11 @@ class BotRockPaperScissor(BotBase):
     def get_message_by_result(self, game):
         result = game.play()
         if (result == Rock.name or result == Scissor.name or result == Paper.name):
-            winner = f"Ganó *{result.upper()}*"
+            if (game.last_winner_is_player_one()):
+                start = "*GANASTE*"
+            else:
+                start = "*PERDISTE*"
         else:
-            winner = f"Fue un *{result.upper()}*"
-        return f"{winner}. Tu elegiste *{game.player_one_choice().upper()}* la computadora eligió *{game.player_two_choice().upper()}*"
+            start = f"Fue un *EMPATE*"
+        return f"{start}. Tu elegiste *{game.player_one_choice().upper()}* la computadora eligió *{game.player_two_choice().upper()}*"
 
