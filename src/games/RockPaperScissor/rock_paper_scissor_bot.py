@@ -19,9 +19,9 @@ class BotRockPaperScissor(BotBase):
     
     def element_options(self):
         return [
-            [InlineKeyboardButton('Piedra', callback_data='rock')],
-            [InlineKeyboardButton('Papel', callback_data='paper')],
-            [InlineKeyboardButton('Tijera', callback_data='scissor')],
+            [InlineKeyboardButton('Piedra', callback_data='piedra')],
+            [InlineKeyboardButton('Papel', callback_data='papel')],
+            [InlineKeyboardButton('Tijera', callback_data='tijera')],
         ]
 
     async def answer_button(self, update, context):
@@ -29,14 +29,14 @@ class BotRockPaperScissor(BotBase):
         bot = context.bot
         user_id = self.get_user_id(update)
         game = self.Game(self.Game.element(option), self.Game.random_choice())
-        message = self.get_message_by_result(game.play())
-        await self.send_message(bot, user_id, message)
+        message = self.get_message_by_result(game)
+        await self.send_message(bot, user_id, message, parse_mode='markdown')
     
-    def get_message_by_result(self, winner):
-        if (winner == Rock.name):
-            return 'Ganó Piedra'
-        if (winner == Scissor.name):
-            return 'Ganó Tijera'
-        if (winner == Paper.name):
-            return 'Ganó Papel'
-        return 'Fue un emptate'
+    def get_message_by_result(self, game):
+        result = game.play()
+        if (result == Rock.name or result == Scissor.name or result == Paper.name):
+            winner = f"Ganó *{result.upper()}*"
+        else:
+            winner = f"Fue un *{result.upper()}*"
+        return f"{winner}. Tu elegiste *{game.player_one_choice().upper()}* la computadora eligió *{game.player_two_choice().upper()}*"
+
