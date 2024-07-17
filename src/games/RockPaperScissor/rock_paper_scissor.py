@@ -2,6 +2,9 @@ import random
 
 class Rock:
     name = 'piedra'
+    
+    def is_unchosen(self):
+        return False
 
     def play_against(self, oponent):
         return oponent.play_against_rock()
@@ -18,6 +21,9 @@ class Rock:
 
 class Paper:
     name = 'papel'
+    
+    def is_unchosen(self):
+        return False
 
     def play_against(self, oponent):
         return oponent.play_against_paper()
@@ -33,6 +39,9 @@ class Paper:
 
 class Scissor:
     name = 'tijera'
+    
+    def is_unchosen(self):
+        return False
 
     def play_against(self, oponent):
         return oponent.play_against_scissor()
@@ -46,11 +55,23 @@ class Scissor:
     def play_against_scissor(self):
         return 'empate'
 
+class NoElement:
+    
+    def is_unchosen(self):
+        return True
+
 class RockPaperScissorGame:
-    def __init__(self, player_one, player_two) -> None:
+    def __init__(self, player_one=NoElement(), player_two=NoElement()) -> None:
         self.player_one = player_one
         self.player_two = player_two
         self.last_winner = None
+
+    def to_json(self):
+        return {}
+    
+    @classmethod
+    def from_json(cls, json):
+        return cls()
 
     def play(self):
         self.last_winner = self.player_one.play_against(self.player_two)
@@ -68,6 +89,15 @@ class RockPaperScissorGame:
     def last_winner_is_player_one(self):
         return self.last_winner_is(self.player_one)
     
+    def no_player_choose(self):
+        return self.player_one.is_unchosen() and self.player_two.is_unchosen()
+    
+    def one_player_choose(self):
+        return self.player_one.is_unchosen() and not self.player_two.is_unchosen() \
+        or self.player_two.is_unchosen() and not self.player_one.is_unchosen()
+    
+    def both_players_choose(self):
+        return not self.player_one.is_unchosen() and not self.player_two.is_unchosen()
     @staticmethod
     def element(name):
         if Rock.name == name:

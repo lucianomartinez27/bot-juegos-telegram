@@ -8,6 +8,7 @@ from games.Minesweeper.minesweeper_bot import BotBuscaminas
 from games.TicTacToe.tictactoe_bot import BotTicTacToe
 from games.TicTacToe_MultiPlayer.inline_tictactoe_bot import BotTaTeTiInLine
 from games.RockPaperScissor.rock_paper_scissor_bot import BotRockPaperScissor
+from games.RockPaperScissor.rock_paper_scissor_multiplayer_bot import BotRockPaperScissorMultiplayer
 from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
@@ -23,6 +24,7 @@ bot_ahorcado = BotTelegramAhorcado()
 bot_buscaminas = BotBuscaminas()
 bot_rps = BotRockPaperScissor()
 bot_tateti_inline = BotTaTeTiInLine()
+bot_rps_multiplayer = BotRockPaperScissorMultiplayer()
 
 
 class BotDeJuegosTelegram(BotTelegram):
@@ -33,7 +35,9 @@ class BotDeJuegosTelegram(BotTelegram):
                                    bot_mastermind.name(): bot_mastermind,
                                    bot_tictactoe.name(): bot_tictactoe,
                                    bot_tateti_inline.name(): bot_tateti_inline,
-                                   bot_rps.name(): bot_rps}
+                                   bot_rps.name(): bot_rps,
+                                   bot_rps_multiplayer.name(): bot_rps_multiplayer
+                                   }
         
         self.data_manager = DataManager(os.path.abspath(''))
         self.user_data = self.data_manager.generate_info(dict())
@@ -51,19 +55,24 @@ class BotDeJuegosTelegram(BotTelegram):
         games = [[InlineKeyboardButton(game.name(), callback_data=game.name())] for game in
                     self.game_catalog.values() if not game.is_inline_game()]
         await update.message.reply_text('Los juegos disponibles son:', reply_markup=InlineKeyboardMarkup(games))
-        self.logger.info("Se ha iniciado un nuevo juego")
+
+    def get_inline_game_by_query_data(self, query_data):
+        if (query_data in ['tijera', 'piedra', 'papel']):
+            return bot_rps_multiplayer.name()
+        else:
+            return bot_tateti_inline.name()
+
 
     async def display_inline_games(self, update, context):
         inline_games = []
         for bot_game in self.game_catalog.values():
             if bot_game.is_inline_game():
+                inline_message_id = uuid4()
                 inline_games.append(InlineQueryResultArticle(
-                    id=uuid4(),
+                    id=f"{bot_game.name()}_{str(inline_message_id)}",
                     title=bot_game.name(),
                     input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(bot_game.name())),
                     reply_markup=bot_game.generate_inline_markup()))
-        user_id = self.get_user_id(update)
-        self.user_data[str(user_id)] = {'juego_actual': 'TaTeTi_MultiPlayer'}
         self.data_manager.save_info(self.user_data)
 
         await update.inline_query.answer(inline_games)
@@ -86,8 +95,8 @@ class BotDeJuegosTelegram(BotTelegram):
             current_game = self.user_data[str(user)]["juego_actual"]
             await self.game_catalog[current_game].answer_button(update, context)
         except KeyError:
-            # Solucionar luego este hardcodeo
-            await self.game_catalog['TaTeTi_MultiPlayer'].answer_button(update, context)
+            game_name = self.get_inline_game_by_query_data(update.callback_query.data)
+            await self.game_catalog[game_name].answer_button(update, context)
 
     async def answer_message_by_game(self, update, context):
         user_id = self.get_user_id(update)
