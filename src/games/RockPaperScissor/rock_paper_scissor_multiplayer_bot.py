@@ -58,8 +58,8 @@ class BotRockPaperScissorMultiplayer(BotBase):
                 start = f"Ganó *{result.upper()}*"
             else:
                 start = f"Fue un *EMPATE*"
-            first_player_name =  context.bot_data['first_player_name']
-            second_player_name = context.bot_data['second_player_name']
-            message = f"{start}. {first_player_name} eligió *{game.player_one_choice().upper()}* y *{second_player_name}* eligió *{game.player_two_choice().upper()}*"
+            first_player_name =  context.bot_data[message_id]['first_player_name']
+            second_player_name = context.bot_data[message_id]['second_player_name']
+            message = f"{start}. *{first_player_name}* eligió *{game.player_one_choice().upper()}* y *{second_player_name}* eligió *{game.player_two_choice().upper()}*"
             await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
 
