@@ -12,7 +12,7 @@ class BotRockPaperScissorMultiplayer(BotBase):
         self.Game = RockPaperScissorGame
 
     def name(self):
-        return '- Piedras Papel y Tijeras'
+        return '- Piedras Papel y Tijeras Multiplayer'
     
     def is_inline_game(self):
         return True
