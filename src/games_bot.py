@@ -69,7 +69,7 @@ class BotDeJuegosTelegram(BotTelegram):
             if bot_game.is_inline_game():
                 inline_message_id = uuid4()
                 inline_games.append(InlineQueryResultArticle(
-                    id=f"{bot_game.name()}_{str(inline_message_id)}",
+                    id=inline_message_id,
                     title=bot_game.name(),
                     input_message_content=InputTextMessageContent('Vamos a jugar a {}'.format(bot_game.name())),
                     reply_markup=bot_game.generate_inline_markup()))
@@ -90,11 +90,11 @@ class BotDeJuegosTelegram(BotTelegram):
         await self.game_catalog[selected_game].play(update, context)
 
     async def answer_button_by_game(self, update, context):
-        try:
+        if not update.callback_query.inline_message_id:
             user = self.get_user_id(update)
             current_game = self.user_data[str(user)]["juego_actual"]
             await self.game_catalog[current_game].answer_button(update, context)
-        except KeyError:
+        else:
             game_name = self.get_inline_game_by_query_data(update.callback_query.data)
             await self.game_catalog[game_name].answer_button(update, context)
 
