@@ -49,7 +49,7 @@ class BotDeJuegosTelegram(BotTelegram):
         self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}}
         self.data_manager.save_info(self.user_data)
         message = f"Hola *{user_name}*, bienvenido al bot de juegos. Utiliza /juegos para ver la lista de juegos.\n\n"
-        message += "También hay juegos que puedes jugar con otros jugadores. Para ello debes escribir '@juegos_clasicos_bot jugar' en el chat de tu amigo.\n\n"
+        message += "También hay juegos que puedes jugar con otros jugadores. Para ello debes escribir `@juegos_clasicos_bot jugar` en el chat de tu amigo.\n\n"
         message += "Te saldrá una lista de los juegos disponibles, selecciona el que quieras jugar."
         await self.send_message(bot, user_id, message, 'markdown')
 
