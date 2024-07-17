@@ -24,25 +24,33 @@ class BotRockPaperScissorMultiplayer(BotBase):
             [InlineKeyboardButton('Tijera', callback_data='tijera')],
         ])
     
-    def reset_player_choice(self, context, game, option):
+    async def reset_player_choice(self, context, update, game, option):
+        message_id = self.get_message_id(update)
+        user_full_name = update.effective_user.full_name
+        users = context.bot_data.setdefault(message_id, {'first_player_name': '', 'second_player_name': ''})
         if game.no_player_choose():
+            users['first_player_name'] = user_full_name
             game.player_one = self.Game.element(option)
-            context.user_data['player_symbol'] = option
-        elif (game.one_player_choose()):
+            context.user_data[message_id] = option
+            message = f"*{user_full_name}* ya eligió su opción."
+            await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
+        elif game.one_player_choose() and not context.user_data.get(message_id):
+            users['second_player_name'] = user_full_name
             game.player_two = self.Game.element(option)
-            context.user_data['player_symbol'] = option
         
         
     async def answer_button(self, update, context):        
         user_id = self.get_user_id(update)
         message_id = self.get_message_id(update)
-        game = self.users_data.setdefault(self.get_message_id(update), self.generate_game_state(user_id))
+        game = self.users_data.setdefault(message_id, self.generate_game_state(user_id))
         option = update.callback_query.data
-        self.reset_player_choice(context, game, option)
-        await self.send_message_by_result(game, message_id, context.bot)
+        await self.reset_player_choice(context, update, game, option)
+        if (game.both_players_choose()):
+            await self.send_message_by_result(game, message_id, context)
+  
         
     
-    async def send_message_by_result(self, game, message_id, bot):
+    async def send_message_by_result(self, game, message_id, context):
         
         if (game.both_players_choose()):
             result = game.play()
@@ -50,6 +58,8 @@ class BotRockPaperScissorMultiplayer(BotBase):
                 start = f"Ganó *{result.upper()}*"
             else:
                 start = f"Fue un *EMPATE*"
-            message = f"{start}. Uno eligió *{game.player_one_choice().upper()}* y el otro *{game.player_two_choice().upper()}*"
-            await bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup())
+            first_player_name =  context.bot_data['first_player_name']
+            second_player_name = context.bot_data['second_player_name']
+            message = f"{start}. {first_player_name} eligió *{game.player_one_choice().upper()}* y *{second_player_name}* eligió *{game.player_two_choice().upper()}*"
+            await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
 
