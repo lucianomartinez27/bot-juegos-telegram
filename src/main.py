@@ -33,6 +33,7 @@ if __name__ == '__main__':
     gamesBot = GamesTelegramBot("Classic Games Bot", TOKEN_TELEGRAM)
     gamesBot.handle_command("start", gamesBot.start)
     gamesBot.handle_command("games", gamesBot.display_games)
+    gamesBot.handle_command("juegos", gamesBot.display_games)
     gamesBot.handle_query(gamesBot.select_game, pattern)
     gamesBot.handle_query(gamesBot.answer_button_by_game)
     gamesBot.handle_message(gamesBot.answer_message_by_game)

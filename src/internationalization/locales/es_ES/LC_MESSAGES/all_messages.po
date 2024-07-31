@@ -24,7 +24,7 @@ msgstr "Lo siento, no puedo entender tu mensaje."
 
 #: src/base_bot.py:36
 msgid "The game ended. Use /games to start a new one"
-msgstr "El juego ha terminado. Usa /games para comenzar uno nuevo."
+msgstr "El juego ha terminado. Usa /juegos para comenzar uno nuevo."
 
 #: src/base_bot.py:55
 msgid "An unexpected error happened"
@@ -35,7 +35,7 @@ msgid ""
 "Hello *{}*, welcome to classic games bot. Use /games to show the "
 "available games"
 msgstr ""
-"Hola *{}*, bienvenido al bot de juegos clásicos. Usa /games para mostrar "
+"Hola *{}*, bienvenido al bot de juegos clásicos. Usa /juegos para mostrar "
 "los juegos disponibles."
 
 #: src/games_bot.py:57
@@ -64,7 +64,7 @@ msgstr "Vamos a jugar a: {}"
 
 #: src/games_bot.py:96
 msgid "You chose to play {}. To change the game, you can use /games again"
-msgstr "Elegiste jugar a {}. Para cambiar de juego, puedes usar /games nuevamente."
+msgstr "Elegiste jugar a {}. Para cambiar de juego, puedes usar /juegos nuevamente."
 
 #: src/games/Hangman/hangman_bot.py:20
 msgid "Enter a letter as a message to play:"
