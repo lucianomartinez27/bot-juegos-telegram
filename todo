@@ -1,0 +1,20 @@
+# TODO List
+
+## Features
+- [ ] Implement Battleship game
+
+
+## Bug Fixes
+
+
+## Documentation
+
+
+## Code Refactoring
+- [ ] Improve how the class hierarchy is implemented between TelegramBot, BaseBot, and GamesTelegramBot
+
+
+## Testing
+- [ ] Write unit tests for each game
+- [ ] Find out how can we test the bot
+

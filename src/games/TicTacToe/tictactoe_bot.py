@@ -21,7 +21,7 @@ class BotTicTacToe(BotBase):
         self.generate_game_state(user_id)
         custom_keyboard = [['X', 'O']]
         await bot.send_message(chat_id=user_id,
-                         text="Por favor, elige tu lado:",
+                         text=self._("Please choose your side:"),
                          reply_markup=ReplyKeyboardMarkup(custom_keyboard))
 
 
@@ -31,7 +31,7 @@ class BotTicTacToe(BotBase):
         return InlineKeyboardMarkup(board_buttons)
 
     async def generate_board(self, update, game):
-        await update.message.reply_text('Ta-Te-Ti:', reply_markup=self.generate_markup(game))
+        await update.message.reply_text(self._('Tic-Tac-Toe:'), reply_markup=self.generate_markup(game))
 
     async def answer_message(self, update, context):
         symbol = update.message.text
@@ -70,11 +70,11 @@ class BotTicTacToe(BotBase):
 
             if game.finished():
                 if game.is_winner(player_symbol):
-                    await self.send_message(bot, user_id, 'Ganaste')
+                    await self.send_message(bot, user_id, self._('You won'))
                 elif game.is_winner(computer_symbol):
-                    await self.send_message(bot, user_id, 'Perdiste')
+                    await self.send_message(bot, user_id, self._('You lost'))
                 else: #isTie
-                    await self.send_message(bot, user_id, 'Empataste')
+                    await self.send_message(bot, user_id, self._('Was a tie'))
             self.save_all_games()
             await self.update_board(bot, game, user_id, message_id)
 

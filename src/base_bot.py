@@ -13,6 +13,7 @@ class BotBase(BotTelegram):
         self.data_manager = DataManager(os.path.dirname(file))
         self.users_data = self.data_manager.generate_info(dict())
         self.Game = None
+        self.initialize_translator()
 
     def save_all_games(self):
         self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
@@ -29,10 +30,10 @@ class BotBase(BotTelegram):
         return self.users_data[str(user_id)]
 
     def do_not_understand_message(self):
-        return "Disculpa, no entiendo tu mensaje."
+        return self._("Sorry, I can't understand you message.")
 
     async def game_finished_message(self, bot, user_id):
-        await self.send_message(bot, user_id, "El juego ya terminó. Utiliza /juegos para comenzar uno nuevo.")
+        await self.send_message(bot, user_id, self._("The game ended. Use /games to start a new one"))
 
     async def answer_message(self, update, context):
         usuario = self.get_user_id(update)
@@ -48,7 +49,7 @@ class BotBase(BotTelegram):
         try:
            await callback()
         except ModelError as error:
-            await self.send_message(bot, user_id, error.message)
+            await self.send_message(bot, user_id,  self._(error.message))
         except Exception  as error:
             print(error)
-            await self.send_message(bot, user_id, "Ocurrió un error inesperado, por favor intenta nuevamente")
+            await self.send_message(bot, user_id,  self._("An unexpected error happened"))

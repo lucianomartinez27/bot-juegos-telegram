@@ -2,3 +2,4 @@ venv
 keys.py
 *.pyc
 data.json
+.vscode/launch.json

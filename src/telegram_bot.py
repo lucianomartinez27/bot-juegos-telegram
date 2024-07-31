@@ -8,6 +8,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler,\
 
 # Registro de actividades
 import logging
+from internationalization import _
 
 
 class BotTelegram:
@@ -16,6 +17,12 @@ class BotTelegram:
         self.app = ApplicationBuilder().token(token).build()
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.logger = logging.getLogger(name)
+
+    def initialize_translator(self):
+        self._ = _
+        
+    def change_translator(self, new_translator):
+        self._ = new_translator
 
     def run(self):
         self.app.run_polling()

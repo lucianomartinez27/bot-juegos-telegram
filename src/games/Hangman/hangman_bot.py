@@ -17,7 +17,7 @@ class BotTelegramAhorcado(BotBase):
         user_id = self.get_user_id(update)
         bot = context.bot
         self.generate_game_state(user_id)
-        await self.send_message(bot, user_id, "Ingrese una letra como mensaje para jugar:")
+        await self.send_message(bot, user_id, self._("Enter a letter as a message to play:"))
         await self.send_message(bot, user_id, self.get_game(user_id).template())
 
     async def answer_message(self, update, context):
@@ -30,10 +30,10 @@ class BotTelegramAhorcado(BotBase):
             game.try_letter(letter)
             await self.send_message(bot, user_id, game.template())
             if game.lost():
-                await self.send_message(bot, user_id, "Has perdido\nLa palabra era: {}".format(game.word()))
+                await self.send_message(bot, user_id, self._("You lost\nThe word was: {}").format(game.word()))
         
             if game.won():
-                await self.send_message(bot, user_id, "Felicitaciones, hasta ganado!.")
+                await self.send_message(bot, user_id,  self._("Congratulations, you've won!"))
 
         if not game.is_finished():
             await self.process_user_action(bot, user_id, try_letter)

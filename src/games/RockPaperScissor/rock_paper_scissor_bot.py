@@ -12,16 +12,16 @@ class BotRockPaperScissor(BotBase):
         self.Game = RockPaperScissorGame
 
     def name(self):
-        return '- Piedras Papel y Tijeras'
+        return  self._('- Rock, Paper, Scissors')
     
     async def play(self, update, context):
         await update.callback_query.message.reply_text(self.name(), reply_markup=InlineKeyboardMarkup(self.element_options()))
     
     def element_options(self):
         return [
-            [InlineKeyboardButton('Piedra', callback_data='piedra')],
-            [InlineKeyboardButton('Papel', callback_data='papel')],
-            [InlineKeyboardButton('Tijera', callback_data='tijera')],
+            [InlineKeyboardButton(self._('Rock'), callback_data='piedra')],
+            [InlineKeyboardButton(self._('Paper'), callback_data='papel')],
+            [InlineKeyboardButton(self._('Scissors'), callback_data='tijera')],
         ]
 
     async def answer_button(self, update, context):
@@ -36,10 +36,11 @@ class BotRockPaperScissor(BotBase):
         result = game.play()
         if (result == Rock.name or result == Scissor.name or result == Paper.name):
             if (game.last_winner_is_player_one()):
-                start = "*GANASTE*"
+                start = self._("*You won*")
             else:
-                start = "*PERDISTE*"
+                start = self._("*You lost*")
         else:
-            start = f"Fue un *EMPATE*"
-        return f"{start}. Tu elegiste *{game.player_one_choice().upper()}* la computadora eligió *{game.player_two_choice().upper()}*"
+            start = self._(f"It was a *TIE*")
+        return self._("{}. You chose *{}*, the computer chose *{}*").format(
+            start, game.player_one_choice().upper(), game.player_two_choice().upper())
 

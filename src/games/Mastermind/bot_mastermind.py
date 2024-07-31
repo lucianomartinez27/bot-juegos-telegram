@@ -22,11 +22,11 @@ class BotMastermind(BotBase):
         user_id = update.callback_query.message.chat_id
         bot = context.bot
         self.generate_game_state(user_id)
-        await self.send_message(bot, user_id, 'MUERTOS Y HERIDOS (MASTERMIND)')
+        await self.send_message(bot, user_id,  self._('MASTERMIND'))
         await self.send_message(bot, user_id,
-                            'Adivina un número de 4 dígitos (ninguno repetido), si aciertas el número, pero no la posición '
-                            'tienes un herido. Si aciertas el número y su posición tienes un muerto.')
-        await self.send_message(bot, user_id, 'Para ganar necesitas conseguir 4 muertos. Tendrás 15 intentos.')
+                             self._("Guess a 4-digit number (no repeats). If you guess the number but not the position ") + \
+                             self._("you have one injured. If you guess the number and its position, you have one dead"))
+        await self.send_message(bot, user_id,  self._("To win, you need to get 4 dead. You will have 15 attempts."))
 
     async def answer_message(self, update, context):
         attempt = update.message.text
@@ -41,10 +41,10 @@ class BotMastermind(BotBase):
             self.save_all_games()
             
             if game.is_winner():
-                await self.send_message(bot, user_id, "Felicidades, {}, GANASTE!!\n "\
+                await self.send_message(bot, user_id,  self._("Congratulations, {}, YOU WON!!\n")\
                                     .format(name))
             elif game.is_looser():
-                await self.send_message(bot, user_id, "Lo siento, {}, PERDISTE!!\n El número era {}".format(name, "".join(game.numbers)))
+                await self.send_message(bot, user_id,  self._("I'm sorry, {}, YOU LOST!!\n The number was {}").format(name, "".join(game.numbers)))
 
         if game.finished():
             await self.game_finished_message(bot, user_id)

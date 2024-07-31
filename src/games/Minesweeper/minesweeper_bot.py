@@ -20,7 +20,7 @@ class BotBuscaminas(BotBase):
         self.generate_game_state(user_id)
         game = self.get_game(user_id)
 
-        await update.callback_query.message.reply_text('Buscaminas:', reply_markup=InlineKeyboardMarkup(self.board_markup(game)))
+        await update.callback_query.message.reply_text(self._('Minesweeper:'), reply_markup=InlineKeyboardMarkup(self.board_markup(game)))
 
     async def answer_button(self, update, context):
         row, col = update.callback_query.data.split()
@@ -37,9 +37,9 @@ class BotBuscaminas(BotBase):
                                             reply_markup=InlineKeyboardMarkup(self.board_markup(game)))
             if game.finished():
                 if game.is_winner():
-                    await self.send_message(bot, user_id, "Ganaste")
+                    await self.send_message(bot, user_id,  self._("You won"))
                 else:
-                    await self.send_message(bot, user_id, "Perdiste")
+                    await self.send_message(bot, user_id,  self._("You lost"))
             
 
     def board_markup(self, game):

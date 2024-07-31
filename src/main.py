@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from games_bot import BotDeJuegosTelegram
+from games_bot import GamesTelegramBot
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
 import re
 pattern = re.compile(r"[-] [a-zA-ZáéíóúñÁÉÍÓÚÑ]+")
@@ -30,9 +30,9 @@ def run_http_server():
 
 if __name__ == '__main__':
 
-    gamesBot = BotDeJuegosTelegram("BotAhorcado", TOKEN_TELEGRAM)
+    gamesBot = GamesTelegramBot("Classic Games Bot", TOKEN_TELEGRAM)
     gamesBot.handle_command("start", gamesBot.start)
-    gamesBot.handle_command("juegos", gamesBot.display_games)
+    gamesBot.handle_command("games", gamesBot.display_games)
     gamesBot.handle_query(gamesBot.select_game, pattern)
     gamesBot.handle_query(gamesBot.answer_button_by_game)
     gamesBot.handle_message(gamesBot.answer_message_by_game)

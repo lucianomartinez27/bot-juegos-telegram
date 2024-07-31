@@ -12,16 +12,16 @@ class BotRockPaperScissorMultiplayer(BotBase):
         self.Game = RockPaperScissorGame
 
     def name(self):
-        return 'Piedras Papel y Tijeras Multiplayer'
+        return self._('Rock, Paper, Scissors Multiplayer')
     
     def is_inline_game(self):
         return True
     
     def generate_inline_markup(self):
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton('Piedra', callback_data='piedra')],
-            [InlineKeyboardButton('Papel', callback_data='papel')],
-            [InlineKeyboardButton('Tijera', callback_data='tijera')],
+            [InlineKeyboardButton(self._('Rock'), callback_data='piedra')],
+            [InlineKeyboardButton(self._('Paper'), callback_data='papel')],
+            [InlineKeyboardButton(self._('Scissors'), callback_data='tijera')],
         ])
     
     async def reset_player_choice(self, context, update, game, option):
@@ -32,7 +32,7 @@ class BotRockPaperScissorMultiplayer(BotBase):
             users['first_player_name'] = user_full_name
             game.player_one = self.Game.element(option)
             context.user_data[message_id] = option
-            message = f"*{user_full_name}* ya eligió su opción."
+            message = self._("*{}* has already chosen their option.").format(user_full_name)
             await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
         elif game.one_player_choose() and not context.user_data.get(message_id):
             users['second_player_name'] = user_full_name
@@ -55,11 +55,12 @@ class BotRockPaperScissorMultiplayer(BotBase):
         if (game.both_players_choose()):
             result = game.play()
             if (result == Rock.name or result == Scissor.name or result == Paper.name):
-                start = f"Ganó *{result.upper()}*"
+                start = self._("*{}* won").format(result.upper())
             else:
-                start = f"Fue un *EMPATE*"
+                start = self._("It was a *TIE*")
             first_player_name =  context.bot_data[message_id]['first_player_name']
             second_player_name = context.bot_data[message_id]['second_player_name']
-            message = f"{start}. *{first_player_name}* eligió *{game.player_one_choice().upper()}* y *{second_player_name}* eligió *{game.player_two_choice().upper()}*"
+            message = self._("{}. *{}* chose  *{}* and *{}* chose *{}*").format(
+                start, first_player_name, game.player_one_choice().upper(), second_player_name, game.player_two_choice().upper())
             await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
 

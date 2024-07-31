@@ -1,0 +1,206 @@
+# Spanish (Spain) translations for Classic Games Telegram Bot.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-07-31 20:21-0300\n"
+"PO-Revision-Date: 2024-07-31 18:51-0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es_ES\n"
+"Language-Team: es_ES <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: src/base_bot.py:33
+msgid "Sorry, I can't understand you message."
+msgstr "Lo siento, no puedo entender tu mensaje."
+
+#: src/base_bot.py:36
+msgid "The game ended. Use /games to start a new one"
+msgstr "El juego ha terminado. Usa /games para comenzar uno nuevo."
+
+#: src/base_bot.py:55
+msgid "An unexpected error happened"
+msgstr "Ocurrió un error inesperado."
+
+#: src/games_bot.py:56
+msgid ""
+"Hello *{}*, welcome to classic games bot. Use /games to show the "
+"available games"
+msgstr ""
+"Hola *{}*, bienvenido al bot de juegos clásicos. Usa /games para mostrar "
+"los juegos disponibles."
+
+#: src/games_bot.py:57
+msgid ""
+"There are also some multiplayer games. To play them, you have to write "
+"`@juegos_clasicos_bot play` on your friend's chat."
+msgstr ""
+"También hay algunos juegos multijugador. Para jugarlos, tienes que "
+"escribir `@juegos_clasicos_bot play` en el chat de tu amigo."
+
+#: src/games_bot.py:58
+msgid ""
+"A list with the available games will be shown, then select the game that "
+"you want to play."
+msgstr ""
+"Se mostrará una lista con los juegos disponibles, luego selecciona el "
+"juego que quieres jugar."
+
+#: src/games_bot.py:65
+msgid "Available games are:"
+msgstr "Los juegos disponibles son:"
+
+#: src/games_bot.py:82
+msgid "Let's play to: {}"
+msgstr "Vamos a jugar a: {}"
+
+#: src/games_bot.py:96
+msgid "You chose to play {}. To change the game, you can use /games again"
+msgstr "Elegiste jugar a {}. Para cambiar de juego, puedes usar /games nuevamente."
+
+#: src/games/Hangman/hangman_bot.py:20
+msgid "Enter a letter as a message to play:"
+msgstr "Ingresa una letra como mensaje para jugar:"
+
+#: src/games/Hangman/hangman_bot.py:33
+msgid ""
+"You lost\n"
+"The word was: {}"
+msgstr ""
+"Perdiste\n"
+"La palabra era: {}"
+
+#: src/games/Hangman/hangman_bot.py:36
+msgid "Congratulations, you've won!"
+msgstr "¡Felicidades, has ganado!"
+
+#: src/games/Mastermind/bot_mastermind.py:25
+msgid "MASTERMIND"
+msgstr "Muertos y Heridos (MASTERMIND)"
+
+#: src/games/Mastermind/bot_mastermind.py:27
+msgid ""
+"Guess a 4-digit number (no repeats). If you guess the number but not the "
+"position "
+msgstr ""
+"Adivina un número de 4 dígitos (sin repetir). Si adivinas el número pero "
+"no la posición "
+
+#: src/games/Mastermind/bot_mastermind.py:28
+msgid ""
+"you have one injured. If you guess the number and its position, you have "
+"one dead"
+msgstr "tienes un herido. Si adivinas el número y su posición, tienes un muerto."
+
+#: src/games/Mastermind/bot_mastermind.py:29
+msgid "To win, you need to get 4 dead. You will have 15 attempts."
+msgstr "Para ganar, necesitas conseguir 4 muertos. Tendrás 15 intentos."
+
+#: src/games/Mastermind/bot_mastermind.py:44
+msgid "Congratulations, {}, YOU WON!!\n"
+msgstr "¡Felicidades, {}, HAS GANADO!!\n"
+
+#: src/games/Mastermind/bot_mastermind.py:47
+msgid ""
+"I'm sorry, {}, YOU LOST!!\n"
+" The number was {}"
+msgstr ""
+"Lo siento, {}, ¡HAS PERDIDO!!\n"
+" El número era {}"
+
+#: src/games/Minesweeper/minesweeper_bot.py:23
+msgid "Minesweeper:"
+msgstr "Buscaminas:"
+
+#: src/games/Minesweeper/minesweeper_bot.py:40
+#: src/games/TicTacToe/tictactoe_bot.py:73
+msgid "You won"
+msgstr "Ganaste"
+
+#: src/games/Minesweeper/minesweeper_bot.py:42
+#: src/games/TicTacToe/tictactoe_bot.py:75
+msgid "You lost"
+msgstr "Perdiste"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:15
+msgid "- Rock, Paper, Scissors"
+msgstr "- Piedra, Papel o Tijera"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:22
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:22
+msgid "Rock"
+msgstr "Piedra"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:23
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:23
+msgid "Paper"
+msgstr "Papel"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:24
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:24
+msgid "Scissors"
+msgstr "Tijeras"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:39
+msgid "*You won*"
+msgstr "*Ganaste*"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:41
+msgid "*You lost*"
+msgstr "*Perdiste*"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:43
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:60
+msgid "It was a *TIE*"
+msgstr "Fue un *EMPATE*"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:44
+msgid "{}. You chose *{}*, the computer chose *{}*"
+msgstr "{}. Tú elegiste *{}*, la computadora eligió *{}*"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:15
+msgid "Rock, Paper, Scissors Multiplayer"
+msgstr "Piedra, Papel o Tijera Multijugador"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:35
+msgid "*{}* has already chosen their option."
+msgstr "*{}* ya eligió su opción."
+
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:58
+msgid "*{}* won"
+msgstr "*{}* ganó"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:63
+msgid "{}. *{}* chose  *{}* and *{}* chose *{}*"
+msgstr "{}. *{}* eligió *{}* y *{}* eligió *{}*"
+
+#: src/games/TicTacToe/tictactoe_bot.py:24
+msgid "Please choose your side:"
+msgstr "Por favor, elige tu lado:"
+
+#: src/games/TicTacToe/tictactoe_bot.py:34
+msgid "Tic-Tac-Toe:"
+msgstr "Ta-Te-Ti:"
+
+#: src/games/TicTacToe/tictactoe_bot.py:77
+#: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:54
+msgid "Was a tie"
+msgstr "Fue un empate"
+
+#: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:16
+msgid "Tic-Tac-Toe MultiPlayer"
+msgstr "Tres en línea Multijugador"
+
+#: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:50
+#: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:52
+msgid " won"
+msgstr " ganó"
+
