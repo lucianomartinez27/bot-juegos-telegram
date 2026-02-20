@@ -11,16 +11,14 @@
 + En un futuro:
     - Piedras, papel o tijeras.
 
-## Detalles a tener en cuenta:
+## Configuración
 
-Para que el bot funcione, es necesario crear un token en Telegram mediante [BotFather](https://t.me/botfather).
-Dicho token debe configurarse en las variables de ambiente.
-
-La estructura de keys.py es la siguiente:
-
-```
-TOKEN_TELEGRAM = "TOKEN"
-```
+1.  Crea un archivo `.env` en la raíz del proyecto basándote en el archivo `.env.example`.
+2.  Obtén un token de Telegram mediante [BotFather](https://t.me/botfather).
+3.  Configura tu token en el archivo `.env`:
+    ```
+    TOKEN_TELEGRAM=TU_TOKEN_AQUI
+    ```
 ### Enlaces que me fueron útiles
 
 ##### Para el bot:
@@ -32,3 +30,4 @@ en Python - Medium](https://medium.com/@goyoregalado/bots-de-telegram-en-python-
 
 #### Requirements
     * python-telegram-bot
+    * python-dotenv

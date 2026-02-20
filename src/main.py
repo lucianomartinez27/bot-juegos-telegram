@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from games_bot import GamesTelegramBot
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
 import re

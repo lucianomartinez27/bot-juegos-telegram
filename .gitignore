@@ -1,3 +1,5 @@
+.idea
+.env
 venv
 keys.py
 *.pyc
