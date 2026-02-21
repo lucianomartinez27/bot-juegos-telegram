@@ -129,7 +129,7 @@ class GamesTelegramBot(BotTelegram):
             if bot_game.is_inline_game():
                 inline_message_id = uuid4()
                 inline_games.append(InlineQueryResultArticle(
-                    id=inline_message_id,
+                    id=str(inline_message_id),
                     title=bot_game.name(),
                     input_message_content=InputTextMessageContent(self._("Let's play to: {}").format(bot_game.name())),
                     reply_markup=bot_game.generate_inline_markup()))
@@ -157,10 +157,10 @@ class GamesTelegramBot(BotTelegram):
             return await self.set_language(update, context)
 
         if not update.callback_query.inline_message_id:
-            await self.run_current_game_if_available(context, update)
+            return await self.run_current_game_if_available(context, update)
         else:
             game_name = self.get_inline_game_by_query_data(update.callback_query.data)
-            await self.game_catalog[game_name].answer_button(update, context)
+            return await self.game_catalog[game_name].answer_button(update, context)
     
     @game_session
     async def answer_message_by_game(self, update, context):

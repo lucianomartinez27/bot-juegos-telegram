@@ -36,9 +36,9 @@ class BotBase(BotTelegram):
         await self.send_message(bot, user_id, self._("The game ended. Use /games to start a new one"))
 
     async def answer_message(self, update, context):
-        usuario = self.get_user_id(update)
+        user_id = self.get_user_id(update)
         bot = context.bot
-        await self.send_message(bot, usuario, self.do_not_understand_message())
+        await self.send_message(bot, user_id, self.do_not_understand_message())
 
     async def answer_button(self, update, context):
         usuario = self.get_user_id(update)
