@@ -2,7 +2,7 @@ from functools import wraps
 import gettext
 
 GETTEXT_DOMAIN = 'all_messages'
-GETTEXT_DIR = 'src/internationalization/locales'
+GETTEXT_DIR = 'src/internationalization/locale'
 
 _ = gettext.gettext
 spanish = gettext.translation(GETTEXT_DOMAIN, GETTEXT_DIR, languages=['es_ES'], fallback=True)
