@@ -40,11 +40,10 @@ msgstr ""
 
 #: src/games_bot.py:57
 msgid ""
-"There are also some multiplayer games. To play them, you have to write "
-"`@juegos_clasicos_bot play` on your friend's chat."
+"`@the_classic_games_bot play` on your friend's chat."
 msgstr ""
 "También hay algunos juegos multijugador. Para jugarlos, tienes que "
-"escribir `@juegos_clasicos_bot play` en el chat de tu amigo."
+"escribir `@the_classic_games_bot play` en el chat de tu amigo."
 
 #: src/games_bot.py:58
 msgid ""

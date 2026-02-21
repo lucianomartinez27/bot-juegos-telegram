@@ -79,7 +79,7 @@ class GamesTelegramBot(BotTelegram):
             self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}, "language": None}
         self.data_manager.save_info(self.user_data)
         message = self._("Hello *{}*, welcome to classic games bot. Use /games to show the available games").format(user_name) + ".\n\n"
-        message += self._("There are also some multiplayer games. To play them, you have to write `@juegos_clasicos_bot play` on your friend's chat.") + "\n\n"
+        message += self._("There are also some multiplayer games. To play them, you have to write `@the_classic_games_bot play` on your friend's chat.") + "\n\n"
         message += self._("A list with the available games will be shown, then select the game that you want to play.")
         await self.send_message(bot, user_id, message, 'markdown')
 

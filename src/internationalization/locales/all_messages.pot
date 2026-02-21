@@ -38,7 +38,7 @@ msgstr ""
 #: src/games_bot.py:57
 msgid ""
 "There are also some multiplayer games. To play them, you have to write "
-"`@juegos_clasicos_bot play` on your friend's chat."
+"`@the_classic_games_bot play` on your friend's chat."
 msgstr ""
 
 #: src/games_bot.py:58
