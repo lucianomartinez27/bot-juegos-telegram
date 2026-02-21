@@ -26,8 +26,23 @@ bot_tateti_inline = BotTaTeTiInLine()
 bot_rps_multiplayer = BotRockPaperScissorMultiplayer()
 from internationalization import set_translator
 
+from functools import wraps
+
+def ensure_session(func):
+    @wraps(func)
+    async def wrapped(self, update, context, *pargs, **kwargs):
+        user_id = self.get_user_id(update)
+        self.ensure_user_data(user_id)
+        return await func(self, update, context, *pargs, **kwargs)
+    return wrapped
+
+def game_session(func):
+    """Decorator that ensures user session data is initialized and sets the translator."""
+    return set_translator(ensure_session(func))
+
 class GamesTelegramBot(BotTelegram):
     def __init__(self, name, token):
+        """Initializes bot; populates game catalog; manages user data"""
         BotTelegram.__init__(self, name, token)
         self.game_catalog = {bot_ahorcado.name(): bot_ahorcado,
                                    bot_buscaminas.name(): bot_buscaminas,                                   bot_mastermind.name(): bot_mastermind,
@@ -46,6 +61,12 @@ class GamesTelegramBot(BotTelegram):
         for game in self.game_catalog.values():
             game.change_translator(new_translator)
     
+    def ensure_user_data(self, user_id):
+        user_id_str = str(user_id)
+        if user_id_str not in self.user_data:
+            self.user_data[user_id_str] = {"juego_actual": None, "estado": {}}
+            self.data_manager.save_info(self.user_data)
+
     @set_translator
     async def start(self, update, context):
         bot = context.bot
@@ -58,7 +79,7 @@ class GamesTelegramBot(BotTelegram):
         message += self._("A list with the available games will be shown, then select the game that you want to play.")
         await self.send_message(bot, user_id, message, 'markdown')
 
-    @set_translator
+    @game_session
     async def display_games(self, update, context):
         games = [[InlineKeyboardButton(game.name(), callback_data=game.name())] for game in
                     self.game_catalog.values() if not game.is_inline_game()]
@@ -70,7 +91,7 @@ class GamesTelegramBot(BotTelegram):
         else:
             return bot_tateti_inline.name()
 
-    @set_translator
+    @game_session
     async def display_inline_games(self, update, context):
         inline_games = []
         for bot_game in self.game_catalog.values():
@@ -85,12 +106,12 @@ class GamesTelegramBot(BotTelegram):
 
         await update.inline_query.answer(inline_games)
     
-    @set_translator
+    @game_session
     async def select_game(self, update, context):
         selected_game = update.callback_query.data
         user = self.get_user_id(update)
         bot = context.bot
-        self.user_data[str(user)] = {"juego_actual": selected_game}
+        self.user_data[str(user)]["juego_actual"] = selected_game
         self.data_manager.save_info(self.user_data)
 
         await self.send_message(bot, user, self._("You chose to play {}. To change the game, you can use /games again") \
@@ -98,19 +119,24 @@ class GamesTelegramBot(BotTelegram):
 
         await self.game_catalog[selected_game].play(update, context)
 
-    @set_translator
+    @game_session
     async def answer_button_by_game(self, update, context):
         if not update.callback_query.inline_message_id:
-            user = self.get_user_id(update)
-            current_game = self.user_data[str(user)]["juego_actual"]
-            await self.game_catalog[current_game].answer_button(update, context)
+            await self.run_current_game_if_available(context, update)
         else:
             game_name = self.get_inline_game_by_query_data(update.callback_query.data)
             await self.game_catalog[game_name].answer_button(update, context)
     
-    @set_translator
+    @game_session
     async def answer_message_by_game(self, update, context):
+        await self.run_current_game_if_available(context, update)
+
+    async def run_current_game_if_available(self, context, update):
         user_id = self.get_user_id(update)
         current_game = self.user_data[str(user_id)]["juego_actual"]
-        await self.game_catalog[current_game].answer_message(update, context)
+        if current_game:
+            await self.game_catalog[current_game].answer_message(update, context)
+        else:
+            await self.send_message(context.bot, user_id,
+            self._("You don't have an active game. Use /games to start one."))
 
