@@ -19,9 +19,9 @@ class BotRockPaperScissorMultiplayer(BotBase):
     
     def generate_inline_markup(self):
         return InlineKeyboardMarkup([
-            [InlineKeyboardButton(self._('Rock'), callback_data='piedra')],
-            [InlineKeyboardButton(self._('Paper'), callback_data='papel')],
-            [InlineKeyboardButton(self._('Scissors'), callback_data='tijera')],
+            [InlineKeyboardButton(self._('Rock'), callback_data='rock')],
+            [InlineKeyboardButton(self._('Paper'), callback_data='paper')],
+            [InlineKeyboardButton(self._('Scissors'), callback_data='scissors')],
         ])
     
     async def reset_player_choice(self, context, update, game, option):

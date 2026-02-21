@@ -24,7 +24,7 @@ bot_buscaminas = BotBuscaminas()
 bot_rps = BotRockPaperScissor()
 bot_tateti_inline = BotTaTeTiInLine()
 bot_rps_multiplayer = BotRockPaperScissorMultiplayer()
-from internationalization import set_translator
+from internationalization import set_translator, _, spanish
 
 from functools import wraps
 
@@ -64,7 +64,10 @@ class GamesTelegramBot(BotTelegram):
     def ensure_user_data(self, user_id):
         user_id_str = str(user_id)
         if user_id_str not in self.user_data:
-            self.user_data[user_id_str] = {"juego_actual": None, "estado": {}}
+            self.user_data[user_id_str] = {"juego_actual": None, "estado": {}, "language": None}
+            self.data_manager.save_info(self.user_data)
+        elif "language" not in self.user_data[user_id_str]:
+            self.user_data[user_id_str]["language"] = None
             self.data_manager.save_info(self.user_data)
 
     @set_translator
@@ -72,7 +75,8 @@ class GamesTelegramBot(BotTelegram):
         bot = context.bot
         user_id = self.get_user_id(update)
         user_name = update.message.chat.first_name
-        self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}}
+        if str(user_id) not in self.user_data:
+            self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}, "language": None}
         self.data_manager.save_info(self.user_data)
         message = self._("Hello *{}*, welcome to classic games bot. Use /games to show the available games").format(user_name) + ".\n\n"
         message += self._("There are also some multiplayer games. To play them, you have to write `@juegos_clasicos_bot play` on your friend's chat.") + "\n\n"
@@ -85,8 +89,35 @@ class GamesTelegramBot(BotTelegram):
                     self.game_catalog.values() if not game.is_inline_game()]
         await update.message.reply_text(self._("Available games are:"), reply_markup=InlineKeyboardMarkup(games))
 
+    @game_session
+    async def display_languages(self, update, context):
+        languages = [
+            [InlineKeyboardButton("English 🇬🇧", callback_data="lang_en")],
+            [InlineKeyboardButton("Español 🇪🇸", callback_data="lang_es")]
+        ]
+        await update.message.reply_text(self._("Select your language:"), reply_markup=InlineKeyboardMarkup(languages))
+
+    async def set_language(self, update, context):
+        query = update.callback_query
+        user_id = str(self.get_user_id(update))
+        lang_code = query.data.split("_")[1]
+        
+        self.user_data[user_id]["language"] = lang_code
+        self.data_manager.save_info(self.user_data)
+        
+        # Apply the new translator for the confirmation message
+        if lang_code == "es":
+            self.change_translator(spanish.gettext)
+            confirmation = "Idioma cambiado a Español 🇪🇸"
+        else:
+            self.change_translator(_)
+            confirmation = "Language changed to English 🇬🇧"
+            
+        await query.answer()
+        await query.edit_message_text(text=confirmation)
+
     def get_inline_game_by_query_data(self, query_data):
-        if (query_data in ['tijera', 'piedra', 'papel']):
+        if (query_data in ['scissors', 'rock', 'paper']):
             return bot_rps_multiplayer.name()
         else:
             return bot_tateti_inline.name()
@@ -121,6 +152,10 @@ class GamesTelegramBot(BotTelegram):
 
     @game_session
     async def answer_button_by_game(self, update, context):
+        query = update.callback_query
+        if query.data.startswith("lang_"):
+            return await self.set_language(update, context)
+
         if not update.callback_query.inline_message_id:
             await self.run_current_game_if_available(context, update)
         else:

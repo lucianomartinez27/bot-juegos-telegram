@@ -201,6 +201,57 @@ msgstr "Tres en línea Multijugador"
 
 #: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:50
 #: src/games/TicTacToe_MultiPlayer/inline_tictactoe_bot.py:52
-msgid " won"
-msgstr " ganó"
+msgid "- Ahorcado"
+msgstr "- El ahorcado"
+
+msgid "- Hangman"
+msgstr "- El ahorcado"
+
+msgid "- Buscaminas"
+msgstr "- Buscaminas"
+
+msgid "- Minesweeper"
+msgstr "- Buscaminas"
+
+msgid "- TaTeTi"
+msgstr "- El tres en línea"
+
+msgid "- Tic-Tac-Toe"
+msgstr "- El tres en línea"
+
+msgid "Select your language:"
+msgstr "Selecciona tu idioma:"
+
+msgid "English 🇬🇧"
+msgstr "Inglés 🇬🇧"
+
+msgid "Español 🇪🇸"
+msgstr "Español 🇪🇸"
+
+msgid "You have {} attempts left "
+msgstr "Te quedan {} intentos "
+
+msgid "DEADS - INJURED"
+msgstr "MUERTOS - HERIDOS"
+
+msgid "The number is invalid. It must have 4 digits"
+msgstr "El número es inválido. Debe tener 4 dígitos."
+
+msgid "You already tried this number"
+msgstr "Ya intentaste con este número."
+
+msgid "There must be no repeated numbers"
+msgstr "No debe haber números repetidos."
+
+msgid "Please enter a single letter."
+msgstr "Por favor, escribe una sola letra."
+
+msgid "You have already chosen that letter."
+msgstr "Ya has elegido esa letra."
+
+msgid "word:"
+msgstr "Palabra:"
+
+msgid "You don't have an active game. Use /games to start one."
+msgstr "No tienes un juego activo. Usa /games para comenzar uno."
 

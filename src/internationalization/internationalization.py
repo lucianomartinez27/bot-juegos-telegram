@@ -5,13 +5,22 @@ GETTEXT_DOMAIN = 'all_messages'
 GETTEXT_DIR = 'src/internationalization/locales'
 
 _ = gettext.gettext
-spanish = gettext.translation(GETTEXT_DOMAIN, GETTEXT_DIR, languages=['es_ES'])
+spanish = gettext.translation(GETTEXT_DOMAIN, GETTEXT_DIR, languages=['es_ES'], fallback=True)
+
 def set_translator(func):
     @wraps(func)
-    def wrapped(bot, update, context, *pargs, **kwargs):
-        if update.effective_user.language_code.startswith("es"):
-            bot.change_translator(spanish.gettext)
+    async def wrapped(self, update, context, *pargs, **kwargs):
+        user_id = str(self.get_user_id(update))
+        # Determine language from user preferences or fallback to Telegram's language_code
+        user_lang = self.user_data.get(user_id, {}).get("language")
+        
+        if not user_lang and update.effective_user:
+            user_lang = update.effective_user.language_code
+
+        if user_lang and user_lang.startswith("es"):
+            self.change_translator(spanish.gettext)
         else:
-            bot.change_translator(_)
-        return func(bot, update, context, *pargs, **kwargs)
+            self.change_translator(_)
+            
+        return await func(self, update, context, *pargs, **kwargs)
     return wrapped

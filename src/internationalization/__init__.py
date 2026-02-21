@@ -1,1 +1,1 @@
-from .internationalization import set_translator, _
+from .internationalization import set_translator, _, spanish

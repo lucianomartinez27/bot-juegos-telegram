@@ -42,11 +42,11 @@ class MasterMind:
 
 		# TODO: Assert and throw error
 		if len(numbers_to_check) != 4 or not numbers_to_check.isnumeric():
-			raise ModelError('El número es invalido. Debe tener 4 dígitos')
+			raise ModelError('The number is invalid. It must have 4 digits')
 		elif numbers_to_check in self.attempts:
-			raise ModelError('Ya intentaste con este número')
-		elif (len(set(numbers_to_check)) != len(numbers_to_check)): # Some repeated number
-			raise ModelError('No debe haber números repetidos')
+			raise ModelError('You already tried this number')
+		elif len(set(numbers_to_check)) != len(numbers_to_check): # Some repeated number
+			raise ModelError('There must be no repeated numbers')
 
 		self.attempts.append(numbers_to_check)
 		self.results.append(self.count_exact_and_partial_matches(numbers_to_check))
@@ -73,8 +73,8 @@ class MasterMind:
 	def template(self):
 		"""comprueba el número de muertos y heridos que obtuvo el usuario"""
 
-		texto = "Te quedan {} intentos ".format(15-len(self.attempts))
-		texto += '\nMUERTOS - HERIDOS'.center(30)
+		texto = "You have {} attempts left ".format(15-len(self.attempts))
+		texto += '\nDEADS - INJURED'.center(30)
 
 		for i in range(len(self.attempts)):
 			exacts, partials = self.results[i][0], self.results[i][1]

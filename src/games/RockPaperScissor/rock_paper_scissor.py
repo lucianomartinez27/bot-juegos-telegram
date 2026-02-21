@@ -1,7 +1,7 @@
 import random
 
 class Rock:
-    name = 'piedra'
+    name = 'rock'
     
     def is_unchosen(self):
         return False
@@ -10,17 +10,17 @@ class Rock:
         return oponent.play_against_rock()
     
     def play_against_rock(self):
-        return 'empate'
+        return 'tie'
     
     def play_against_paper(self):
-        return 'papel'
+        return 'paper'
     
     def play_against_scissor(self):
-        return 'piedra'
+        return 'rock'
     
 
 class Paper:
-    name = 'papel'
+    name = 'paper'
     
     def is_unchosen(self):
         return False
@@ -29,16 +29,16 @@ class Paper:
         return oponent.play_against_paper()
     
     def play_against_rock(self):
-        return 'papel'
+        return 'paper'
     
     def play_against_paper(self):
-        return 'empate'
+        return 'tie'
     
     def play_against_scissor(self):
-        return 'tijera'
+        return 'scissors'
 
 class Scissor:
-    name = 'tijera'
+    name = 'scissors'
     
     def is_unchosen(self):
         return False
@@ -47,13 +47,13 @@ class Scissor:
         return oponent.play_against_scissor()
     
     def play_against_rock(self):
-        return 'piedra'
+        return 'rock'
     
     def play_against_paper(self):
-        return 'tijera'
+        return 'scissors'
 
     def play_against_scissor(self):
-        return 'empate'
+        return 'tie'
 
 class NoElement:
     
