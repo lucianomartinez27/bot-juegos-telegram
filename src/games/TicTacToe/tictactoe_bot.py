@@ -34,14 +34,16 @@ class BotTicTacToe(BotBase):
         await update.message.reply_text(self._('Tic-Tac-Toe:'), reply_markup=self.generate_markup(game))
 
     async def answer_message(self, update, context):
-        symbol = update.message.text
         user_id = self.get_user_id(update)
         game = self.get_game(user_id)
-        if not game.started():
+        if not game.started() and update.message:
+            symbol = update.message.text
             game.get_players_symbols(symbol)
             if game.computer_plays_first():
                 game.make_computer_movement()    
             await self.generate_board(update, game)
+        elif update.callback_query:
+            await self.answer_button(update, context)
 
     async def update_board(self, bot, game, chat_id=None, message_id=None, id_mensaje_inline=None):
         await bot.edit_message_reply_markup(chat_id=chat_id,

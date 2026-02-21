@@ -157,16 +157,16 @@ class GamesTelegramBot(BotTelegram):
             return await self.set_language(update, context)
 
         if not update.callback_query.inline_message_id:
-            return await self.run_current_game_if_available(context, update)
+            return await self.run_current_game_if_available(update, context)
         else:
             game_name = self.get_inline_game_by_query_data(update.callback_query.data)
             return await self.game_catalog[game_name].answer_button(update, context)
     
     @game_session
     async def answer_message_by_game(self, update, context):
-        await self.run_current_game_if_available(context, update)
+        await self.run_current_game_if_available(update, context)
 
-    async def run_current_game_if_available(self, context, update):
+    async def run_current_game_if_available(self, update, context):
         user_id = self.get_user_id(update)
         current_game = self.user_data[str(user_id)]["juego_actual"]
         if current_game:
