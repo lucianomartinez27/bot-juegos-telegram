@@ -32,8 +32,6 @@ class BotRockPaperScissor(BotBase):
         message = self.get_message_by_result(game)
         await self.send_message(bot, user_id, message, parse_mode='markdown')
 
-    async def answer_message(self, update, context):
-        await self.answer_button(update, context)
     
     def get_message_by_result(self, game):
         result = game.play()

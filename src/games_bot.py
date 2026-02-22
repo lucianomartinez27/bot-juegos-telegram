@@ -156,21 +156,25 @@ class GamesTelegramBot(BotTelegram):
         if query.data.startswith("lang_"):
             return await self.set_language(update, context)
 
-        if not update.callback_query.inline_message_id:
-            return await self.run_current_game_if_available(update, context)
+        if not query.inline_message_id:
+            return await self.run_current_game_if_available(update, context, True)
         else:
-            game_name = self.get_inline_game_by_query_data(update.callback_query.data)
+            game_name = self.get_inline_game_by_query_data(query.data)
             return await self.game_catalog[game_name].answer_button(update, context)
     
     @game_session
     async def answer_message_by_game(self, update, context):
         await self.run_current_game_if_available(update, context)
 
-    async def run_current_game_if_available(self, update, context):
+    async def run_current_game_if_available(self, update, context, is_button_message=False):
+        # TODO: Do not use boolean flag for button messages
         user_id = self.get_user_id(update)
         current_game = self.user_data[str(user_id)]["juego_actual"]
         if current_game:
-            await self.game_catalog[current_game].answer_message(update, context)
+            if is_button_message:
+                await self.game_catalog[current_game].answer_button(update, context)
+            else:
+                 await self.game_catalog[current_game].answer_message(update, context)
         else:
             await self.send_message(context.bot, user_id,
             self._("You don't have an active game. Use /games to start one."))

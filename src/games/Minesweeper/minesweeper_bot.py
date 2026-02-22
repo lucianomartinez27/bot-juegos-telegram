@@ -41,8 +41,6 @@ class BotBuscaminas(BotBase):
                 else:
                     await self.send_message(bot, user_id,  self._("You lost"))
 
-    async def answer_message(self, update, context):
-        await self.answer_button(update, context)
 
     def board_markup(self, game):
          return [
