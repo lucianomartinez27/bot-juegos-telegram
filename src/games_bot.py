@@ -108,11 +108,12 @@ class GamesTelegramBot(BotTelegram):
         # Apply the new translator for the confirmation message
         if lang_code == "es":
             new_translator = spanish.gettext
+            confirmation = self._("Idioma cambiado a Español 🇪🇸")
         else:
             new_translator = _
+            confirmation = self._("Language changed to English 🇬🇧")
         
         self.change_translator(new_translator, lang_code)
-        confirmation = self._("Language changed to English 🇬🇧")
             
         await query.answer()
         await query.edit_message_text(text=confirmation)
