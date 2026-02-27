@@ -25,7 +25,7 @@ class BotTelegramAhorcado(BotBase):
         self.generate_game_state(user_id, user_lang)
         bot = context.bot
         await self.send_message(bot, user_id, self._("Enter a letter as a message to play:"))
-        await self.send_message(bot, user_id, self.get_game(user_id).template())
+        await self.send_message(bot, user_id, self.get_game(user_id).template(self._("word:")))
 
     def generate_game_state(self, user_id, lang="en"):
         word = self.get_random_word(lang)
@@ -59,7 +59,7 @@ class BotTelegramAhorcado(BotBase):
 
         async def try_letter():
             game.try_letter(letter)
-            await self.send_message(bot, user_id, game.template())
+            await self.send_message(bot, user_id, game.template(self._("word:")))
             if game.lost():
                 await self.send_message(bot, user_id, self._("You lost\nThe word was: {}").format(game.word()))
         

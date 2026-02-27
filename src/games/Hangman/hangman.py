@@ -21,7 +21,7 @@ class HangManGame:
 			game.game_finished = data['game_finished']
 			return game
 
-	def template(self) -> str:
+	def template(self, word_label: str = "word:") -> str:
 		person = ("O", "|", "/", "\\", "/ '", "\\")
 		gallow = ["  ", "  ", "  ", "  ", "  ", "  "]
 
@@ -36,7 +36,7 @@ class HangManGame:
 		gallow_template += "||           \n"
 		gallow_template += "||=========\n\n"
 
-		gallow_template += "word:"
+		gallow_template += word_label
 		for letter in self._word:
 				if letter not in self.guessed:
 						gallow_template += " _"
