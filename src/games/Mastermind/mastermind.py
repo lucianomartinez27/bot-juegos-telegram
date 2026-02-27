@@ -70,11 +70,11 @@ class MasterMind:
 	def is_looser(self):
 		return len(self.attempts) > 14
 
-	def template(self):
+	def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED"):
 		"""comprueba el número de muertos y heridos que obtuvo el usuario"""
 
-		texto = "You have {} attempts left ".format(15-len(self.attempts))
-		texto += '\nDEADS - INJURED'.center(30)
+		texto = attempts_left_label.format(15-len(self.attempts))
+		texto += '\n' + deads_injured_label.center(30)
 
 		for i in range(len(self.attempts)):
 			exacts, partials = self.results[i][0], self.results[i][1]

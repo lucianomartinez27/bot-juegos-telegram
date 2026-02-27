@@ -13,11 +13,11 @@ UNICODE_SYMBOLS = {0: " ", 1: u"\U00000031", 2: u"\U00000032", 3: u"\U00000033",
 
 
 class Minesweeper:
-	def __init__(self, num_of_rows=8, num_of_cols=8) -> None:
-		self.num_of_bombs = 8 #TODO: Parametrize
+	def __init__(self, num_of_rows=8, num_of_cols=8, num_of_bombs=8) -> None:
+		self.num_of_bombs = num_of_bombs
 		self.num_of_rows = num_of_rows
 		self.num_of_cols = num_of_cols
-		self.hidden_board = [[0 for column in range(num_of_rows)] for row in range (num_of_cols)]
+		self.hidden_board = [[0 for column in range(num_of_cols)] for row in range (num_of_rows)]
 		self.visible_board = self.create_visible_board()
 		self.game_status = 'playing'
 		self.place_bombs()
@@ -28,8 +28,7 @@ class Minesweeper:
 	@classmethod
 	def from_json(cls, json_str):
 			data = json.loads(json_str)
-			game = cls(data['num_of_rows'], data['num_of_cols'])
-			game.num_of_bombs = data['num_of_bombs']
+			game = cls(data['num_of_rows'], data['num_of_cols'], data['num_of_bombs'])
 			game.hidden_board = data['hidden_board']
 			game.visible_board = data['visible_board']
 			game.game_status = data['game_status']
@@ -107,8 +106,8 @@ class Minesweeper:
 		return self.game_status == 'win'
 	
 	def reveal_board(self):
-		for row_number in range(self.num_of_cols):
-			for column_number in range(self.num_of_rows):
+		for row_number in range(self.num_of_rows):
+			for column_number in range(self.num_of_cols):
 				self.reveal_cell(row_number, column_number)
 
 	def reveal_cell(self, row_number, column_number):

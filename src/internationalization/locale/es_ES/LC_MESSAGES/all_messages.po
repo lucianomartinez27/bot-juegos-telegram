@@ -248,8 +248,32 @@ msgstr "Por favor, escribe una sola letra."
 msgid "You have already chosen that letter."
 msgstr "Ya has elegido esa letra."
 
+msgid "Select difficulty level:"
+msgstr "Selecciona el nivel de dificultad:"
+
+msgid "Easy"
+msgstr "Fácil"
+
+msgid "Medium"
+msgstr "Intermedio"
+
+msgid "Hard"
+msgstr "Difícil"
+
+msgid "Minesweeper:"
+msgstr "Buscaminas:"
+
+msgid "You won"
+msgstr "Ganaste"
+
+msgid "You lost"
+msgstr "Perdiste"
+
 msgid "word:"
 msgstr "Palabra:"
+
+msgid "Language changed to English 🇬🇧"
+msgstr "Idioma cambiado a Inglés 🇬🇧"
 
 msgid "You don't have an active game. Use /games to start one."
 msgstr "No tienes un juego activo. Usa /games para comenzar uno."

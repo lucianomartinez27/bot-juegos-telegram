@@ -37,7 +37,10 @@ class BotMastermind(BotBase):
 
         async def make_attempt():
             game.check_number(attempt)
-            await self.send_message(bot, user_id, game.template())
+            await self.send_message(bot, user_id, game.template(
+                self._("You have {} attempts left "), 
+                self._("DEADS - INJURED")
+            ))
             self.save_all_games()
             
             if game.is_winner():
