@@ -7,9 +7,9 @@ from .rock_paper_scissor import RockPaperScissorGame, Rock, Scissor, Paper
 
 class BotRockPaperScissorMultiplayer(BotBase):
     def __init__(self):
-        super(BotRockPaperScissorMultiplayer, self).__init__(__file__)
-        self.users_data = {}
+        super().__init__(__file__)
         self.Game = RockPaperScissorGame
+        self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
     def name(self):
         return self._('Rock, Paper, Scissors Multiplayer')

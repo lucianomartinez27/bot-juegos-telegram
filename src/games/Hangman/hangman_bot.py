@@ -6,9 +6,9 @@ from .hangman import HangManGame
 
 class BotTelegramAhorcado(BotBase):
     def __init__(self):
-        super(BotTelegramAhorcado, self).__init__(__file__)
-        self.users_data = { key: HangManGame.from_json(value) for key, value in self.users_data.items() }
+        super().__init__(__file__)
         self.Game = HangManGame
+        self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
     def name(self):
         return '- Hangman'

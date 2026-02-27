@@ -1,11 +1,13 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
-from games.TicTacToe.tictactoe_bot import BotTicTacToe
+
+from base_bot import BotBase
 from games.TicTacToe.tictactoe import TicTacToeGame
+from games.TicTacToe.tictactoe_bot import generate_markup
 
 
-class BotTaTeTiInLine(BotTicTacToe):
+class BotTaTeTiInLine(BotBase):
     def __init__(self):
-        super(BotTicTacToe, self).__init__(__file__)
+        super().__init__(__file__)
         self.Game = TicTacToeGame
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
@@ -42,7 +44,7 @@ class BotTaTeTiInLine(BotTicTacToe):
             game.mark_cell(player_symbol, cell)
             if not game.finished():
                 self.make_opponent_movement(game)
-            await self.update_board(bot, game, user_id, message_id)
+            await self.update_board(bot, game, None, message_id)
             if game.finished():
                 context.user_data["player_symbol"] = None
                 context.user_data["opposite_symbol"] = None
@@ -62,8 +64,11 @@ class BotTaTeTiInLine(BotTicTacToe):
             context.user_data["player_symbol"] = 'O'
             context.user_data["opposite_symbol"] = 'X'
     
-    def update_board(self, bot, board, chat_id=None, message_id=None):
-        return super().update_board(bot, board, None, None, message_id)
+    async def update_board(self, bot, game, chat_id, message_id):
+        return await bot.edit_message_reply_markup(chat_id=chat_id,
+                                             message_id=None,
+                                             inline_message_id=message_id,
+                                             reply_markup=generate_markup(game))
     
     def make_opponent_movement(self, game):
         pass # just wait for the opponent

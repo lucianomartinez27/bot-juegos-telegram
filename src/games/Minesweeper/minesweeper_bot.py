@@ -8,7 +8,7 @@ from .minesweeper import Minesweeper
 
 class BotBuscaminas(BotBase):
     def __init__(self):
-        super(BotBuscaminas, self).__init__(__file__)
+        super().__init__(__file__)
         self.Game = Minesweeper
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 

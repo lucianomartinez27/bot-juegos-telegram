@@ -111,7 +111,6 @@ class AgainstComputerTicTacToe(TicTacToeGame):
 	
 	@classmethod
 	def from_json(cls, json_str):
-			game = super()
 			data = json.loads(json_str)
 			game = cls()
 			game.board = data['board']

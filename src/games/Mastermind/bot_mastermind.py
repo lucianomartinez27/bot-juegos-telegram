@@ -11,9 +11,9 @@ from games.Mastermind.mastermind import MasterMind
 
 class BotMastermind(BotBase):
     def __init__(self):
-        super(BotMastermind, self).__init__(__file__)
-        self.users_data = { key: MasterMind.from_json(value) for key, value in self.users_data.items() }
+        super().__init__(__file__)
         self.Game = MasterMind
+        self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
     def name(self):
         return '- Mastermind'

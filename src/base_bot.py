@@ -9,7 +9,9 @@ from utils.errors import ModelError
 
 class BotBase(BotTelegram):
 
-    def __init__(self, file):
+    def __init__(self, file, name="BaseBot", token=None):
+        if token:
+            super().__init__(name, token)
         self.data_manager = DataManager(os.path.dirname(file))
         self.users_data = self.data_manager.generate_info(dict())
         self.Game = None
