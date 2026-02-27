@@ -14,6 +14,9 @@ class BotTaTeTiInLine(BotBase):
     def is_inline_game(self):
         return True
 
+    def game_id(self):
+        return '- tictactoe_multiplayer'
+
     def name(self):
         return self._('Tic-Tac-Toe MultiPlayer')
 

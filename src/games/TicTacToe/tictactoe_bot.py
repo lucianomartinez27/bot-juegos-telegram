@@ -18,6 +18,9 @@ class BotTicTacToe(BotBase):
         self.Game = AgainstComputerTicTacToe
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
     
+    def game_id(self):
+        return '- tictactoe'
+
     def name(self):
         return '- Tic-Tac-Toe'
 

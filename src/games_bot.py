@@ -44,16 +44,21 @@ class GamesTelegramBot(BotTelegram):
     def __init__(self, name, token):
         """Initializes bot; populates game catalog; manages user data"""
         BotTelegram.__init__(self, name, token)
-        self.game_catalog = {bot_ahorcado.name(): bot_ahorcado,
-                                   bot_buscaminas.name(): bot_buscaminas,                                   bot_mastermind.name(): bot_mastermind,
-                                   bot_tictactoe.name(): bot_tictactoe,
-                                   bot_tateti_inline.name(): bot_tateti_inline,
-                                   bot_rps.name(): bot_rps,
-                                   bot_rps_multiplayer.name(): bot_rps_multiplayer
-                                   }
+        self.game_catalog = {game.game_id(): game for game in [
+            bot_ahorcado,
+            bot_buscaminas,
+            bot_mastermind,
+            bot_tictactoe,
+            bot_tateti_inline,
+            bot_rps,
+            bot_rps_multiplayer
+        ]}
         
         self.data_manager = DataManager(os.path.abspath(''))
         self.user_data = self.data_manager.generate_info(dict())
+    
+    def get_game_bot(self, game_id):
+        return self.game_catalog.get(game_id)
     
     # TO-DO: We should re check how this is done
     def change_translator(self, new_translator, language_code):
@@ -85,7 +90,7 @@ class GamesTelegramBot(BotTelegram):
 
     @game_session
     async def display_games(self, update, context):
-        games = [[InlineKeyboardButton(game.name(), callback_data=game.name())] for game in
+        games = [[InlineKeyboardButton(game.name(), callback_data=game.game_id())] for game in
                     self.game_catalog.values() if not game.is_inline_game()]
         await update.message.reply_text(self._("Available games are:"), reply_markup=InlineKeyboardMarkup(games))
 
@@ -119,10 +124,10 @@ class GamesTelegramBot(BotTelegram):
         await query.edit_message_text(text=confirmation)
 
     def get_inline_game_by_query_data(self, query_data):
-        if (query_data in ['scissors', 'rock', 'paper']):
-            return bot_rps_multiplayer.name()
+        if query_data in ['scissors', 'rock', 'paper']:
+            return bot_rps_multiplayer.game_id()
         else:
-            return bot_tateti_inline.name()
+            return bot_tateti_inline.game_id()
 
     @game_session
     async def display_inline_games(self, update, context):
@@ -141,16 +146,17 @@ class GamesTelegramBot(BotTelegram):
     
     @game_session
     async def select_game(self, update, context):
-        selected_game = update.callback_query.data
+        selected_game_id = update.callback_query.data
         user = self.get_user_id(update)
         bot = context.bot
-        self.user_data[str(user)]["juego_actual"] = selected_game
+        self.user_data[str(user)]["juego_actual"] = selected_game_id
         self.data_manager.save_info(self.user_data)
 
+        game_bot = self.get_game_bot(selected_game_id)
         await self.send_message(bot, user, self._("You chose to play {}. To change the game, you can use /games again") \
-                            .format(selected_game))
+                            .format(game_bot.name()))
 
-        await self.game_catalog[selected_game].play(update, context)
+        await game_bot.play(update, context)
 
     @game_session
     async def answer_button_by_game(self, update, context):
@@ -161,8 +167,8 @@ class GamesTelegramBot(BotTelegram):
         if not query.inline_message_id:
             return await self.run_current_game_if_available(update, context, True)
         else:
-            game_name = self.get_inline_game_by_query_data(query.data)
-            return await self.game_catalog[game_name].answer_button(update, context)
+            game_id = self.get_inline_game_by_query_data(query.data)
+            return await self.get_game_bot(game_id).answer_button(update, context)
     
     @game_session
     async def answer_message_by_game(self, update, context):
@@ -171,12 +177,13 @@ class GamesTelegramBot(BotTelegram):
     async def run_current_game_if_available(self, update, context, is_button_message=False):
         # TODO: Do not use boolean flag for button messages
         user_id = self.get_user_id(update)
-        current_game = self.user_data[str(user_id)]["juego_actual"]
-        if current_game:
+        current_game_id = self.user_data[str(user_id)]["juego_actual"]
+        if current_game_id:
+            game_bot = self.get_game_bot(current_game_id)
             if is_button_message:
-                await self.game_catalog[current_game].answer_button(update, context)
+                await game_bot.answer_button(update, context)
             else:
-                 await self.game_catalog[current_game].answer_message(update, context)
+                 await game_bot.answer_message(update, context)
         else:
             await self.send_message(context.bot, user_id,
             self._("You don't have an active game. Use /games to start one."))

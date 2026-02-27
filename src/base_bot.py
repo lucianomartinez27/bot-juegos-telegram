@@ -17,6 +17,9 @@ class BotBase(BotTelegram):
         self.Game = None
         self.initialize_translator()
 
+    def game_id(self):
+        return None
+
     def save_all_games(self):
         self.data_manager.save_info({key: value.to_json() for key, value in self.users_data.items()})
     

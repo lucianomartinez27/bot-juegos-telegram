@@ -21,6 +21,9 @@ class BotMastermind(BotBase):
             "hard": {"num_digits": 5, "max_attempts": 12}
         }
 
+    def game_id(self):
+        return '- mastermind'
+
     def name(self):
         return '- Mastermind'
 

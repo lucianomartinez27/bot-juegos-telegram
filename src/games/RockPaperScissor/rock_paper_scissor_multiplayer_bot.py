@@ -11,6 +11,9 @@ class BotRockPaperScissorMultiplayer(BotBase):
         self.Game = RockPaperScissorGame
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
 
+    def game_id(self):
+        return '- rock_paper_scissor_multiplayer'
+
     def name(self):
         return self._('Rock, Paper, Scissors Multiplayer')
     

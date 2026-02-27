@@ -13,6 +13,9 @@ class BotTelegramAhorcado(BotBase):
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
         self._words_cache = {}
 
+    def game_id(self):
+        return '- hangman'
+
     def name(self):
         return '- Hangman'
     

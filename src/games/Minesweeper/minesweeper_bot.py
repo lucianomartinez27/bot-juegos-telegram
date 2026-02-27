@@ -17,6 +17,9 @@ class BotBuscaminas(BotBase):
             "hard": {"rows": 12, "cols": 12, "bombs": 25}
         }
 
+    def game_id(self):
+        return '- minesweeper'
+
     def name(self):
         return '- Minesweeper'
 
