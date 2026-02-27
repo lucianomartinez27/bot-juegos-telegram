@@ -105,7 +105,7 @@ msgstr "Para ganar, necesitas conseguir {} muertos. Tendrás {} intentos."
 
 #: src/games/Mastermind/bot_mastermind.py:44
 msgid "Congratulations, {}, YOU WON!!\n"
-msgstr "¡Felicidades, {}, HAS GANADO!!\n"
+msgstr "¡Felicidades, {}, HAS GANADO!\n"
 
 #: src/games/Mastermind/bot_mastermind.py:47
 msgid ""
