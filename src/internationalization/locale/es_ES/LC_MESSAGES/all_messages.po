@@ -260,15 +260,6 @@ msgstr "Intermedio"
 msgid "Hard"
 msgstr "Difícil"
 
-msgid "Minesweeper:"
-msgstr "Buscaminas:"
-
-msgid "You won"
-msgstr "Ganaste"
-
-msgid "You lost"
-msgstr "Perdiste"
-
 msgid "word:"
 msgstr "Palabra:"
 
