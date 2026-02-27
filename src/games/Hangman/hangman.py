@@ -3,9 +3,8 @@ import random
 from utils.errors import ModelError
 
 class HangManGame:
-	def __init__(self) -> None:
-		self.words = "shotgun tangerine vase dog carrot apple computer".upper().split()
-		self._word = random.choice(self.words)
+	def __init__(self, word: str) -> None:
+		self._word = word.upper()
 		self.errors = []
 		self.guessed = []
 		self.game_finished = False
@@ -16,8 +15,7 @@ class HangManGame:
 	@classmethod
 	def from_json(cls, json_str):
 			data = json.loads(json_str)
-			game = cls()
-			game._word = data['_word']
+			game = cls(data['_word'])
 			game.errors = data['errors']
 			game.guessed = data['guessed']
 			game.game_finished = data['game_finished']

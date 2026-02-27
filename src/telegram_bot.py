@@ -15,15 +15,18 @@ class BotTelegram:
 
     def __init__(self, name, token):
         self._ = None
+        self.language = 'en'
         self.app = ApplicationBuilder().token(token).build()
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.logger = logging.getLogger(name)
 
     def initialize_translator(self):
         self._ = _
+        self.language = 'en'
         
-    def change_translator(self, new_translator):
+    def change_translator(self, new_translator, language_code):
         self._ = new_translator
+        self.language = language_code
 
     def run(self):
         self.app.run_polling()

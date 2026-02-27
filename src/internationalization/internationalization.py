@@ -18,9 +18,13 @@ def set_translator(func):
             user_lang = update.effective_user.language_code
 
         if user_lang and user_lang.startswith("es"):
-            self.change_translator(spanish.gettext)
+            new_translator = spanish.gettext
+            lang_code = "es"
         else:
-            self.change_translator(_)
+            new_translator = _
+            lang_code = "en"
+        
+        self.change_translator(new_translator, lang_code)
             
         return await func(self, update, context, *pargs, **kwargs)
     return wrapped

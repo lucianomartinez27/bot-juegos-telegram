@@ -56,10 +56,10 @@ class GamesTelegramBot(BotTelegram):
         self.user_data = self.data_manager.generate_info(dict())
     
     # TO-DO: We should re check how this is done
-    def change_translator(self, new_translator):
-        super().change_translator(new_translator)
+    def change_translator(self, new_translator, language_code):
+        super().change_translator(new_translator, language_code)
         for game in self.game_catalog.values():
-            game.change_translator(new_translator)
+            game.change_translator(new_translator, language_code)
     
     def ensure_user_data(self, user_id):
         user_id_str = str(user_id)
@@ -107,11 +107,13 @@ class GamesTelegramBot(BotTelegram):
         
         # Apply the new translator for the confirmation message
         if lang_code == "es":
-            self.change_translator(spanish.gettext)
+            new_translator = spanish.gettext
             confirmation = "Idioma cambiado a Español 🇪🇸"
         else:
-            self.change_translator(_)
+            new_translator = _
             confirmation = "Language changed to English 🇬🇧"
+        
+        self.change_translator(new_translator, lang_code)
             
         await query.answer()
         await query.edit_message_text(text=confirmation)
