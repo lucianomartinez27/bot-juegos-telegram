@@ -85,23 +85,23 @@ msgstr "¡Felicidades, has ganado!"
 msgid "MASTERMIND"
 msgstr "Muertos y Heridos (MASTERMIND)"
 
-#: src/games/Mastermind/bot_mastermind.py:27
+#: src/games/Mastermind/bot_mastermind.py:47
 msgid ""
-"Guess a 4-digit number (no repeats). If you guess the number but not the "
+"Guess a {}-digit number (no repeats). If you guess the number but not the "
 "position "
 msgstr ""
-"Adivina un número de 4 dígitos (sin repetir). Si adivinas el número pero "
+"Adivina un número de {} dígitos (sin repetir). Si adivinas el número pero "
 "no la posición "
 
-#: src/games/Mastermind/bot_mastermind.py:28
+#: src/games/Mastermind/bot_mastermind.py:48
 msgid ""
 "you have one injured. If you guess the number and its position, you have "
 "one dead"
 msgstr "tienes un herido. Si adivinas el número y su posición, tienes un muerto."
 
-#: src/games/Mastermind/bot_mastermind.py:29
-msgid "To win, you need to get 4 dead. You will have 15 attempts."
-msgstr "Para ganar, necesitas conseguir 4 muertos. Tendrás 15 intentos."
+#: src/games/Mastermind/bot_mastermind.py:49
+msgid "To win, you need to get {} dead. You will have {} attempts."
+msgstr "Para ganar, necesitas conseguir {} muertos. Tendrás {} intentos."
 
 #: src/games/Mastermind/bot_mastermind.py:44
 msgid "Congratulations, {}, YOU WON!!\n"
@@ -233,8 +233,8 @@ msgstr "Te quedan {} intentos "
 msgid "DEADS - INJURED"
 msgstr "MUERTOS - HERIDOS"
 
-msgid "The number is invalid. It must have 4 digits"
-msgstr "El número es inválido. Debe tener 4 dígitos."
+msgid "The number is invalid. It must have {} digits"
+msgstr "El número es inválido. Debe tener {} dígitos."
 
 msgid "You already tried this number"
 msgstr "Ya intentaste con este número."
@@ -250,6 +250,9 @@ msgstr "Ya has elegido esa letra."
 
 msgid "Select difficulty level:"
 msgstr "Selecciona el nivel de dificultad:"
+
+msgid "Difficulty set to {}"
+msgstr "Dificultad establecida en {}"
 
 msgid "Easy"
 msgstr "Fácil"
