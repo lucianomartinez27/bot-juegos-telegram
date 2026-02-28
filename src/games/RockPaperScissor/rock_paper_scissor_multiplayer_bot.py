@@ -48,21 +48,25 @@ class BotRockPaperScissorMultiplayer(BotBase):
         game = self.users_data.setdefault(message_id, self.generate_game_state(user_id))
         option = update.callback_query.data
         await self.reset_player_choice(context, update, game, option)
-        if (game.both_players_choose()):
+        if game.both_players_choose():
             await self.send_message_by_result(game, message_id, context)
   
         
     
     async def send_message_by_result(self, game, message_id, context):
         
-        if (game.both_players_choose()):
+        if game.both_players_choose():
             result = game.play()
-            if (result == Rock.name or result == Scissor.name or result == Paper.name):
-                start = self._("*{}* won").format(result.upper())
-            else:
-                start = self._("It was a *TIE*")
             first_player_name =  context.bot_data[message_id]['first_player_name']
             second_player_name = context.bot_data[message_id]['second_player_name']
+            if result == Rock.name or result == Scissor.name or result == Paper.name:
+                if result == game.player_one_choice():
+                    winner_name = first_player_name
+                else:
+                    winner_name = second_player_name
+                start = self._("*{}* won").format(winner_name)
+            else:
+                start = self._("It was a *TIE*")
             message = self._("{}. *{}* chose  *{}* and *{}* chose *{}*").format(
                 start, first_player_name, game.player_one_choice().upper(), second_player_name, game.player_two_choice().upper())
             await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
