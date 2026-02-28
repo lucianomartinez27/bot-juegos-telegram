@@ -37,8 +37,13 @@ class BotBase(BotTelegram):
     def do_not_understand_message(self):
         return self._("Sorry, I can't understand you message.")
 
-    async def game_finished_message(self, bot, user_id):
-        await self.send_message(bot, user_id, self._("The game ended. Use /games to start a new one"))
+    async def game_finished_message(self, update, context):
+        if update.callback_query:
+            await update.callback_query.answer(self._("The game ended. Use /games to start a new one"), show_alert=True)
+        else:
+            user_id = self.get_user_id(update)
+            bot = context.bot
+            await self.send_message(bot, user_id, self._("The game ended. Use /games to start a new one"))
 
     async def answer_message(self, update, context):
         user_id = self.get_user_id(update)

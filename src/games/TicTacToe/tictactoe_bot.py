@@ -67,7 +67,7 @@ class BotTicTacToe(BotBase):
         [player_symbol, computer_symbol] = self.get_player_symbols(game, context)
 
         if game.finished():
-            await self.game_finished_message(bot, user_id)
+            await self.game_finished_message(update, context)
         else:
             game.mark_cell(player_symbol, cell)            
             if not game.finished():

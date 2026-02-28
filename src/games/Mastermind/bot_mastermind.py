@@ -87,7 +87,7 @@ class BotMastermind(BotBase):
                 await self.send_message(bot, user_id,  self._("I'm sorry, {}, YOU LOST!!\n The number was {}").format(name, "".join(game.numbers)))
 
         if game.finished():
-            await self.game_finished_message(bot, user_id)
+            await self.game_finished_message(update, context)
 
         else:
             await self.process_user_action(bot, user_id, make_attempt)

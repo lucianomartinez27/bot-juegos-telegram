@@ -55,7 +55,7 @@ class BotBuscaminas(BotBase):
         message_id = update.callback_query.message.message_id
         game = self.get_game(user_id)
         if game.finished():
-            await self.game_finished_message(bot, user_id)
+            await self.game_finished_message(update, context)
         else:
             game.mark_cell(int(row), int(col))
             self.save_all_games()
