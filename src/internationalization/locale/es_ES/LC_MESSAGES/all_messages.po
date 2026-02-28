@@ -212,11 +212,8 @@ msgstr "- Buscaminas"
 msgid "- Minesweeper"
 msgstr "- Buscaminas"
 
-msgid "- TaTeTi"
-msgstr "- El tres en línea"
-
 msgid "- Tic-Tac-Toe"
-msgstr "- El tres en línea"
+msgstr "- Ta Te Tí (El tres en línea)"
 
 msgid "Select your language:"
 msgstr "Selecciona tu idioma:"

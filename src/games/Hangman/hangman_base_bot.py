@@ -26,8 +26,8 @@ class BotHangmanBase(BotBase):
     def generate_inline_markup(self, game=None):
         keyboard = []
         row = []
-        SPANISH_UPPER = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
-        letters = self.language == "es" and SPANISH_UPPER or string.ascii_uppercase
+        spanish_upper = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+        letters = self.language == "es" and spanish_upper or string.ascii_uppercase
         for i, letter in enumerate(letters):
             text = letter
             if game and game.letter_has_been_tried(letter):

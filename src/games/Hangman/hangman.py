@@ -30,7 +30,7 @@ class HangManGame:
 		for i in range(len(self.errors)):
 				gallow[i] = person[i]
 
-		gallow_template = "*-------*\n"
+		gallow_template =  "*-------*\n"
 		gallow_template += "||      |    \n"
 		gallow_template += "||     {0}    \n".format(gallow[0])
 		gallow_template += "||   {1} {0} {2}  \n".format(gallow[1], gallow[2], gallow[3])

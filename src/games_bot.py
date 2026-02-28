@@ -93,7 +93,7 @@ class GamesTelegramBot(BotTelegram):
 
     @game_session
     async def display_games(self, update, context):
-        games = [[InlineKeyboardButton(game.name(), callback_data=game.game_id())] for game in
+        games = [[InlineKeyboardButton(self._(game.name()), callback_data=game.game_id())] for game in
                     self.game_catalog.values() if not game.is_inline_game()]
         await update.message.reply_text(self._("Available games are:"), reply_markup=InlineKeyboardMarkup(games))
 
