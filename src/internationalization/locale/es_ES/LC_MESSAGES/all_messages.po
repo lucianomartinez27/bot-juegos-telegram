@@ -272,3 +272,12 @@ msgstr "Idioma cambiado a Inglés 🇬🇧"
 msgid "You don't have an active game. Use /games to start one."
 msgstr "No tienes un juego activo. Usa /games para comenzar uno."
 
+msgid "Hangman MultiPlayer"
+msgstr "Ahorcado Multijugador"
+
+msgid "It is not your turn! Wait for another player."
+msgstr "¡No es tu turno! Espera a otro jugador."
+
+msgid "The game has already finished."
+msgstr "El juego ya ha terminado."
+

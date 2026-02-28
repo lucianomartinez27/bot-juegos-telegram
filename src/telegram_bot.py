@@ -31,8 +31,8 @@ class BotTelegram:
     def run(self):
         self.app.run_polling()
 
-    async def send_message(self, bot, user_id, message, parse_mode=None) -> object:
-        await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode)
+    async def send_message(self, bot, user_id, message, parse_mode=None, reply_markup=None) -> object:
+        await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=reply_markup)
 
     def handle_command(self, comando, callback):
 

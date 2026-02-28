@@ -8,6 +8,8 @@ class HangManGame:
 		self.errors = []
 		self.guessed = []
 		self.game_finished = False
+		# find another way to handle this; hangman bot looks for last_player_id when is inline game
+		self.last_player_id = None
 	
 	def to_json(self):
 		return json.dumps(self.__dict__)
