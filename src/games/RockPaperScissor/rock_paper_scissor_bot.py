@@ -38,13 +38,13 @@ class BotRockPaperScissor(BotBase):
     
     def get_message_by_result(self, game):
         result = game.play()
-        if (result == Rock.name or result == Scissor.name or result == Paper.name):
-            if (game.last_winner_is_player_one()):
+        if result == Rock.name or result == Scissor.name or result == Paper.name:
+            if game.last_winner_is_player_one():
                 start = self._("*You won*")
             else:
                 start = self._("*You lost*")
         else:
             start = self._(f"It was a *TIE*")
         return self._("{}. You chose *{}*, the computer chose *{}*").format(
-            start, game.player_one_choice().upper(), game.player_two_choice().upper())
+            start, self._(game.player_one_choice().upper()), self._(game.player_two_choice().upper()))
 

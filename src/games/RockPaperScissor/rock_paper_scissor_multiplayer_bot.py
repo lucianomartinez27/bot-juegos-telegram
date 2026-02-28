@@ -68,6 +68,6 @@ class BotRockPaperScissorMultiplayer(BotBase):
             else:
                 start = self._("It was a *TIE*")
             message = self._("{}. *{}* chose  *{}* and *{}* chose *{}*").format(
-                start, first_player_name, game.player_one_choice().upper(), second_player_name, game.player_two_choice().upper())
+                start, first_player_name, self._(game.player_one_choice().upper()), second_player_name, self._(game.player_two_choice().upper()))
             await context.bot.edit_message_caption(inline_message_id=message_id, caption= message, reply_markup=self.generate_inline_markup(), parse_mode='markdown')
 
