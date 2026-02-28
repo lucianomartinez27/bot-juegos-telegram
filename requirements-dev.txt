@@ -1,1 +1,4 @@
 Babel
+pytest
+pytest-mock
+pytest-asyncio

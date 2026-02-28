@@ -58,10 +58,8 @@ class TicTacToeGame:
 
 	def duplicate_game(self):
 		# Duplica la lista del board y devuelve el duplicado
-		game = AgainstComputerTicTacToe()
+		game = AgainstComputerTicTacToe(self.player_symbol, self.computer_symbol)
 		game.board = self.board[:]
-		game.player_symbol = self.player_symbol
-		game.computer_symbol = self.computer_symbol
 		return game
 
 
@@ -104,19 +102,17 @@ class TicTacToeGame:
 
 class AgainstComputerTicTacToe(TicTacToeGame):
 	 
-	def __init__(self):
+	def __init__(self, player_symbol='', computer_symbol=''):
 			super(AgainstComputerTicTacToe, self).__init__()
-			self.player_symbol = ''
-			self.computer_symbol = ''
+			self.player_symbol = player_symbol
+			self.computer_symbol = computer_symbol
 	
 	@classmethod
 	def from_json(cls, json_str):
 			data = json.loads(json_str)
-			game = cls()
+			game = cls(data['player_symbol'], data['computer_symbol'])
 			game.board = data['board']
 			game.game_finished = data['game_finished']
-			game.player_symbol = data['player_symbol']
-			game.computer_symbol = data['computer_symbol']
 			return game
 	
 	def started(self):
