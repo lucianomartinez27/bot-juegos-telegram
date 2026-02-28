@@ -148,6 +148,21 @@ msgstr "Papel"
 msgid "Scissors"
 msgstr "Tijeras"
 
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:49
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:71
+msgid "ROCK"
+msgstr "PIEDRA"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:49
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:71
+msgid "PAPER"
+msgstr "PAPEL"
+
+#: src/games/RockPaperScissor/rock_paper_scissor_bot.py:49
+#: src/games/RockPaperScissor/rock_paper_scissor_multiplayer_bot.py:71
+msgid "SCISSORS"
+msgstr "TIJERAS"
+
 #: src/games/RockPaperScissor/rock_paper_scissor_bot.py:39
 msgid "*You won*"
 msgstr "*Ganaste*"
