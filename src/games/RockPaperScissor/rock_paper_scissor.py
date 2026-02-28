@@ -56,9 +56,22 @@ class Scissor:
         return 'tie'
 
 class NoElement:
-    
+    name = 'no_element'
+
     def is_unchosen(self):
         return True
+
+    def play_against(self, oponent):
+        return 'tie'
+
+    def play_against_rock(self):
+        return 'rock'
+
+    def play_against_paper(self):
+        return 'paper'
+
+    def play_against_scissor(self):
+        return 'scissors'
 
 class RockPaperScissorGame:
     def __init__(self, player_one=NoElement(), player_two=NoElement()) -> None:
@@ -106,7 +119,8 @@ class RockPaperScissorGame:
             return Scissor()
         if Paper.name == name:
             return Paper()
-        
+        return NoElement()
+
     @staticmethod
     def random_choice():
         return random.choice([Rock(), Paper(), Scissor()])
