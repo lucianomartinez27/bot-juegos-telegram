@@ -8,6 +8,8 @@ load_dotenv()
 
 from games_bot import GamesTelegramBot
 TOKEN_TELEGRAM = os.environ['TOKEN_TELEGRAM']
+BOT_NAME = os.environ.get('BOT_NAME', 'PlayTheGamesBot')
+BOT_USERNAME = os.environ.get('BOT_USERNAME', 'PlayTheGamesBot')
 import re
 pattern = re.compile(r"[-] [a-zA-ZáéíóúñÁÉÍÓÚÑ ,]+")
 inline_pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ ,]+[_]+ [1-9]")
@@ -34,7 +36,7 @@ def run_http_server():
 
 if __name__ == '__main__':
 
-    gamesBot = GamesTelegramBot("Classic Games Bot", TOKEN_TELEGRAM)
+    gamesBot = GamesTelegramBot(BOT_NAME, TOKEN_TELEGRAM, BOT_USERNAME)
     gamesBot.handle_command("start", gamesBot.start)
     gamesBot.handle_command("games", gamesBot.display_games)
     gamesBot.handle_command("juegos", gamesBot.display_games)

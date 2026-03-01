@@ -6,21 +6,24 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import MessageHandler, CommandHandler, CallbackQueryHandler, InlineQueryHandler, filters
 
 class RedirectBot(BotTelegram):
-    def __init__(self, name, token):
+    def __init__(self, name, token, new_bot_username="PlayTheGamesBot"):
         super().__init__(name, token)
+        self.new_bot_username = new_bot_username
+        self.new_bot_url = f"https://t.me/{new_bot_username}"
 
     async def send_redirect_message(self, update, context):
         """Send a message informing that the bot has moved."""
+        escaped_username = self.new_bot_username.replace('_', r'\_')
         message = (
             "🚀 **We have moved! / ¡Nos hemos mudado!**\n\n"
             "This bot is no longer active. To continue playing classic games, "
-            "please visit our new bot: @the\_classic\_games\_bot\n\n"
+            f"please visit our new bot: @{escaped_username}\n\n"
             "Este bot ya no está activo. Para seguir jugando a los juegos clásicos, "
-            "por favor visita nuestro nuevo bot: @the\_classic\_games\_bot"
+            f"por favor visita nuestro nuevo bot: @{escaped_username}"
         )
         
         keyboard = [
-            [InlineKeyboardButton("Go to New Bot / Ir al nuevo Bot 🎮", url="https://t.me/the_classic_games_bot")]
+            [InlineKeyboardButton("Go to New Bot / Ir al nuevo Bot 🎮", url=self.new_bot_url)]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
@@ -62,6 +65,7 @@ if __name__ == '__main__':
         exit(1)
 
     print("Starting Redirect Bot...")
-    redirect_bot = RedirectBot("Redirect Bot", TOKEN_TELEGRAM_REDIRECT)
+    NEW_BOT_USERNAME = os.getenv('BOT_USERNAME', 'PlayTheGamesBot')
+    redirect_bot = RedirectBot("Redirect Bot", TOKEN_TELEGRAM_REDIRECT, NEW_BOT_USERNAME)
     redirect_bot.setup()
     redirect_bot.run()

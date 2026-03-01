@@ -1,9 +1,9 @@
-# Classic Games Telegram Bot
+# PlayTheGamesBot Telegram Bot
 
 A Telegram bot that allows you to play several classic games directly in your chat or with friends using inline mode.
 
 ## Try it out!
-You can try the bot here: [Classic Games Bot](https://t.me/the_classic_games_bot)
+You can try the bot here: [PlayTheGamesBot](https://t.me/PlayTheGamesBot)
 
 ## Features
 - **Multi-language Support**: Users can choose between English 🇬🇧 and Spanish 🇪🇸 using the `/language` command.
@@ -20,7 +20,7 @@ You can try the bot here: [Classic Games Bot](https://t.me/the_classic_games_bot
 - **- Tic-Tac-Toe**: The classic 3x3 game against the computer.
 - **- Rock, Paper, Scissors**: Play against the computer.
 
-### Multiplayer (Inline Mode - type `@the_classic_games_bot play`)
+### Multiplayer (Inline Mode - type `@PlayTheGamesBot play`)
 - **Tic-Tac-Toe MultiPlayer**: Challenge a friend in any chat.
 - **Rock, Paper, Scissors Multiplayer**: Play against a friend.
 

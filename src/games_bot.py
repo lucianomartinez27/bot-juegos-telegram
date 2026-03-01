@@ -43,9 +43,10 @@ def game_session(func):
     return set_translator(ensure_session(func))
 
 class GamesTelegramBot(BotTelegram):
-    def __init__(self, name, token):
+    def __init__(self, name, token, username=None):
         """Initializes bot; populates game catalog; manages user data"""
         BotTelegram.__init__(self, name, token)
+        self.username = username or name
         self.game_catalog = {game.game_id(): game for game in [
             bot_ahorcado,
             bot_buscaminas,
@@ -83,11 +84,12 @@ class GamesTelegramBot(BotTelegram):
         bot = context.bot
         user_id = self.get_user_id(update)
         user_name = update.message.chat.first_name
+        self.logger.info(f"User {user_name} ({user_id}) started the bot")
         if str(user_id) not in self.user_data:
             self.user_data[str(user_id)] = {"juego_actual": None, "estado": {}, "language": None}
         self.data_manager.save_info(self.user_data)
-        message = self._("Hello *{}*, welcome to classic games bot. Use /games to show the available games").format(user_name) + ".\n\n"
-        message += self._("There are also some multiplayer games. To play them, you have to write `@the_classic_games_bot play` on your friend's chat.") + "\n\n"
+        message = self._("Hello *{}*, welcome to {}. Use /games to show the available games").format(user_name, self.name) + ".\n\n"
+        message += self._("There are also some multiplayer games. To play them, you have to write `@{} play` on your friend's chat.").format(self.username) + "\n\n"
         message += self._("A list with the available games will be shown, then select the game that you want to play.")
         await self.send_message(bot, user_id, message, 'markdown')
 
@@ -136,6 +138,9 @@ class GamesTelegramBot(BotTelegram):
 
     @game_session
     async def display_inline_games(self, update, context):
+        user_id = self.get_user_id(update)
+        user_name = update.inline_query.from_user.first_name
+        self.logger.info(f"User {user_name} ({user_id}) is displaying inline games")
         inline_games = []
         for bot_game in self.game_catalog.values():
             if bot_game.is_inline_game():
@@ -153,11 +158,13 @@ class GamesTelegramBot(BotTelegram):
     async def select_game(self, update, context):
         selected_game_id = update.callback_query.data
         user = self.get_user_id(update)
+        user_name = update.callback_query.from_user.first_name
         bot = context.bot
         self.user_data[str(user)]["juego_actual"] = selected_game_id
         self.data_manager.save_info(self.user_data)
 
         game_bot = self.get_game_bot(selected_game_id)
+        self.logger.info(f"User {user_name} ({user}) selected game {game_bot.name()} ({selected_game_id})")
         await self.send_message(bot, user, self._("You chose to play {}. To change the game, you can use /games again") \
                             .format(game_bot.name()))
 
