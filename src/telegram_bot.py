@@ -36,7 +36,7 @@ class BotTelegram:
         self.app.run_webhook(
             listen="0.0.0.0",
             port=port,
-            url_path=secret_token if secret_token else "",
+            url_path=url_path,
             webhook_url=f"{url}/{secret_token if secret_token else ''}",
             cert=cert,
             key=key,
