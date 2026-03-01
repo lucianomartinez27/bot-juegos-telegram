@@ -44,7 +44,7 @@ class BotBuscaminas(BotBase):
             self.generate_game_state(user_id, settings["rows"], settings["cols"], settings["bombs"])
             game = self.get_game(user_id)
             await query.edit_message_text(
-                self._('Minesweeper:'), 
+                self._('Minesweeper:') + f" 💣 {settings['bombs']}",
                 reply_markup=InlineKeyboardMarkup(self.board_markup(game))
             )
             return
