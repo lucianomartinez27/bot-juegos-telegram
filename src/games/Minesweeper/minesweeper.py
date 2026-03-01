@@ -69,8 +69,10 @@ class Minesweeper:
 		for row_number in range(self.num_of_rows):
 			for col_number in range(self.num_of_cols):
 				if self.hidden_board[row_number][col_number] == MINE_CODE:
-					for row_sibling in range(max(0, row_number-1), min(self.num_of_rows, row_number+2)):
-						for column_sibling in range(max(0, col_number-1), min(self.num_of_cols, col_number+2)):
+					row_siblings = range(max(0, row_number - 1), min(self.num_of_rows, row_number + 2))
+					for row_sibling in row_siblings:
+						col_siblings = range(max(0, col_number - 1), min(self.num_of_cols, col_number + 2))
+						for column_sibling in col_siblings:
 							if self.hidden_board[row_sibling][column_sibling] != MINE_CODE:
 								self.hidden_board[row_sibling][column_sibling] += 1
 

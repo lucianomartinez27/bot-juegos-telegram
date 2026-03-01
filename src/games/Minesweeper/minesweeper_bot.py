@@ -13,8 +13,8 @@ class BotBuscaminas(BotBase):
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
         self.difficulty_settings = {
             "easy": {"rows": 8, "cols": 8, "bombs": 8},
-            "medium": {"rows": 10, "cols": 10, "bombs": 15},
-            "hard": {"rows": 12, "cols": 12, "bombs": 25}
+            "medium": {"rows": 10, "cols": 8, "bombs": 15},
+            "hard": {"rows": 12, "cols": 8, "bombs": 25}
         }
 
     def game_id(self):
@@ -75,6 +75,6 @@ class BotBuscaminas(BotBase):
 
     def board_markup(self, game):
          return [
-            [InlineKeyboardButton(game.board()[col][row], callback_data="{} {}".format(col, row)) for row in range(game.num_of_rows)]
-            for col in range(game.num_of_cols)
+            [InlineKeyboardButton(game.board()[row][col], callback_data="{} {}".format(row, col)) for col in range(game.num_of_cols)]
+            for row in range(game.num_of_rows)
         ]
