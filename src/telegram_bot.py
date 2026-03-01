@@ -32,7 +32,7 @@ class BotTelegram:
     def run_polling(self):
         self.app.run_polling()
 
-    def run_webhook(self, url, port, secret_token=None, cert=None, key=None):
+    def run_webhook(self, url, port, url_path, secret_token=None, cert=None, key=None):
         self.app.run_webhook(
             listen="0.0.0.0",
             port=port,

@@ -33,6 +33,6 @@ if __name__ == '__main__':
         PORT = int(os.getenv('PORT', 8080))
         # Secret token is recommended for webhooks
         SECRET_TOKEN = os.getenv('WEBHOOK_SECRET_TOKEN')
-        gamesBot.run_webhook(WEBHOOK_URL, PORT, SECRET_TOKEN)
+        gamesBot.run_webhook(WEBHOOK_URL, PORT, "webhook", SECRET_TOKEN)
     else:
         gamesBot.run()
