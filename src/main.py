@@ -14,26 +14,6 @@ import re
 pattern = re.compile(r"[-] [a-zA-ZáéíóúñÁÉÍÓÚÑ ,]+")
 inline_pattern = re.compile(r"[a-zA-ZáéíóúñÁÉÍÓÚÑ ,]+[_]+ [1-9]")
 
-import threading
-import http.server
-import socketserver
-
-class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/':
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(b'Hello, world!')
-        else:
-            self.send_error(404)
-
-PORT = 8080
-
-def run_http_server():
-    with socketserver.TCPServer(("", PORT), SimpleHTTPRequestHandler) as httpd:
-        print(f"Serving on port {PORT}")
-        httpd.serve_forever()
-
 if __name__ == '__main__':
 
     gamesBot = GamesTelegramBot(BOT_NAME, TOKEN_TELEGRAM, BOT_USERNAME)
@@ -47,8 +27,12 @@ if __name__ == '__main__':
     gamesBot.handle_message(gamesBot.answer_message_by_game)
     gamesBot.handle_inline_mode(gamesBot.display_inline_games)
 
-    http_thread = threading.Thread(target=run_http_server)
-    http_thread.daemon = True
-    http_thread.start()
+    WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 
-    gamesBot.run()
+    if WEBHOOK_URL:
+        PORT = int(os.getenv('PORT', 8080))
+        # Secret token is recommended for webhooks
+        SECRET_TOKEN = os.getenv('WEBHOOK_SECRET_TOKEN')
+        gamesBot.run_webhook(WEBHOOK_URL, PORT, SECRET_TOKEN)
+    else:
+        gamesBot.run()

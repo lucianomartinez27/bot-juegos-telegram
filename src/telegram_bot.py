@@ -29,8 +29,22 @@ class BotTelegram:
         self._ = new_translator
         self.language = language_code
 
-    def run(self):
+    def run_polling(self):
         self.app.run_polling()
+
+    def run_webhook(self, url, port, secret_token=None, cert=None, key=None):
+        self.app.run_webhook(
+            listen="0.0.0.0",
+            port=port,
+            url_path=secret_token if secret_token else "",
+            webhook_url=f"{url}/{secret_token if secret_token else ''}",
+            cert=cert,
+            key=key,
+            secret_token=secret_token
+        )
+
+    def run(self):
+        self.run_polling()
 
     async def send_message(self, bot, user_id, message, parse_mode=None, reply_markup=None) -> object:
         await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=reply_markup)
