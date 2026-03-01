@@ -64,27 +64,10 @@ class BotTelegram:
         self.app.add_handler(InlineQueryHandler(comando, pattern=patron))
 
     def get_user_id(self, update):
-        try:
-            id = update.callback_query.message.chat_id
-        except:
-            try:
-                id = update.message.chat_id
-            except:
-                try:
-                    id = update.inline_query.from_user.id
-                except:
-                    id = update.callback_query.from_user.id
-        return id
+        return update.effective_user.id
+
+    def get_chat_id(self, update):
+        return update.effective_chat.id
 
     def get_message_id(self, update):
-        try:
-            id = update.callback_query.message.message_id
-        except:
-            try:
-                id = update.message.message_id
-            except:
-                try:
-                    id = update.inline_query.from_user.message_id
-                except:
-                    id = update.callback_query.inline_message_id
-        return id
+        return update.effective_message.message_id
