@@ -13,8 +13,8 @@ class BotBuscaminas(BotBase):
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
         self.difficulty_settings = {
             "easy": {"rows": 8, "cols": 8, "bombs": 8},
-            "medium": {"rows": 10, "cols": 8, "bombs": 15},
-            "hard": {"rows": 12, "cols": 8, "bombs": 25}
+            "medium": {"rows": 10, "cols": 8, "bombs": 12},
+            "hard": {"rows": 12, "cols": 8, "bombs": 20}
         }
 
     def game_id(self):
