@@ -20,7 +20,7 @@ class Minesweeper:
 		self.hidden_board = [[0 for column in range(num_of_cols)] for row in range (num_of_rows)]
 		self.visible_board = self.create_visible_board()
 		self.game_status = 'playing'
-		self.place_bombs()
+		self.bombs_placed = False
 
 	def to_json(self):
 		return json.dumps(self.__dict__)
@@ -32,6 +32,7 @@ class Minesweeper:
 			game.hidden_board = data['hidden_board']
 			game.visible_board = data['visible_board']
 			game.game_status = data['game_status']
+			game.bombs_placed = data.get('bombs_placed', True)
 
 			return game
 
@@ -42,6 +43,8 @@ class Minesweeper:
 		return self.game_status != 'playing'
 	
 	def mark_cell(self, row_number, column_number):
+		if not self.bombs_placed:
+			self.place_bombs(row_number, column_number)
 		self.show_board_hints(row_number, column_number)
 		if self.is_bomb(row_number, column_number):
 			self.reveal_board()
@@ -54,15 +57,18 @@ class Minesweeper:
 	def is_bomb(self, row_number, column_number):
 		return self.hidden_board[row_number][column_number] == MINE_CODE
 	
-	def place_bombs(self):
+	def place_bombs(self, avoid_row=None, avoid_col=None):
 		bombs_placed  = 0
 		while bombs_placed < self.num_of_bombs:
 			row_number = random.randrange(self.num_of_rows)
 			col_number = random.randrange(self.num_of_cols)
+			if (row_number, col_number) == (avoid_row, avoid_col):
+				continue
 			if self.hidden_board[row_number][col_number] != MINE_CODE:
 				self.hidden_board[row_number][col_number] = MINE_CODE
 				bombs_placed += 1
 		self.place_hints()
+		self.bombs_placed = True
 	
 	def place_hints(self):
 		
