@@ -166,7 +166,7 @@ class GamesTelegramBot(BotTelegram):
         game_bot = self.get_game_bot(selected_game_id)
         self.logger.info(f"User {user_name} ({user}) selected game {game_bot.name()} ({selected_game_id})")
         await self.send_message(bot, user, self._("You chose to play {}. To change the game, you can use /games again") \
-                            .format(game_bot.name()))
+                            .format(self._(game_bot.name())))
 
         await game_bot.play(update, context)
 
