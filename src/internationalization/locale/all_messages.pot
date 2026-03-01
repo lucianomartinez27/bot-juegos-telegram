@@ -63,6 +63,10 @@ msgstr ""
 msgid "Enter a letter as a message to play:"
 msgstr ""
 
+#: src/games/Hangman/hangman_bot.py:28
+msgid "Select a letter to play:"
+msgstr ""
+
 #: src/games/Hangman/hangman_bot.py:33
 msgid ""
 "You lost\n"

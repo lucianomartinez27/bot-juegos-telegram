@@ -69,6 +69,10 @@ msgstr "Elegiste jugar a {}. Para cambiar de juego, puedes usar /juegos nuevamen
 msgid "Enter a letter as a message to play:"
 msgstr "Ingresa una letra como mensaje para jugar:"
 
+#: src/games/Hangman/hangman_bot.py:28
+msgid "Select a letter to play:"
+msgstr "Seleccione una letra para jugar:"
+
 #: src/games/Hangman/hangman_bot.py:33
 msgid ""
 "You lost\n"
