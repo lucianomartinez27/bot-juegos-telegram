@@ -54,6 +54,9 @@ class BotBuscaminas(BotBase):
         user_id = update.callback_query.message.chat.id
         message_id = update.callback_query.message.message_id
         game = self.get_game(user_id)
+        if game.is_revealed(int(row), int(col)):
+            # do nothing
+            return
         if game.finished():
             await self.game_finished_message(update, context)
         else:

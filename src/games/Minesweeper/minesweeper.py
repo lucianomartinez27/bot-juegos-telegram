@@ -113,6 +113,9 @@ class Minesweeper:
 	def is_winner(self):
 		return self.game_status == 'win'
 	
+	def is_revealed(self, row_number, column_number):
+		return self.visible_board[row_number][column_number] != HIDDEN_CELL
+	
 	def reveal_board(self):
 		for row_number in range(self.num_of_rows):
 			for column_number in range(self.num_of_cols):
