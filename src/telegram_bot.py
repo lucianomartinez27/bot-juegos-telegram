@@ -70,4 +70,6 @@ class BotTelegram:
         return update.effective_chat.id
 
     def get_message_id(self, update):
+        if update.callback_query and update.callback_query.inline_message_id:
+            return update.callback_query.inline_message_id
         return update.effective_message.message_id
