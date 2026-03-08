@@ -41,8 +41,10 @@ class BotMastermind(BotBase):
 
     async def start_game(self, update, context, difficulty):
         user_id = self.get_user_id(update)
+        user_name = update.effective_user.first_name
         bot = context.bot
         settings = self.difficulty_settings[difficulty]
+        self.logger.info(f"User {user_name} ({user_id}) started game: {self.name()} ({difficulty})")
         game = self.generate_game_state(user_id, settings["num_digits"], settings["max_attempts"])
         
         await self.send_message(bot, user_id,  self._('MASTERMIND'))

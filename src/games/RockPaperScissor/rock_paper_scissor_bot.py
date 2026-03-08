@@ -31,6 +31,8 @@ class BotRockPaperScissor(BotBase):
         option = update.callback_query.data
         bot = context.bot
         user_id = self.get_user_id(update)
+        user_name = update.effective_user.first_name
+        self.logger.info(f"User {user_name} ({user_id}) played game: {self.name()}")
         game = self.Game(self.Game.element(option), self.Game.random_choice())
         message = self.get_message_by_result(game)
         await self.send_message(bot, user_id, message, parse_mode='markdown')

@@ -44,8 +44,13 @@ class BotRockPaperScissorMultiplayer(BotBase):
         
     async def answer_button(self, update, context):        
         user_id = self.get_user_id(update)
+        user_name = update.effective_user.first_name
         message_id = self.get_message_id(update)
-        game = self.users_data.setdefault(message_id, self.generate_game_state(user_id))
+        if message_id not in self.users_data:
+            self.logger.info(f"User {user_name} ({user_id}) started inline game: {self.name()} ({message_id})")
+            self.users_data[message_id] = self.generate_game_state(user_id)
+        
+        game = self.users_data[message_id]
         option = update.callback_query.data
         await self.reset_player_choice(context, update, game, option)
         if game.both_players_choose():

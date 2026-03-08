@@ -67,10 +67,12 @@ class BotHangmanBase(BotBase):
 
     async def answer_button(self, update, context):
         user_id = self.get_user_id(update)
+        user_name = update.effective_user.first_name
         message_id = self.get_message_id(update)
         query = update.callback_query
 
         if message_id not in self.users_data:
+            self.logger.info(f"User {user_name} ({user_id}) started inline game: {self.name()} ({message_id})")
             # For inline games, we often use message_id as key
             self.users_data[message_id] = self.generate_game_state(user_id, self.language)
 

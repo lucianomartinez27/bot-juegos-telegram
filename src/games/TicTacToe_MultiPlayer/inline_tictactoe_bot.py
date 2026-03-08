@@ -30,8 +30,12 @@ class BotTaTeTiInLine(BotBase):
     
     async def answer_button(self, update, context):
         user_id = self.get_user_id(update)
-        self.users_data.setdefault(self.get_message_id(update), self.generate_game_state(user_id))
+        user_name = update.effective_user.first_name
         message_id = self.get_message_id(update)
+        if message_id not in self.users_data:
+            self.logger.info(f"User {user_name} ({user_id}) started inline game: {self.name()} ({message_id})")
+            self.users_data[message_id] = self.generate_game_state(user_id)
+        
         game = self.get_game(message_id)
         self.reset_player_symbols(context, game)
        

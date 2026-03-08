@@ -40,9 +40,11 @@ class BotBuscaminas(BotBase):
         if query.data.startswith("ms_diff_"):
             difficulty = query.data.split("_")[2]
             user_id = self.get_user_id(update)
+            user_name = update.effective_user.first_name
             bot = context.bot
             message_id = query.message.message_id
             settings = self.difficulty_settings[difficulty]
+            self.logger.info(f"User {user_name} ({user_id}) started game: {self.name()} ({difficulty})")
             self.generate_game_state(user_id, settings["rows"], settings["cols"], settings["bombs"])
             game = self.get_game(user_id)
             await self.edit_message_text(bot, user_id, message_id,

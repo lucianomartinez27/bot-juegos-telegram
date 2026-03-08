@@ -27,6 +27,8 @@ class BotTicTacToe(BotBase):
     async def play(self, update, context):
 
         user_id = self.get_user_id(update)
+        user_name = update.effective_user.first_name
+        self.logger.info(f"User {user_name} ({user_id}) started game: {self.name()}")
         bot = context.bot
         self.generate_game_state(user_id)
         custom_keyboard = [['X', 'O']]
