@@ -297,3 +297,24 @@ msgstr "¡No es tu turno! Espera a otro jugador."
 msgid "The game has already finished."
 msgstr "El juego ya ha terminado."
 
+msgid "Mastermind MultiPlayer"
+msgstr "Muertos y Heridos Multijugador"
+
+msgid "The combination has already been set."
+msgstr "La combinación ya ha sido establecida."
+
+msgid "Only the creator can set the combination."
+msgstr "Solo el creador puede establecer la combinación."
+
+msgid "Combination set! Now others can guess."
+msgstr "¡Combinación establecida! Ahora los demás pueden adivinar."
+
+msgid "Wait for the creator to set the combination."
+msgstr "Espera a que el creador establezca la combinación."
+
+msgid "The creator cannot play!"
+msgstr "¡El creador no puede jugar!"
+
+msgid "MASTERMIND MULTIPLAYER\n\nSetting up the game.\nCreator: Select the secret combination."
+msgstr "MUERTOS Y HERIDOS MULTIJUGADOR\n\nConfigurando el juego.\nCreador: Selecciona la combinación secreta."
+

@@ -6,23 +6,15 @@ Juego : MUERTOS Y HERIDOS - MASTERMIND
 """
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from base_bot import BotBase
+from .bot_mastermind_base import BotMastermindBase
 from games.Mastermind.mastermind import MasterMind
 
 
-class BotMastermind(BotBase):
+class BotMastermind(BotMastermindBase):
     def __init__(self):
         super().__init__(__file__)
         self.Game = MasterMind
         self.users_data = { key: self.Game.from_json(value) for key, value in self.users_data.items() }
-        self.difficulty_settings = {
-            "easy": {"num_digits": 3, "max_attempts": 15},
-            "medium": {"num_digits": 4, "max_attempts": 15},
-            "hard": {"num_digits": 5, "max_attempts": 12}
-        }
-        self.colors = ["🔴", "🔵", "🟢", "🟡", "🟣", "🟠", "🟤", "⚪"]
-        self.color_to_num = {color: str(i) for i, color in enumerate(self.colors)}
-        self.num_to_color = {str(i): color for i, color in enumerate(self.colors)}
 
     def format_attempt(self, attempt):
         return "".join([self.num_to_color.get(num, num) for num in attempt])
@@ -68,26 +60,8 @@ class BotMastermind(BotBase):
         self.save_all_games()
         return self.users_data[str(user_id)]
 
-    def generate_inline_markup(self, game):
-        keyboard = []
-        row = []
-        for i, color in enumerate(self.colors):
-            num = self.color_to_num[color]
-            row.append(InlineKeyboardButton(color, callback_data=f"mm_c_{num}"))
-            if (i + 1) % 4 == 0:
-                keyboard.append(row)
-                row = []
-        if row:
-            keyboard.append(row)
-        
-        # Action buttons
-        action_row = [
-            InlineKeyboardButton("⌫", callback_data="mm_delete"),
-            InlineKeyboardButton("⏎", callback_data="mm_submit")
-        ]
-        keyboard.append(action_row)
-        
-        return InlineKeyboardMarkup(keyboard)
+    def generate_inline_markup(self, game=None):
+        return self.generate_inline_markup_base(game, prefix="mm")
 
     async def answer_button(self, update, context):
         query = update.callback_query
@@ -152,35 +126,8 @@ class BotMastermind(BotBase):
         await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
 
     async def make_attempt(self, bot, user_id, attempt, name="Player", query=None):
-        game = self.get_game(user_id)
-        
         async def do_attempt():
-            game.check_number(attempt)
-            text = game.template(
-                self._("You have {} attempts left "), 
-                self._("DEADS - INJURED"),
-                formatter=self.format_attempt
-            )
-            self.save_all_games()
-            
-            if game.is_winner():
-                text += "\n\n" + self._("Congratulations, {}, YOU WON!!\n").format(name)
-                if query:
-                    await query.edit_message_text(text)
-                else:
-                    await self.send_message(bot, user_id, text)
-            elif game.is_looser():
-                solution = self.format_attempt("".join(game.numbers))
-                text += "\n\n" + self._("I'm sorry, {}, YOU LOST!!\n The combination was {}").format(name, solution)
-                if query:
-                    await query.edit_message_text(text)
-                else:
-                    await self.send_message(bot, user_id, text)
-            else:
-                if query:
-                    await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
-                else:
-                    await self.send_message(bot, user_id, text, reply_markup=self.generate_inline_markup(game))
+            await self.make_attempt_logic(bot, user_id, attempt, name, query)
 
         await self.process_user_action(bot, user_id, do_attempt)
                 

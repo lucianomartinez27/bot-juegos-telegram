@@ -4,6 +4,7 @@ from telegram_bot import BotTelegram
 from games.Hangman.hangman_bot import BotTelegramAhorcado
 from games.Hangman.hangman_multiplayer_bot import BotHangmanMultiPlayer
 from games.Mastermind.bot_mastermind import BotMastermind
+from games.Mastermind.bot_mastermind_multiplayer import BotMastermindMultiplayer
 from games.Minesweeper.minesweeper_bot import BotBuscaminas
 from games.TicTacToe.tictactoe_bot import BotTicTacToe
 from games.TicTacToe_MultiPlayer.inline_tictactoe_bot import BotTaTeTiInLine
@@ -19,6 +20,7 @@ import os
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 bot_mastermind = BotMastermind()
+bot_mastermind_multiplayer = BotMastermindMultiplayer()
 bot_tictactoe = BotTicTacToe()
 bot_ahorcado = BotTelegramAhorcado()
 bot_buscaminas = BotBuscaminas()
@@ -51,6 +53,7 @@ class GamesTelegramBot(BotTelegram):
             bot_ahorcado,
             bot_buscaminas,
             bot_mastermind,
+            bot_mastermind_multiplayer,
             bot_tictactoe,
             bot_tateti_inline,
             bot_hangman_multiplayer,
@@ -133,6 +136,8 @@ class GamesTelegramBot(BotTelegram):
             return bot_rps_multiplayer.game_id()
         elif query_data.startswith("h_"):
             return bot_hangman_multiplayer.game_id()
+        elif query_data.startswith("mmm_"):
+            return bot_mastermind_multiplayer.game_id()
         else:
             return bot_tateti_inline.game_id()
 
