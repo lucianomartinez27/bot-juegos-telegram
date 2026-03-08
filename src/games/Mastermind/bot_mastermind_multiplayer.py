@@ -156,6 +156,7 @@ class BotMastermindMultiplayer(BotMastermindBase):
             formatter=self.format_attempt
         )
         text += f"\n\n" + self._("Current selection: {}").format(current_colors)
+        text += self.get_instructions(game)
         await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
 
     async def make_attempt_multiplayer(self, bot, message_id, attempt, name, query):

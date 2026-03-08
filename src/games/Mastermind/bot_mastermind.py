@@ -46,10 +46,7 @@ class BotMastermind(BotMastermindBase):
         game = self.generate_game_state(user_id, settings["num_digits"], settings["max_attempts"])
         
         await self.send_message(bot, user_id,  self._('MASTERMIND'))
-        color_list = " ".join(self.colors)
-        instructions = self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) + "\n\n" + \
-                       self._("Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches")
-        await self.send_message(bot, user_id, instructions)
+        await self.send_message(bot, user_id,  self.get_instructions(game))
         
         status_msg = self._("To win, you need to get {} ⚫. You will have {} attempts.").format(game.num_digits, game.max_attempts)
         await self.send_message(bot, user_id, status_msg, reply_markup=self.generate_inline_markup(game))
@@ -116,14 +113,14 @@ class BotMastermind(BotMastermindBase):
             await self.make_attempt(bot, user_id, attempt, name, query)
 
     async def update_game_message(self, query, game):
-        current_colors = self.format_attempt(getattr(game, 'current_guess', ""))
         text = game.template(
             self._("You have {} attempts left "), 
             self._("Results"),
             formatter=self.format_attempt
         )
-        text += f"\n\n" + self._("Current selection: {}").format(current_colors)
-        await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
+
+        text += self.get_instructions(game)
+        await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game), parse_mode='HTML')
 
     async def make_attempt(self, bot, user_id, attempt, name="Player", query=None):
         async def do_attempt():

@@ -42,6 +42,13 @@ class BotMastermindBase(BotBase):
         keyboard.append(action_row)
         return InlineKeyboardMarkup(keyboard)
 
+    def get_instructions(self, game):
+        current_colors = self.format_attempt(game.current_guess)
+        color_list = " ".join(self.colors)
+        return (self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) +
+                f"\n\n" + self._("Current selection: {}").format(current_colors) +
+                "\n\n" + self._("Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches"))
+
     async def make_attempt_logic(self, bot, user_id, attempt, name="Player", query=None, game=None):
         if game is None:
             game = self.get_game(user_id)
