@@ -40,10 +40,12 @@ class BotBuscaminas(BotBase):
         if query.data.startswith("ms_diff_"):
             difficulty = query.data.split("_")[2]
             user_id = self.get_user_id(update)
+            bot = context.bot
+            message_id = query.message.message_id
             settings = self.difficulty_settings[difficulty]
             self.generate_game_state(user_id, settings["rows"], settings["cols"], settings["bombs"])
             game = self.get_game(user_id)
-            await query.edit_message_text(
+            await self.edit_message_text(bot, user_id, message_id,
                 self._('Minesweeper:') + f" 💣 {settings['bombs']}",
                 reply_markup=InlineKeyboardMarkup(self.board_markup(game))
             )
@@ -62,7 +64,7 @@ class BotBuscaminas(BotBase):
         else:
             game.mark_cell(int(row), int(col))
             self.save_all_games()
-            await bot.edit_message_reply_markup(chat_id=user_id, message_id=message_id,
+            await self.edit_message_reply_markup(bot, user_id, message_id,
                                             reply_markup=InlineKeyboardMarkup(self.board_markup(game)))
             if game.finished():
                 if game.is_winner():

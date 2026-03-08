@@ -18,8 +18,13 @@ class BotTelegram:
         self.language = 'en'
         self.name = name
         self.app = ApplicationBuilder().token(token).build()
+        self.app.add_error_handler(self.error_handler)
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
         self.logger = logging.getLogger(name)
+
+    async def error_handler(self, update, context):
+        """Log the error and send a telegram message to notify the developer."""
+        self.logger.error(msg="Exception while handling an update:", exc_info=context.error)
 
     def initialize_translator(self):
         self._ = _
@@ -47,7 +52,25 @@ class BotTelegram:
         self.run_polling()
 
     async def send_message(self, bot, user_id, message, parse_mode=None, reply_markup=None) -> object:
-        await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=reply_markup)
+        try:
+            return await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=reply_markup)
+        except Exception as e:
+            self.logger.error(f"Error sending message: {e}")
+            raise e
+
+    async def edit_message_text(self, bot, chat_id, message_id, text, parse_mode=None, reply_markup=None):
+        try:
+            return await bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
+        except Exception as e:
+            self.logger.error(f"Error editing message text: {e}")
+            raise e
+
+    async def edit_message_reply_markup(self, bot, chat_id, message_id, reply_markup=None):
+        try:
+            return await bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id, reply_markup=reply_markup)
+        except Exception as e:
+            self.logger.error(f"Error editing message reply markup: {e}")
+            raise e
 
     def handle_command(self, comando, callback):
 
