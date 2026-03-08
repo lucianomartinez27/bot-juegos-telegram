@@ -79,15 +79,16 @@ class MasterMind:
         """comprueba el número de muertos y heridos que obtuvo el usuario"""
 
         texto = attempts_left_label.format(self.max_attempts - len(self.attempts))
-        texto += '\n' + status_label.center(30)
+        if self.attempts:
+            texto += '\n' + status_label.center(30)
 
-        for i in range(len(self.attempts)):
-            result = self.results[i]
-            attempt_display = self.attempts[i]
-            if formatter:
-                attempt_display = formatter(attempt_display)
-            color_map = {1: "⚫", 2: "⚪", 3: "❌"}
-            status_display = "".join([color_map[r] for r in result])
-            texto += f'\n{attempt_display}: {status_display}'
+            for i in range(len(self.attempts)):
+                result = self.results[i]
+                attempt_display = self.attempts[i]
+                if formatter:
+                    attempt_display = formatter(attempt_display)
+                color_map = {1: "⚫", 2: "⚪", 3: "❌"}
+                status_display = "".join([color_map[r] for r in result])
+                texto += f'\n{attempt_display}: {status_display}'
 
         return texto

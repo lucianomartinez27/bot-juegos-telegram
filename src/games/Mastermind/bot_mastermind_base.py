@@ -43,11 +43,13 @@ class BotMastermindBase(BotBase):
         return InlineKeyboardMarkup(keyboard)
 
     def get_instructions(self, game):
-        current_colors = self.format_attempt(game.current_guess)
         color_list = " ".join(self.colors)
         return (self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) +
-                f"\n\n" + self._("Current selection: {}").format(current_colors) +
                 "\n\n" + self._("Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches"))
+
+    def get_current_selection(self, game):
+        current_colors = self.format_attempt(game.current_guess)
+        return "\n\n" + self._("Current selection: {}").format(current_colors)
 
     async def make_attempt_logic(self, bot, user_id, attempt, name="Player", query=None, game=None):
         if game is None:
@@ -75,10 +77,11 @@ class BotMastermindBase(BotBase):
             else:
                 await self.send_message(bot, user_id, text)
         else:
+            full_text = self.get_instructions(game) + "\n\n" + text + self.get_current_selection(game)
             if query:
-                await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
+                await query.edit_message_text(full_text, reply_markup=self.generate_inline_markup(game))
             else:
-                await self.send_message(bot, user_id, text, reply_markup=self.generate_inline_markup(game))
+                await self.send_message(bot, user_id, full_text, reply_markup=self.generate_inline_markup(game))
 
     def generate_inline_markup(self, game=None):
         raise NotImplementedError

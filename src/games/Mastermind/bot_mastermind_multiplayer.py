@@ -149,15 +149,13 @@ class BotMastermindMultiplayer(BotMastermindBase):
         await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
 
     async def update_game_message_multiplayer(self, query, game):
-        current_colors = self.format_attempt(game.current_guess)
         text = game.template(
             self._("You have {} attempts left "), 
             self._("Results"),
             formatter=self.format_attempt
         )
-        text += f"\n\n" + self._("Current selection: {}").format(current_colors)
-        text += self.get_instructions(game)
-        await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
+        full_text = self.get_instructions(game) + "\n\n" + text + self.get_current_selection(game)
+        await query.edit_message_text(full_text, reply_markup=self.generate_inline_markup(game))
 
     async def make_attempt_multiplayer(self, bot, message_id, attempt, name, query):
         await self.make_attempt_logic(bot, message_id, attempt, name, query, game=self.users_data[message_id])

@@ -46,10 +46,10 @@ class BotMastermind(BotMastermindBase):
         game = self.generate_game_state(user_id, settings["num_digits"], settings["max_attempts"])
         
         await self.send_message(bot, user_id,  self._('MASTERMIND'))
-        await self.send_message(bot, user_id,  self.get_instructions(game))
         
         status_msg = self._("To win, you need to get {} ⚫. You will have {} attempts.").format(game.num_digits, game.max_attempts)
-        await self.send_message(bot, user_id, status_msg, reply_markup=self.generate_inline_markup(game))
+        full_text = self.get_instructions(game) + "\n\n" + status_msg + self.get_current_selection(game)
+        await self.send_message(bot, user_id, full_text, reply_markup=self.generate_inline_markup(game))
 
     def generate_game_state(self, user_id, num_digits=4, max_attempts=15):
         self.users_data[str(user_id)] = self.Game(num_digits, max_attempts)
@@ -119,8 +119,8 @@ class BotMastermind(BotMastermindBase):
             formatter=self.format_attempt
         )
 
-        text += self.get_instructions(game)
-        await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game), parse_mode='HTML')
+        full_text = self.get_instructions(game) + "\n\n" + text + self.get_current_selection(game)
+        await query.edit_message_text(full_text, reply_markup=self.generate_inline_markup(game), parse_mode='HTML')
 
     async def make_attempt(self, bot, user_id, attempt, name="Player", query=None):
         async def do_attempt():
