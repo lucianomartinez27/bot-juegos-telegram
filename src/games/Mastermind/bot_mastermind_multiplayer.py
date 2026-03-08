@@ -121,6 +121,9 @@ class BotMastermindMultiplayer(BotMastermindBase):
 
         elif query.data == "mmm_delete":
             if not game.combination_set or game.finished(): return
+            if user_id == game.creator_id:
+                await query.answer(self._("The creator cannot play!"), show_alert=True)
+                return
             if len(game.current_guess) > 0:
                 game.current_guess = game.current_guess[:-1]
                 await self.update_game_message_multiplayer(query, game)
@@ -132,6 +135,9 @@ class BotMastermindMultiplayer(BotMastermindBase):
             if not game.combination_set: return
             if game.finished():
                 await query.answer(self._("The game has already finished."), show_alert=True)
+                return
+            if user_id == game.creator_id:
+                await query.answer(self._("The creator cannot play!"), show_alert=True)
                 return
             if len(game.current_guess) != game.num_digits:
                 await query.answer(self._("The combination is invalid. It must have {} elements").format(game.num_digits), show_alert=True)
