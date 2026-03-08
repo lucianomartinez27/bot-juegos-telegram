@@ -5,84 +5,86 @@ import random
 from utils.errors import ModelError
 
 class MasterMind:
-	def __init__(self, num_digits: int = 4, max_attempts: int = 15) -> None:
-		self.num_digits = num_digits
-		self.max_attempts = max_attempts
-		self.numbers = self.generate_numbers()
-		self.attempts = []
-		self.results = []
-		self.game_finished = False
-	
-	def to_json(self):
-		return json.dumps(self.__dict__)
-	
-	@classmethod
-	def from_json(cls, json_str):
-			data = json.loads(json_str)
-			game = cls(num_digits=data.get('num_digits', 4), max_attempts=data.get('max_attempts', 15))
-			game.numbers = data['numbers']
-			game.attempts = data['attempts']
-			game.results = data['results']
-			game.game_finished = data['game_finished']
-			return game
-	
-	def finished(self):
-		return self.game_finished
+    def __init__(self, num_digits: int = 4, max_attempts: int = 15) -> None:
+        self.num_digits = num_digits
+        self.max_attempts = max_attempts
+        self.numbers = self.generate_numbers()
+        self.attempts = []
+        self.results = []
+        self.game_finished = False
+        self.current_guess = ""
 
-	def generate_numbers(self):
-		""" Genera num_digits números aleatorios, del 0 al 7, todos distintos."""
-		numbers = []
-		while len(numbers) < self.num_digits:
-			number = str(random.randint(0, 7))
-			if number not in numbers:
-				numbers.append(number)
-		return numbers
+    def to_json(self):
+        return json.dumps(self.__dict__)
 
-	def check_number(self, numbers_to_check):
-		"""pide al usuario un número de num_digits cifras y comprueba que no estén en
-			una lista donde se guardan intentos"""
+    @classmethod
+    def from_json(cls, json_str):
+        data = json.loads(json_str)
+        game = cls(num_digits=data.get('num_digits', 4), max_attempts=data.get('max_attempts', 15))
+        game.numbers = data['numbers']
+        game.attempts = data['attempts']
+        game.results = data['results']
+        game.game_finished = data['game_finished']
+        game.current_guess = data.get('current_guess', "")
+        return game
 
-		# TODO: Assert and throw error
-		if len(numbers_to_check) != self.num_digits:
-			raise ModelError('The number is invalid. It must have {} elements'.format(self.num_digits))
-		elif numbers_to_check in self.attempts:
-			raise ModelError('You already tried this combination')
-		elif len(set(numbers_to_check)) != len(numbers_to_check): # Some repeated number
-			raise ModelError('There must be no repeated elements')
+    def finished(self):
+        return self.game_finished
 
-		self.attempts.append(numbers_to_check)
-		self.results.append(self.count_exact_and_partial_matches(numbers_to_check))
-		return numbers_to_check
-		
-	def count_exact_and_partial_matches(self, numbers_to_check):
-		correct_number = 0
-		currect_number_and_position = 0
-		for position, number in enumerate(numbers_to_check):
-			if number == self.numbers[position]:
-				currect_number_and_position += 1
-			elif number in self.numbers:
-				correct_number += 1
-			
-		return currect_number_and_position, correct_number
+    def generate_numbers(self):
+        """ Genera num_digits números aleatorios, del 0 al 7, todos distintos."""
+        numbers = []
+        while len(numbers) < self.num_digits:
+            number = str(random.randint(0, 7))
+            if number not in numbers:
+                numbers.append(number)
+        return numbers
 
-	def is_winner(self):
-		last_result = self.results[len(self.results) - 1]
-		return last_result == (self.num_digits, 0)
+    def check_number(self, numbers_to_check):
+        """pide al usuario un número de num_digits cifras y comprueba que no estén en
+            una lista donde se guardan intentos"""
 
-	def is_looser(self):
-		return len(self.attempts) >= self.max_attempts
+        # TODO: Assert and throw error
+        if len(numbers_to_check) != self.num_digits:
+            raise ModelError('The combination is invalid. It must have {} elements'.format(self.num_digits))
+        elif numbers_to_check in self.attempts:
+            raise ModelError('You already tried this combination')
+        elif len(set(numbers_to_check)) != len(numbers_to_check): # Some repeated number
+            raise ModelError('There must be no repeated elements')
 
-	def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED", formatter: callable = None):
-		"""comprueba el número de muertos y heridos que obtuvo el usuario"""
+        self.attempts.append(numbers_to_check)
+        self.results.append(self.count_exact_and_partial_matches(numbers_to_check))
+        return numbers_to_check
 
-		texto = attempts_left_label.format(self.max_attempts - len(self.attempts))
-		texto += '\n' + deads_injured_label.center(30)
+    def count_exact_and_partial_matches(self, numbers_to_check):
+        correct_number = 0
+        currect_number_and_position = 0
+        for position, number in enumerate(numbers_to_check):
+            if number == self.numbers[position]:
+                currect_number_and_position += 1
+            elif number in self.numbers:
+                correct_number += 1
 
-		for i in range(len(self.attempts)):
-			exacts, partials = self.results[i][0], self.results[i][1]
-			attempt_display = self.attempts[i]
-			if formatter:
-				attempt_display = formatter(attempt_display)
-			texto += '\n{}:    {}         {}'.format(attempt_display, exacts, partials)
+        return currect_number_and_position, correct_number
 
-		return texto
+    def is_winner(self):
+        last_result = self.results[len(self.results) - 1]
+        return last_result == (self.num_digits, 0)
+
+    def is_looser(self):
+        return len(self.attempts) >= self.max_attempts
+
+    def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED", formatter: callable = None):
+        """comprueba el número de muertos y heridos que obtuvo el usuario"""
+
+        texto = attempts_left_label.format(self.max_attempts - len(self.attempts))
+        texto += '\n' + deads_injured_label.center(30)
+
+        for i in range(len(self.attempts)):
+            exacts, partials = self.results[i][0], self.results[i][1]
+            attempt_display = self.attempts[i]
+            if formatter:
+                attempt_display = formatter(attempt_display)
+            texto += '\n{}:    {}         {}'.format(attempt_display, exacts, partials)
+
+        return texto

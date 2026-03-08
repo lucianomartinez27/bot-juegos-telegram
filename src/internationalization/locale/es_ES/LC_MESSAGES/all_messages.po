@@ -249,7 +249,7 @@ msgstr "Te quedan {} intentos "
 msgid "DEADS - INJURED"
 msgstr "MUERTOS - HERIDOS"
 
-msgid "The number is invalid. It must have {} elements"
+msgid "The combination is invalid. It must have {} elements"
 msgstr "La combinación es inválida. Debe tener {} elementos."
 
 msgid "You already tried this combination"
@@ -288,8 +288,8 @@ msgstr "Idioma cambiado a Inglés 🇬🇧"
 msgid "You don't have an active game. Use /games to start one."
 msgstr "No tienes un juego activo. Usa /games para comenzar uno."
 
-msgid "Hangman MultiPlayer"
-msgstr "Ahorcado Multijugador"
+msgid "Current selection: {}"
+msgstr "Selección actual: {}"
 
 msgid "It is not your turn! Wait for another player."
 msgstr "¡No es tu turno! Espera a otro jugador."

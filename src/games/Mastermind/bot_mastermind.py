@@ -55,67 +55,133 @@ class BotMastermind(BotBase):
         
         await self.send_message(bot, user_id,  self._('MASTERMIND'))
         color_list = " ".join(self.colors)
-        await self.send_message(bot, user_id,
-                             self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) + "\n\n" + \
-                             self._("If you guess the color but not the position, you have one injured. If you guess the color and its position, you have one dead"))
-        await self.send_message(bot, user_id,  self._("To win, you need to get {} dead. You will have {} attempts.")\
-                                .format(game.num_digits, game.max_attempts))
+        instructions = self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) + "\n\n" + \
+                       self._("If you guess the color but not the position, you have one injured. If you guess the color and its position, you have one dead")
+        await self.send_message(bot, user_id, instructions)
+        
+        status_msg = self._("To win, you need to get {} dead. You will have {} attempts.").format(game.num_digits, game.max_attempts)
+        await self.send_message(bot, user_id, status_msg, reply_markup=self.generate_inline_markup(game))
 
     def generate_game_state(self, user_id, num_digits=4, max_attempts=15):
         self.users_data[str(user_id)] = self.Game(num_digits, max_attempts)
+        self.users_data[str(user_id)].current_guess = ""
         self.save_all_games()
         return self.users_data[str(user_id)]
 
+    def generate_inline_markup(self, game):
+        keyboard = []
+        row = []
+        for i, color in enumerate(self.colors):
+            num = self.color_to_num[color]
+            row.append(InlineKeyboardButton(color, callback_data=f"mm_c_{num}"))
+            if (i + 1) % 4 == 0:
+                keyboard.append(row)
+                row = []
+        if row:
+            keyboard.append(row)
+        
+        # Action buttons
+        action_row = [
+            InlineKeyboardButton("⌫", callback_data="mm_delete"),
+            InlineKeyboardButton("⏎", callback_data="mm_submit")
+        ]
+        keyboard.append(action_row)
+        
+        return InlineKeyboardMarkup(keyboard)
+
     async def answer_button(self, update, context):
         query = update.callback_query
+        user_id = self.get_user_id(update)
+        game = self.get_game(user_id)
+        bot = context.bot
+
         if query.data.startswith("mm_diff_"):
             difficulty = query.data.split("_")[2]
             await query.answer()
             await query.edit_message_text(self._("Difficulty set to {}").format(self._(difficulty.capitalize())))
             await self.start_game(update, context, difficulty)
+            return
 
-    async def answer_message(self, update, context):
-        text = update.message.text
-        bot = context.bot
-        user_id = update.message.chat_id
-        name = update.message.chat.first_name
+        if game.finished():
+            await query.answer(self._("The game ended. Use /games to start a new one"), show_alert=True)
+            return
+
+        if query.data.startswith("mm_c_"):
+            color_num = query.data.split("_")[2]
+            if not hasattr(game, 'current_guess'):
+                game.current_guess = ""
+            
+            if color_num in game.current_guess:
+                await query.answer(self._("There must be no repeated elements"), show_alert=True)
+                return
+                
+            if len(game.current_guess) < game.num_digits:
+                game.current_guess += color_num
+                current_colors = self.format_attempt(game.current_guess)
+                await query.answer(f"Selected: {current_colors}")
+                await self.update_game_message(query, game)
+            else:
+                await query.answer(self._("The combination is invalid. It must have {} elements").format(game.num_digits), show_alert=True)
+
+        elif query.data == "mm_delete":
+            if hasattr(game, 'current_guess') and len(game.current_guess) > 0:
+                game.current_guess = game.current_guess[:-1]
+                await query.answer("Deleted")
+                await self.update_game_message(query, game)
+            else:
+                await query.answer("Nothing to delete")
+
+        elif query.data == "mm_submit":
+            if not hasattr(game, 'current_guess') or len(game.current_guess) != game.num_digits:
+                await query.answer(self._("The combination is invalid. It must have {} elements").format(game.num_digits), show_alert=True)
+                return
+            
+            attempt = game.current_guess
+            game.current_guess = "" # Reset for next attempt
+            name = update.effective_user.first_name if update.effective_user else "Player"
+            await self.make_attempt(bot, user_id, attempt, name, query)
+
+    async def update_game_message(self, query, game):
+        current_colors = self.format_attempt(getattr(game, 'current_guess', ""))
+        text = game.template(
+            self._("You have {} attempts left "), 
+            self._("DEADS - INJURED"),
+            formatter=self.format_attempt
+        )
+        text += f"\n\n" + self._("Current selection: {}").format(current_colors)
+        await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
+
+    async def make_attempt(self, bot, user_id, attempt, name="Player", query=None):
         game = self.get_game(user_id)
-
-        # Convert emojis to numbers
-        attempt = ""
-        i = 0
-        while i < len(text):
-            found = False
-            for color, num in self.color_to_num.items():
-                if text[i:i+len(color)] == color:
-                    attempt += num
-                    i += len(color)
-                    found = True
-                    break
-            if not found:
-                attempt += text[i]
-                i += 1
-
-        async def make_attempt():
+        
+        async def do_attempt():
             game.check_number(attempt)
-            await self.send_message(bot, user_id, game.template(
+            text = game.template(
                 self._("You have {} attempts left "), 
                 self._("DEADS - INJURED"),
                 formatter=self.format_attempt
-            ))
+            )
             self.save_all_games()
             
             if game.is_winner():
-                await self.send_message(bot, user_id,  self._("Congratulations, {}, YOU WON!!\n")\
-                                    .format(name))
+                text += "\n\n" + self._("Congratulations, {}, YOU WON!!\n").format(name)
+                if query:
+                    await query.edit_message_text(text)
+                else:
+                    await self.send_message(bot, user_id, text)
             elif game.is_looser():
                 solution = self.format_attempt("".join(game.numbers))
-                await self.send_message(bot, user_id,  self._("I'm sorry, {}, YOU LOST!!\n The combination was {}").format(name, solution))
+                text += "\n\n" + self._("I'm sorry, {}, YOU LOST!!\n The combination was {}").format(name, solution)
+                if query:
+                    await query.edit_message_text(text)
+                else:
+                    await self.send_message(bot, user_id, text)
+            else:
+                if query:
+                    await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
+                else:
+                    await self.send_message(bot, user_id, text, reply_markup=self.generate_inline_markup(game))
 
-        if game.finished():
-            await self.game_finished_message(update, context)
-
-        else:
-            await self.process_user_action(bot, user_id, make_attempt)
+        await self.process_user_action(bot, user_id, do_attempt)
                 
                 
