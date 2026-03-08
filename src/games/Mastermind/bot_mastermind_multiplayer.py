@@ -21,7 +21,7 @@ class BotMastermindMultiplayer(BotMastermindBase):
         return True
 
     def generate_inline_markup(self, game=None):
-        if game and not game.combination_set:
+        if game and game.combination_set:
             # Standard game keyboard with different callback prefix to avoid conflicts
             return self.create_keyboard("mmm", "c", "delete", "submit")
         # Markup for the creator to set the combination
