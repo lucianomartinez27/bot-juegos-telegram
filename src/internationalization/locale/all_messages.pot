@@ -77,24 +77,32 @@ msgstr ""
 msgid "Congratulations, you've won!"
 msgstr ""
 
-#: src/games/Mastermind/bot_mastermind.py:25
+#: src/games/Mastermind/bot_mastermind_base.py:48
+msgid "Guess a {}-color combination (no repeats) using these colors: \n{}"
+msgstr ""
+
+#: src/games/Mastermind/bot_mastermind_base.py:49
+msgid "Current selection: {}"
+msgstr ""
+
+#: src/games/Mastermind/bot_mastermind_base.py:50
+msgid ""
+"Results meaning:\n"
+"⚫: Correct color and position\n"
+"⚪: Correct color but wrong position\n"
+"❌: No matches"
+msgstr ""
+
+#: src/games/Mastermind/bot_mastermind_multiplayer.py:147
+msgid ""
+"MASTERMIND MULTIPLAYER\n"
+"\n"
+"Setting up the game.\n"
+"Creator: Select the secret combination."
+msgstr ""
+
+#: src/games/Mastermind/bot_mastermind.py:48
 msgid "MASTERMIND"
-msgstr ""
-
-#: src/games/Mastermind/bot_mastermind.py:27
-msgid ""
-"Guess a 4-digit number (no repeats). If you guess the number but not the "
-"position "
-msgstr ""
-
-#: src/games/Mastermind/bot_mastermind.py:28
-msgid ""
-"you have one injured. If you guess the number and its position, you have "
-"one dead"
-msgstr ""
-
-#: src/games/Mastermind/bot_mastermind.py:29
-msgid "To win, you need to get 4 dead. You will have 15 attempts."
 msgstr ""
 
 #: src/games/Mastermind/bot_mastermind.py:44
