@@ -16,7 +16,6 @@ class BotTelegram:
     def __init__(self, name, token):
         self._ = None
         self.language = 'en'
-        self.name = name
         self.logger = logging.getLogger(name)
         self.app = ApplicationBuilder().token(token).build()
         self.app.add_error_handler(self.error_handler)
