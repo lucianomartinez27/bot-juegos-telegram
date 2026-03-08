@@ -153,7 +153,7 @@ class GamesTelegramBot(BotTelegram):
                 inline_games.append(InlineQueryResultArticle(
                     id=str(inline_message_id),
                     title=bot_game.name(),
-                    input_message_content=InputTextMessageContent(self._("Let's play to: {}").format(bot_game.name())),
+                    input_message_content=InputTextMessageContent(bot_game.get_inline_initial_message()),
                     reply_markup=bot_game.generate_inline_markup()))
         self.data_manager.save_info(self.user_data)
 

@@ -42,10 +42,14 @@ class BotMastermindBase(BotBase):
         keyboard.append(action_row)
         return InlineKeyboardMarkup(keyboard)
 
-    def get_instructions(self, game):
+    def get_instructions(self, game=None):
+        num_digits = game.num_digits if game else 4
         color_list = " ".join(self.colors)
-        return (self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) +
+        return (self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(num_digits, color_list) +
                 "\n\n" + self._("Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches"))
+
+    def get_inline_initial_message(self):
+        return self._("MASTERMIND MULTIPLAYER\n\nSetting up the game.\nThe first one to insert will be the creator.\nCreator: Select a secret combination of {} elements.").format(4) + "\n\n" + self.get_instructions()
 
     def get_current_selection(self, game):
         current_colors = self.format_attempt(game.current_guess)

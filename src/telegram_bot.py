@@ -50,6 +50,9 @@ class BotTelegram:
     def run(self):
         self.run_polling()
 
+    def name(self):
+        raise NotImplementedError
+
     async def send_message(self, bot, user_id, message, parse_mode=None, reply_markup=None) -> object:
         try:
             return await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=reply_markup)

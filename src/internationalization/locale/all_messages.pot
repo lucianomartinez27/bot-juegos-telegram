@@ -98,7 +98,8 @@ msgid ""
 "MASTERMIND MULTIPLAYER\n"
 "\n"
 "Setting up the game.\n"
-"Creator: Select the secret combination."
+"The first one to insert will be the creator.\n"
+"Creator: Select a secret combination of {} elements."
 msgstr ""
 
 #: src/games/Mastermind/bot_mastermind.py:48

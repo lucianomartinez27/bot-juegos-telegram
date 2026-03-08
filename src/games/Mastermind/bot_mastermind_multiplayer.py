@@ -144,7 +144,8 @@ class BotMastermindMultiplayer(BotMastermindBase):
     async def update_setup_message(self, query, game):
         # Progress indicator instead of actual colors
         progress = "●" * len(game.current_guess) + "○" * (game.num_digits - len(game.current_guess))
-        text = self._("MASTERMIND MULTIPLAYER\n\nSetting up the game.\nCreator: Select the secret combination.")
+        text = self._("MASTERMIND MULTIPLAYER\n\nSetting up the game.\nThe first one to insert will be the creator.\nCreator: Select a secret combination of {} elements.").format(game.num_digits)
+        text += "\n\n" + self.get_instructions(game)
         text += f"\n\n" + self._("Selection: {}").format(progress)
         await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
 

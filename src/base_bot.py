@@ -38,6 +38,9 @@ class BotBase(BotTelegram):
     def get_game(self, user_id: int):
         return self.users_data[str(user_id)]
 
+    def get_inline_initial_message(self):
+        return self._("Let's play to: {}").format(self.name())
+
     def do_not_understand_message(self):
         return self._("Sorry, I can't understand you message.")
 
