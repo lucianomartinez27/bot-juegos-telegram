@@ -21,9 +21,8 @@ def test_tictactoe_draw():
     # X O X
     # X O O
     # O X O
-    moves = [(0, 'X'), (1, 'O'), (2, 'X'), (4, 'O'), (3, 'X'), (5, 'O'), (7, 'X'), (6, 'O'), (8, 'X')]
-    # Wait, the order matters for mark_cell because of last_movement_symbol
-    for cell, symbol in [(0, 'X'), (1, 'O'), (2, 'X'), (4, 'O'), (3, 'X'), (5, 'O'), (7, 'X'), (6, 'O')]:
+    moves = [(0, 'X'), (1, 'O'), (2, 'X'), (4, 'O'), (3, 'X'), (5, 'O'), (7, 'X'), (6, 'O')]
+    for cell, symbol in moves:
         game.mark_cell(symbol, cell)
     
     # X O X
