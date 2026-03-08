@@ -13,7 +13,6 @@ class BotBase(BotTelegram):
     def __init__(self, file, name="BaseBot", token=None):
         self._ = None
         self.language = 'en'
-        self.name = name
         self.logger = logging.getLogger(name)
         if token:
             super().__init__(name, token)
