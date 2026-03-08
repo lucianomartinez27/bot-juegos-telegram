@@ -61,8 +61,9 @@ class BotMastermindMultiplayer(BotMastermindBase):
             
             if len(game.current_guess) < game.num_digits:
                 game.current_guess += color_num
+                current_colors = self.format_attempt(game.current_guess)
                 await self.update_setup_message(query, game)
-                await query.answer()
+                await query.answer(self._("Current selection: {}").format(current_colors))
             else:
                 await query.answer(self._("The combination is invalid. It must have {} elements").format(game.num_digits), show_alert=True)
 
@@ -73,8 +74,9 @@ class BotMastermindMultiplayer(BotMastermindBase):
                 return
             if len(game.current_guess) > 0:
                 game.current_guess = game.current_guess[:-1]
+                current_colors = self.format_attempt(game.current_guess)
                 await self.update_setup_message(query, game)
-                await query.answer()
+                await query.answer(self._("Current selection: {}").format(current_colors))
             else:
                 await query.answer("Nothing to delete")
 
@@ -140,9 +142,10 @@ class BotMastermindMultiplayer(BotMastermindBase):
             await self.make_attempt_multiplayer(context.bot, message_id, attempt, user_name, query)
 
     async def update_setup_message(self, query, game):
-        current_colors = self.format_attempt(game.current_guess)
+        # Progress indicator instead of actual colors
+        progress = "●" * len(game.current_guess) + "○" * (game.num_digits - len(game.current_guess))
         text = self._("MASTERMIND MULTIPLAYER\n\nSetting up the game.\nCreator: Select the secret combination.")
-        text += f"\n\n" + self._("Current selection: {}").format(current_colors)
+        text += f"\n\n" + self._("Selection: {}").format(progress)
         await query.edit_message_text(text, reply_markup=self.generate_inline_markup(game))
 
     async def update_game_message_multiplayer(self, query, game):
