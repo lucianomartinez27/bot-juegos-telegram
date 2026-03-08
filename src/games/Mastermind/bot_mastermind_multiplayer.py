@@ -152,7 +152,7 @@ class BotMastermindMultiplayer(BotMastermindBase):
         current_colors = self.format_attempt(game.current_guess)
         text = game.template(
             self._("You have {} attempts left "), 
-            self._("DEADS - INJURED"),
+            self._("Results"),
             formatter=self.format_attempt
         )
         text += f"\n\n" + self._("Current selection: {}").format(current_colors)

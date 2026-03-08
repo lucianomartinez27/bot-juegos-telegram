@@ -13,7 +13,7 @@ class BotMastermindBase(BotBase):
             "medium": {"num_digits": 4, "max_attempts": 15},
             "hard": {"num_digits": 5, "max_attempts": 12}
         }
-        self.colors = ["🔴", "🔵", "🟢", "🟡", "🟣", "🟠", "🟤", "⚪"]
+        self.colors = ["🔴", "🔵", "🟢", "🟡", "🟣", "🟠", "🟤"]
         self.color_to_num = {color: str(i) for i, color in enumerate(self.colors)}
         self.num_to_color = {str(i): color for i, color in enumerate(self.colors)}
 
@@ -49,7 +49,7 @@ class BotMastermindBase(BotBase):
         game.check_number(attempt)
         text = game.template(
             self._("You have {} attempts left "), 
-            self._("DEADS - INJURED"),
+            self._("Results"),
             formatter=self.format_attempt
         )
         self.save_all_games()

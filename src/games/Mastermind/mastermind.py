@@ -32,10 +32,10 @@ class MasterMind:
         return self.game_finished
 
     def generate_numbers(self):
-        """ Genera num_digits números aleatorios, del 0 al 7, todos distintos."""
+        """ Genera num_digits números aleatorios, del 0 al 6, todos distintos."""
         numbers = []
         while len(numbers) < self.num_digits:
-            number = str(random.randint(0, 7))
+            number = str(random.randint(0, 6))
             if number not in numbers:
                 numbers.append(number)
         return numbers
@@ -57,34 +57,37 @@ class MasterMind:
         return numbers_to_check
 
     def count_exact_and_partial_matches(self, numbers_to_check):
-        correct_number = 0
-        currect_number_and_position = 0
+        results = []
         for position, number in enumerate(numbers_to_check):
             if number == self.numbers[position]:
-                currect_number_and_position += 1
+                results.append(1) # Exact match
             elif number in self.numbers:
-                correct_number += 1
+                results.append(2) # Partial match
+            else:
+                results.append(3) # No match
 
-        return currect_number_and_position, correct_number
+        return results
 
     def is_winner(self):
         last_result = self.results[len(self.results) - 1]
-        return last_result == (self.num_digits, 0)
+        return all(r == 1 for r in last_result)
 
     def is_looser(self):
         return len(self.attempts) >= self.max_attempts
 
-    def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED", formatter: callable = None):
+    def template(self, attempts_left_label: str = "You have {} attempts left ", status_label: str = "Results", formatter: callable = None):
         """comprueba el número de muertos y heridos que obtuvo el usuario"""
 
         texto = attempts_left_label.format(self.max_attempts - len(self.attempts))
-        texto += '\n' + deads_injured_label.center(30)
+        texto += '\n' + status_label.center(30)
 
         for i in range(len(self.attempts)):
-            exacts, partials = self.results[i][0], self.results[i][1]
+            result = self.results[i]
             attempt_display = self.attempts[i]
             if formatter:
                 attempt_display = formatter(attempt_display)
-            texto += '\n{}:    {}         {}'.format(attempt_display, exacts, partials)
+            color_map = {1: "⚫", 2: "⚪", 3: "❌"}
+            status_display = "".join([color_map[r] for r in result])
+            texto += f'\n{attempt_display}: {status_display}'
 
         return texto

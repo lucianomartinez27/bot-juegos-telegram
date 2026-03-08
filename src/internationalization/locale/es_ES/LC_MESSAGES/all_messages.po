@@ -90,22 +90,14 @@ msgid "MASTERMIND"
 msgstr "Muertos y Heridos (MASTERMIND)"
 
 #: src/games/Mastermind/bot_mastermind.py:59
-msgid "Guess a {}-color combination (no repeats) using these colors: \n{}"
-msgstr ""
-"Adivina una combinación de {} colores (sin repetir) usando estos colores: "
-"\n{}"
+msgid "Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches"
+msgstr "Significado de los resultados:\n⚫: Color y posición correctos\n⚪: Color correcto pero posición incorrecta\n❌: Sin coincidencias"
 
-#: src/games/Mastermind/bot_mastermind.py:60
-msgid ""
-"If you guess the color but not the position, you have one injured. If you "
-"guess the color and its position, you have one dead"
-msgstr ""
-"Si adivinas el color pero no la posición, tienes un herido. Si adivinas el "
-"color y su posición, tienes un muerto."
+msgid "To win, you need to get {} ⚫. You will have {} attempts."
+msgstr "Para ganar, necesitas conseguir {} ⚫. Tendrás {} intentos."
 
-#: src/games/Mastermind/bot_mastermind.py:49
-msgid "To win, you need to get {} dead. You will have {} attempts."
-msgstr "Para ganar, necesitas conseguir {} muertos. Tendrás {} intentos."
+msgid "Results"
+msgstr "Resultados"
 
 #: src/games/Mastermind/bot_mastermind.py:44
 msgid "Congratulations, {}, YOU WON!!\n"
@@ -248,6 +240,9 @@ msgstr "Te quedan {} intentos "
 
 msgid "DEADS - INJURED"
 msgstr "MUERTOS - HERIDOS"
+
+msgid "Results"
+msgstr "Resultados"
 
 msgid "The combination is invalid. It must have {} elements"
 msgstr "La combinación es inválida. Debe tener {} elementos."

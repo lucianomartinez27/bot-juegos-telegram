@@ -48,10 +48,10 @@ class BotMastermind(BotMastermindBase):
         await self.send_message(bot, user_id,  self._('MASTERMIND'))
         color_list = " ".join(self.colors)
         instructions = self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) + "\n\n" + \
-                       self._("If you guess the color but not the position, you have one injured. If you guess the color and its position, you have one dead")
+                       self._("Results meaning:\n⚫: Correct color and position\n⚪: Correct color but wrong position\n❌: No matches")
         await self.send_message(bot, user_id, instructions)
         
-        status_msg = self._("To win, you need to get {} dead. You will have {} attempts.").format(game.num_digits, game.max_attempts)
+        status_msg = self._("To win, you need to get {} ⚫. You will have {} attempts.").format(game.num_digits, game.max_attempts)
         await self.send_message(bot, user_id, status_msg, reply_markup=self.generate_inline_markup(game))
 
     def generate_game_state(self, user_id, num_digits=4, max_attempts=15):
@@ -119,7 +119,7 @@ class BotMastermind(BotMastermindBase):
         current_colors = self.format_attempt(getattr(game, 'current_guess', ""))
         text = game.template(
             self._("You have {} attempts left "), 
-            self._("DEADS - INJURED"),
+            self._("Results"),
             formatter=self.format_attempt
         )
         text += f"\n\n" + self._("Current selection: {}").format(current_colors)
