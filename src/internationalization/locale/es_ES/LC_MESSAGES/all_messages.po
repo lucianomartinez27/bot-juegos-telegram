@@ -307,6 +307,9 @@ msgstr "Espera a que el creador establezca la combinación."
 msgid "The creator cannot play!"
 msgstr "¡El creador no puede jugar!"
 
+msgid "Guess a {}-color combination (no repeats) using these colors: \n{}"
+msgstr "Adivina una combinación de {}-colores (sin repetir) usando estos colores: \n{}"
+
 msgid "MASTERMIND MULTIPLAYER\n\nSetting up the game.\nCreator: Select the secret combination."
 msgstr "MUERTOS Y HERIDOS MULTIJUGADOR\n\nConfigurando el juego.\nCreador: Selecciona la combinación secreta."
 
