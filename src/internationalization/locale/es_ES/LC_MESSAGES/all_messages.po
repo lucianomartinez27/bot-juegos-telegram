@@ -238,12 +238,6 @@ msgstr "Español 🇪🇸"
 msgid "You have {} attempts left "
 msgstr "Te quedan {} intentos "
 
-msgid "DEADS - INJURED"
-msgstr "MUERTOS - HERIDOS"
-
-msgid "Results"
-msgstr "Resultados"
-
 msgid "The combination is invalid. It must have {} elements"
 msgstr "La combinación es inválida. Debe tener {} elementos."
 
