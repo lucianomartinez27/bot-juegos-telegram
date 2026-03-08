@@ -89,19 +89,19 @@ msgstr "¡Felicidades, has ganado!"
 msgid "MASTERMIND"
 msgstr "Muertos y Heridos (MASTERMIND)"
 
-#: src/games/Mastermind/bot_mastermind.py:47
-msgid ""
-"Guess a {}-digit number (no repeats). If you guess the number but not the "
-"position "
+#: src/games/Mastermind/bot_mastermind.py:59
+msgid "Guess a {}-color combination (no repeats) using these colors: \n{}"
 msgstr ""
-"Adivina un número de {} dígitos (sin repetir). Si adivinas el número pero "
-"no la posición "
+"Adivina una combinación de {} colores (sin repetir) usando estos colores: "
+"\n{}"
 
-#: src/games/Mastermind/bot_mastermind.py:48
+#: src/games/Mastermind/bot_mastermind.py:60
 msgid ""
-"you have one injured. If you guess the number and its position, you have "
-"one dead"
-msgstr "tienes un herido. Si adivinas el número y su posición, tienes un muerto."
+"If you guess the color but not the position, you have one injured. If you "
+"guess the color and its position, you have one dead"
+msgstr ""
+"Si adivinas el color pero no la posición, tienes un herido. Si adivinas el "
+"color y su posición, tienes un muerto."
 
 #: src/games/Mastermind/bot_mastermind.py:49
 msgid "To win, you need to get {} dead. You will have {} attempts."
@@ -111,13 +111,13 @@ msgstr "Para ganar, necesitas conseguir {} muertos. Tendrás {} intentos."
 msgid "Congratulations, {}, YOU WON!!\n"
 msgstr "¡Felicidades, {}, HAS GANADO!\n"
 
-#: src/games/Mastermind/bot_mastermind.py:47
+#: src/games/Mastermind/bot_mastermind.py:113
 msgid ""
 "I'm sorry, {}, YOU LOST!!\n"
-" The number was {}"
+" The combination was {}"
 msgstr ""
 "Lo siento, {}, ¡HAS PERDIDO!!\n"
-" El número era {}"
+" La combinación era {}"
 
 #: src/games/Minesweeper/minesweeper_bot.py:23
 msgid "Minesweeper:"
@@ -249,14 +249,14 @@ msgstr "Te quedan {} intentos "
 msgid "DEADS - INJURED"
 msgstr "MUERTOS - HERIDOS"
 
-msgid "The number is invalid. It must have {} digits"
-msgstr "El número es inválido. Debe tener {} dígitos."
+msgid "The number is invalid. It must have {} elements"
+msgstr "La combinación es inválida. Debe tener {} elementos."
 
-msgid "You already tried this number"
-msgstr "Ya intentaste con este número."
+msgid "You already tried this combination"
+msgstr "Ya has probado esta combinación."
 
-msgid "There must be no repeated numbers"
-msgstr "No debe haber números repetidos."
+msgid "There must be no repeated elements"
+msgstr "No debe haber elementos repetidos."
 
 msgid "Please enter a single letter."
 msgstr "Por favor, escribe una sola letra."

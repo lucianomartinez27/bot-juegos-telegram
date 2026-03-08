@@ -20,6 +20,12 @@ class BotMastermind(BotBase):
             "medium": {"num_digits": 4, "max_attempts": 15},
             "hard": {"num_digits": 5, "max_attempts": 12}
         }
+        self.colors = ["🔴", "🔵", "🟢", "🟡", "🟣", "🟠", "🟤", "⚪"]
+        self.color_to_num = {color: str(i) for i, color in enumerate(self.colors)}
+        self.num_to_color = {str(i): color for i, color in enumerate(self.colors)}
+
+    def format_attempt(self, attempt):
+        return "".join([self.num_to_color.get(num, num) for num in attempt])
 
     def game_id(self):
         return '- mastermind'
@@ -48,9 +54,10 @@ class BotMastermind(BotBase):
         game = self.generate_game_state(user_id, settings["num_digits"], settings["max_attempts"])
         
         await self.send_message(bot, user_id,  self._('MASTERMIND'))
+        color_list = " ".join(self.colors)
         await self.send_message(bot, user_id,
-                             self._("Guess a {}-digit number (no repeats). If you guess the number but not the position ").format(game.num_digits) + \
-                             self._("you have one injured. If you guess the number and its position, you have one dead"))
+                             self._("Guess a {}-color combination (no repeats) using these colors: \n{}").format(game.num_digits, color_list) + "\n\n" + \
+                             self._("If you guess the color but not the position, you have one injured. If you guess the color and its position, you have one dead"))
         await self.send_message(bot, user_id,  self._("To win, you need to get {} dead. You will have {} attempts.")\
                                 .format(game.num_digits, game.max_attempts))
 
@@ -68,17 +75,33 @@ class BotMastermind(BotBase):
             await self.start_game(update, context, difficulty)
 
     async def answer_message(self, update, context):
-        attempt = update.message.text
+        text = update.message.text
         bot = context.bot
         user_id = update.message.chat_id
         name = update.message.chat.first_name
         game = self.get_game(user_id)
 
+        # Convert emojis to numbers
+        attempt = ""
+        i = 0
+        while i < len(text):
+            found = False
+            for color, num in self.color_to_num.items():
+                if text[i:i+len(color)] == color:
+                    attempt += num
+                    i += len(color)
+                    found = True
+                    break
+            if not found:
+                attempt += text[i]
+                i += 1
+
         async def make_attempt():
             game.check_number(attempt)
             await self.send_message(bot, user_id, game.template(
                 self._("You have {} attempts left "), 
-                self._("DEADS - INJURED")
+                self._("DEADS - INJURED"),
+                formatter=self.format_attempt
             ))
             self.save_all_games()
             
@@ -86,7 +109,8 @@ class BotMastermind(BotBase):
                 await self.send_message(bot, user_id,  self._("Congratulations, {}, YOU WON!!\n")\
                                     .format(name))
             elif game.is_looser():
-                await self.send_message(bot, user_id,  self._("I'm sorry, {}, YOU LOST!!\n The number was {}").format(name, "".join(game.numbers)))
+                solution = self.format_attempt("".join(game.numbers))
+                await self.send_message(bot, user_id,  self._("I'm sorry, {}, YOU LOST!!\n The combination was {}").format(name, solution))
 
         if game.finished():
             await self.game_finished_message(update, context)

@@ -30,10 +30,10 @@ class MasterMind:
 		return self.game_finished
 
 	def generate_numbers(self):
-		""" Genera num_digits números aleatorios, del 0 al 9, todos distintos."""
+		""" Genera num_digits números aleatorios, del 0 al 7, todos distintos."""
 		numbers = []
 		while len(numbers) < self.num_digits:
-			number = str(random.randint(0, 9))
+			number = str(random.randint(0, 7))
 			if number not in numbers:
 				numbers.append(number)
 		return numbers
@@ -43,12 +43,12 @@ class MasterMind:
 			una lista donde se guardan intentos"""
 
 		# TODO: Assert and throw error
-		if len(numbers_to_check) != self.num_digits or not numbers_to_check.isnumeric():
-			raise ModelError('The number is invalid. It must have {} digits'.format(self.num_digits))
+		if len(numbers_to_check) != self.num_digits:
+			raise ModelError('The number is invalid. It must have {} elements'.format(self.num_digits))
 		elif numbers_to_check in self.attempts:
-			raise ModelError('You already tried this number')
+			raise ModelError('You already tried this combination')
 		elif len(set(numbers_to_check)) != len(numbers_to_check): # Some repeated number
-			raise ModelError('There must be no repeated numbers')
+			raise ModelError('There must be no repeated elements')
 
 		self.attempts.append(numbers_to_check)
 		self.results.append(self.count_exact_and_partial_matches(numbers_to_check))
@@ -72,7 +72,7 @@ class MasterMind:
 	def is_looser(self):
 		return len(self.attempts) >= self.max_attempts
 
-	def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED"):
+	def template(self, attempts_left_label: str = "You have {} attempts left ", deads_injured_label: str = "DEADS - INJURED", formatter: callable = None):
 		"""comprueba el número de muertos y heridos que obtuvo el usuario"""
 
 		texto = attempts_left_label.format(self.max_attempts - len(self.attempts))
@@ -80,6 +80,9 @@ class MasterMind:
 
 		for i in range(len(self.attempts)):
 			exacts, partials = self.results[i][0], self.results[i][1]
-			texto += '\n{}:    {}         {}'.format(self.attempts[i], exacts, partials)
+			attempt_display = self.attempts[i]
+			if formatter:
+				attempt_display = formatter(attempt_display)
+			texto += '\n{}:    {}         {}'.format(attempt_display, exacts, partials)
 
 		return texto
