@@ -23,42 +23,14 @@ class BotMastermindMultiplayer(BotMastermindBase):
     def generate_inline_markup(self, game=None):
         if game and not game.combination_set:
             # Markup for the creator to set the combination
-            keyboard = []
-            row = []
-            for i, color in enumerate(self.colors):
-                num = self.color_to_num[color]
-                row.append(InlineKeyboardButton(color, callback_data=f"mmm_set_{num}"))
-                if (i + 1) % 4 == 0:
-                    keyboard.append(row)
-                    row = []
-            if row:
-                keyboard.append(row)
-            
-            action_row = [
-                InlineKeyboardButton("⌫", callback_data="mmm_del_set"),
-                InlineKeyboardButton("⏎", callback_data="mmm_sub_set")
-            ]
-            keyboard.append(action_row)
-            return InlineKeyboardMarkup(keyboard)
-        
+            return self.create_keyboard("mmm", "set", "del_set", "sub_set")
+
+
         # Standard game keyboard with different callback prefix to avoid conflicts
-        keyboard = []
-        row = []
-        for i, color in enumerate(self.colors):
-            num = self.color_to_num[color]
-            row.append(InlineKeyboardButton(color, callback_data=f"mmm_c_{num}"))
-            if (i + 1) % 4 == 0:
-                keyboard.append(row)
-                row = []
-        if row:
-            keyboard.append(row)
-        
-        action_row = [
-            InlineKeyboardButton("⌫", callback_data="mmm_delete"),
-            InlineKeyboardButton("⏎", callback_data="mmm_submit")
-        ]
-        keyboard.append(action_row)
-        return InlineKeyboardMarkup(keyboard)
+        return self.create_keyboard("mmm", "c", "delete", "submit")
+
+
+
 
     async def answer_button(self, update, context):
         query = update.callback_query

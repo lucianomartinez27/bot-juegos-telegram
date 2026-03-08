@@ -20,25 +20,26 @@ class BotMastermindBase(BotBase):
     def format_attempt(self, attempt):
         return "".join([self.num_to_color.get(num, num) for num in attempt])
 
-    def generate_inline_markup_base(self, game, prefix="mm"):
+    def generate_inline_markup_base(self):
+        return self.create_keyboard("mm", "c", "delete", "submit")
+
+    def create_keyboard(self, prefix, callback_prefix, del_prefix, sub_prefix) -> InlineKeyboardMarkup:
         keyboard = []
         row = []
         for i, color in enumerate(self.colors):
             num = self.color_to_num[color]
-            row.append(InlineKeyboardButton(color, callback_data=f"{prefix}_c_{num}"))
+            row.append(InlineKeyboardButton(color, callback_data=f"{prefix}_{callback_prefix}_{num}"))
             if (i + 1) % 4 == 0:
                 keyboard.append(row)
                 row = []
         if row:
             keyboard.append(row)
-        
-        # Action buttons
+
         action_row = [
-            InlineKeyboardButton("⌫", callback_data=f"{prefix}_delete"),
-            InlineKeyboardButton("⏎", callback_data=f"{prefix}_submit")
+            InlineKeyboardButton("⌫", callback_data=f"{prefix}_{del_prefix}"),
+            InlineKeyboardButton("⏎", callback_data=f"{prefix}_{sub_prefix}")
         ]
         keyboard.append(action_row)
-        
         return InlineKeyboardMarkup(keyboard)
 
     async def make_attempt_logic(self, bot, user_id, attempt, name="Player", query=None, game=None):

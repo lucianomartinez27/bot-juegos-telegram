@@ -61,7 +61,7 @@ class BotMastermind(BotMastermindBase):
         return self.users_data[str(user_id)]
 
     def generate_inline_markup(self, game=None):
-        return self.generate_inline_markup_base(game, prefix="mm")
+        return self.generate_inline_markup_base()
 
     async def answer_button(self, update, context):
         query = update.callback_query
