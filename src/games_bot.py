@@ -10,6 +10,8 @@ from games.TicTacToe.tictactoe_bot import BotTicTacToe
 from games.TicTacToe_MultiPlayer.inline_tictactoe_bot import BotTaTeTiInLine
 from games.RockPaperScissor.rock_paper_scissor_bot import BotRockPaperScissor
 from games.RockPaperScissor.rock_paper_scissor_multiplayer_bot import BotRockPaperScissorMultiplayer
+from games.Connect4.connect4_bot import BotConnect4
+from games.Connect4.inline_connect4_bot import BotConnect4InLine
 from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
@@ -28,6 +30,8 @@ bot_rps = BotRockPaperScissor()
 bot_tateti_inline = BotTaTeTiInLine()
 bot_hangman_multiplayer = BotHangmanMultiPlayer()
 bot_rps_multiplayer = BotRockPaperScissorMultiplayer()
+bot_connect4 = BotConnect4()
+bot_connect4_inline = BotConnect4InLine()
 from internationalization import set_translator, _, spanish
 
 from functools import wraps
@@ -58,7 +62,9 @@ class GamesTelegramBot(BotTelegram):
             bot_tateti_inline,
             bot_hangman_multiplayer,
             bot_rps,
-            bot_rps_multiplayer
+            bot_rps_multiplayer,
+            bot_connect4,
+            bot_connect4_inline
         ]}
         
         self.data_manager = DataManager(os.path.abspath(''))
@@ -138,6 +144,8 @@ class GamesTelegramBot(BotTelegram):
             return bot_hangman_multiplayer.game_id()
         elif query_data.startswith("mmm_"):
             return bot_mastermind_multiplayer.game_id()
+        elif query_data.startswith("c4_"):
+            return bot_connect4_inline.game_id()
         else:
             return bot_tateti_inline.game_id()
 
