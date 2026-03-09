@@ -12,6 +12,7 @@ from games.RockPaperScissor.rock_paper_scissor_bot import BotRockPaperScissor
 from games.RockPaperScissor.rock_paper_scissor_multiplayer_bot import BotRockPaperScissorMultiplayer
 from games.Connect4.connect4_bot import BotConnect4
 from games.Connect4.inline_connect4_bot import BotConnect4InLine
+from games.PringlesBoom.pringles_boom_bot import PringlesBoomBot
 from utils.data_manager import DataManager
 from telegram import InputTextMessageContent, InlineQueryResultArticle
 from uuid import uuid4
@@ -32,6 +33,7 @@ bot_hangman_multiplayer = BotHangmanMultiPlayer()
 bot_rps_multiplayer = BotRockPaperScissorMultiplayer()
 bot_connect4 = BotConnect4()
 bot_connect4_inline = BotConnect4InLine()
+bot_pringles_boom = PringlesBoomBot()
 from internationalization import set_translator, _, spanish
 
 from functools import wraps
@@ -64,7 +66,8 @@ class GamesTelegramBot(BotTelegram):
             bot_rps,
             bot_rps_multiplayer,
             bot_connect4,
-            bot_connect4_inline
+            bot_connect4_inline,
+            bot_pringles_boom
         ]}
         
         self.data_manager = DataManager(os.path.abspath(''))
@@ -106,7 +109,9 @@ class GamesTelegramBot(BotTelegram):
     async def display_games(self, update, context):
         games = [[InlineKeyboardButton(self._(game.name()), callback_data=game.game_id())] for game in
                     self.game_catalog.values() if not game.is_inline_game()]
-        await update.message.reply_text(self._("Available games are:"), reply_markup=InlineKeyboardMarkup(games))
+        reply_markup = InlineKeyboardMarkup(games)
+        await self.send_message(context.bot, self.get_user_id(update), self._("Select the game that you want to play:"), reply_markup=reply_markup)
+
 
     @game_session
     async def display_languages(self, update, context):
@@ -146,6 +151,10 @@ class GamesTelegramBot(BotTelegram):
             return bot_mastermind_multiplayer.game_id()
         elif query_data.startswith("c4_"):
             return bot_connect4_inline.game_id()
+        elif query_data.startswith("pb_"):
+            return bot_pringles_boom.game_id()
+        elif query_data.startswith("ttt_"):
+            return bot_tateti_inline.game_id()
         else:
             return bot_tateti_inline.game_id()
 

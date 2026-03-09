@@ -21,7 +21,7 @@ class BotTaTeTiInLine(BotBase):
         return self._('Tic-Tac-Toe MultiPlayer')
 
     def generate_inline_markup(self):
-        options = [[InlineKeyboardButton(" ", callback_data="{}".format(i))
+        options = [[InlineKeyboardButton(" ", callback_data="ttt_{}".format(i))
                      for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
         return InlineKeyboardMarkup(options)
     
@@ -39,7 +39,10 @@ class BotTaTeTiInLine(BotBase):
         game = self.get_game(message_id)
         self.reset_player_symbols(context, game)
        
-        cell = int(update.callback_query.data)
+        query_data = update.callback_query.data
+        if not query_data.startswith("ttt_"):
+            return
+        cell = int(query_data.split("_")[1])
         bot = context.bot
         game = self.get_game(message_id)
 

@@ -7,7 +7,7 @@ from .tictactoe import AgainstComputerTicTacToe
 
 
 def generate_markup(game):
-    board_buttons = [[InlineKeyboardButton(game.board[i], callback_data="{}".format(i))
+    board_buttons = [[InlineKeyboardButton(game.board[i], callback_data="ttt_{}".format(i))
                  for i in j] for j in [[0, 1, 2], [3, 4, 5], [6, 7, 8]]]
     return InlineKeyboardMarkup(board_buttons)
 
@@ -60,7 +60,10 @@ class BotTicTacToe(BotBase):
         return [game.player_symbol, game.computer_symbol]
 
     async def answer_button(self, update, context):
-        cell = int(update.callback_query.data)
+        query_data = update.callback_query.data
+        if not query_data.startswith("ttt_"):
+             return
+        cell = int(query_data.split("_")[1])
         bot = context.bot
         user_id = self.get_user_id(update)
         message_id = self.get_message_id(update)
