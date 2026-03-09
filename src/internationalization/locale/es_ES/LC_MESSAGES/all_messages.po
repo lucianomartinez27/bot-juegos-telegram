@@ -304,6 +304,24 @@ msgstr "Esa columna ya está llena, por favor elige otra."
 msgid "Debes esperar a que tu oponente marque una casilla."
 msgstr "Debes esperar a que tu oponente marque una casilla."
 
+msgid "The combination is invalid. It must have {} elements"
+msgstr "La combinación es inválida. Debe tener {} elementos."
+
+msgid "You already tried this combination"
+msgstr "Ya has probado esta combinación."
+
+msgid "There must be no repeated elements"
+msgstr "No debe haber elementos repetidos."
+
+msgid "You won"
+msgstr "Ganaste"
+
+msgid "You lost"
+msgstr "Perdiste"
+
+msgid "Was a tie"
+msgstr "Fue un empate"
+
 msgid " won"
 msgstr " ganó"
 
@@ -344,3 +362,60 @@ msgstr ""
 "El primero en jugar será el creador.\n"
 "Creador: Selecciona una combinación secreta de {} elementos."
 
+
+msgid "Pringles Boom Challenge"
+msgstr "Desafío Pringles Boom"
+
+msgid "Choose your chip emoji:"
+msgstr "Elige el emoji de tus papas:"
+
+msgid "--- {}'s Field ---"
+msgstr "--- Campo de {} ---"
+
+msgid "Action registered!"
+msgstr "¡Acción registrada!"
+
+msgid "Setup Phase: Place 3 bombs on your board!\n{}: {}/3, {}: {}/3"
+msgstr "Fase de preparación: ¡Coloca 3 bombas en tu tablero!\n{}: {}/3, {}: {}/3"
+
+msgid "Choose your emoji!\n{}: {}, {}: {}"
+msgstr "¡Elige tu emoji!\n{}: {}, {}: {}"
+
+msgid "Game Over! {} wins!"
+msgstr "¡Juego terminado! ¡{} gana!"
+
+msgid "Turn: {}. Pick a chip from the opponent's grid!"
+msgstr "Turno: {}. ¡Elige una papa del tablero del oponente!"
+
+msgid "You must choose an emoji first!"
+msgstr "¡Primero debes elegir un emoji!"
+
+msgid "You can't place bombs now!"
+msgstr "¡No puedes colocar bombas ahora!"
+
+msgid "You are Player 1! You can only place bombs on your own board."
+msgstr "¡Eres el Jugador 1! Solo puedes colocar bombas en tu propio tablero."
+
+msgid "You are Player 2! You can only place bombs on your own board."
+msgstr "¡Eres el Jugador 2! Solo puedes colocar bombas en tu propio tablero."
+
+msgid "You are not part of this game."
+msgstr "No eres parte de este juego."
+
+msgid "You can only place 3 bombs!"
+msgstr "¡Solo puedes colocar 3 bombas!"
+
+msgid "You can't choose an emoji now!"
+msgstr "¡No puedes elegir un emoji ahora!"
+
+msgid "Wait your turn! ✋"
+msgstr "¡Espera tu turno! ✋"
+
+msgid "You must pick from your opponent's grid!"
+msgstr "¡Debes elegir en el tablero de tu oponente!"
+
+msgid "This chip has already been picked."
+msgstr "Esta papa ya ha sido elegida."
+
+msgid "An error occurred."
+msgstr "Ocurrió un error."
