@@ -87,5 +87,33 @@ class TestPringlesBoomGame(unittest.TestCase):
         self.assertEqual(game.exploded_count2, 3)
         self.assertEqual(game.phase, PringlesBoomGame.PHASE_FINISHED)
 
+    def test_same_user_cannot_place_bombs_on_both_boards(self):
+        game = PringlesBoomGame(player1_id=1, player1_name="Alice")
+        
+        # Alice places a bomb on board 1
+        game.place_bomb(1, 0, 1)
+        self.assertEqual(game.player1_id, 1)
+        
+        # Alice tries to place a bomb on board 2
+        with self.assertRaises(ModelError) as cm:
+            game.place_bomb(1, 0, 2)
+        self.assertEqual(str(cm.exception), "You are Player 1! You can only place bombs on your own board.")
+        
+        # Another user becomes Player 2 by placing on board 2
+        game.place_bomb(2, 0, 2, user_name="Bob")
+        self.assertEqual(game.player2_id, 2)
+        self.assertEqual(game.player2_name, "Bob")
+        
+        # Bob tries to place a bomb on board 1
+        with self.assertRaises(ModelError) as cm:
+            game.place_bomb(2, 1, 1)
+        self.assertEqual(str(cm.exception), "You are Player 2! You can only place bombs on your own board.")
+
+    def test_third_user_cannot_place_bombs(self):
+        game = PringlesBoomGame(player1_id=1, player2_id=2)
+        with self.assertRaises(ModelError) as cm:
+            game.place_bomb(3, 0, 1)
+        self.assertEqual(str(cm.exception), "You are not part of this game.")
+
 if __name__ == '__main__':
     unittest.main()

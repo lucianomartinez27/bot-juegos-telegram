@@ -50,18 +50,31 @@ class PringlesBoomGame:
         if self.phase != self.PHASE_SETUP:
             raise ModelError("You can't place bombs now!")
 
+        # Initialize Player 1 if not set
         if self.player1_id is None:
             self.player1_id = user_id
             if user_name:
                 self.player1_name = user_name
-        elif self.player2_id is None and user_id != self.player1_id:
+        
+        # Determine if this user is already registered as a player
+        if user_id == self.player1_id:
+            if grid_num != 1:
+                raise ModelError("You are Player 1! You can only place bombs on your own board.")
+        elif self.player2_id == user_id:
+            if grid_num != 2:
+                raise ModelError("You are Player 2! You can only place bombs on your own board.")
+        elif self.player2_id is None:
+            # New user wants to be Player 2
             self.player2_id = user_id
             if user_name:
                 self.player2_name = user_name
+            if grid_num != 2:
+                raise ModelError("You are Player 2! You can only place bombs on your own board.")
+        else:
+            # Someone else entirely
+            raise ModelError("You are not part of this game.")
 
         if grid_num == 1:
-            if user_id != self.player1_id:
-                raise ModelError("This is not your board!")
             if cell_index in self.bombs1:
                 self.bombs1.remove(cell_index)
             elif len(self.bombs1) < 3:
@@ -69,12 +82,6 @@ class PringlesBoomGame:
             else:
                 raise ModelError("You can only place 3 bombs!")
         elif grid_num == 2:
-            if self.player2_id is None:
-                self.player2_id = user_id
-                if user_name:
-                    self.player2_name = user_name
-            if user_id != self.player2_id:
-                raise ModelError("This is not your board!")
             if cell_index in self.bombs2:
                 self.bombs2.remove(cell_index)
             elif len(self.bombs2) < 3:
