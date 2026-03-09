@@ -219,3 +219,60 @@ msgstr ""
 msgid " won"
 msgstr ""
 
+
+msgid "Pringles Boom Challenge"
+msgstr ""
+
+msgid "Choose your chip emoji:"
+msgstr ""
+
+msgid "--- {}'s Field ---"
+msgstr ""
+
+msgid "Action registered!"
+msgstr ""
+
+msgid "Setup Phase: Place 3 bombs on your board!\n{}: {}/3, {}: {}/3"
+msgstr ""
+
+msgid "Choose your emoji!\n{}: {}, {}: {}"
+msgstr ""
+
+msgid "Game Over! {} wins!"
+msgstr ""
+
+msgid "Turn: {}. Pick a chip from the opponent's grid!"
+msgstr ""
+
+msgid "You must choose an emoji first!"
+msgstr ""
+
+msgid "You can't place bombs now!"
+msgstr ""
+
+msgid "You are Player 1! You can only place bombs on your own board."
+msgstr ""
+
+msgid "You are Player 2! You can only place bombs on your own board."
+msgstr ""
+
+msgid "You are not part of this game."
+msgstr ""
+
+msgid "You can only place 3 bombs!"
+msgstr ""
+
+msgid "You can't choose an emoji now!"
+msgstr ""
+
+msgid "Wait your turn! ✋"
+msgstr ""
+
+msgid "You must pick from your opponent's grid!"
+msgstr ""
+
+msgid "This chip has already been picked."
+msgstr ""
+
+msgid "An error occurred."
+msgstr ""

@@ -304,27 +304,6 @@ msgstr "Esa columna ya está llena, por favor elige otra."
 msgid "Debes esperar a que tu oponente marque una casilla."
 msgstr "Debes esperar a que tu oponente marque una casilla."
 
-msgid "The combination is invalid. It must have {} elements"
-msgstr "La combinación es inválida. Debe tener {} elementos."
-
-msgid "You already tried this combination"
-msgstr "Ya has probado esta combinación."
-
-msgid "There must be no repeated elements"
-msgstr "No debe haber elementos repetidos."
-
-msgid "You won"
-msgstr "Ganaste"
-
-msgid "You lost"
-msgstr "Perdiste"
-
-msgid "Was a tie"
-msgstr "Fue un empate"
-
-msgid " won"
-msgstr " ganó"
-
 msgid "The game has already finished."
 msgstr "El juego ya ha terminado."
 
