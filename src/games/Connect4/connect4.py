@@ -1,6 +1,7 @@
 import json
 from utils.errors import ModelError
 import random
+from internationalization import _
 
 class Connect4Game:
     def __init__(self, rows=6, cols=7):
@@ -71,11 +72,11 @@ class Connect4Game:
 
     def mark_column(self, symbol, col):
         if col < 0 or col >= self.cols:
-            raise ModelError("Columna inválida.")
+            raise ModelError(_("Columna inválida."))
         if self.board[0][col] != " ":
-            raise ModelError("Esa columna ya está llena, por favor elige otra.")
+            raise ModelError(_("Esa columna ya está llena, por favor elige otra."))
         if self.last_movement_symbol == symbol:
-            raise ModelError("Debes esperar a que tu oponente marque una casilla.")
+            raise ModelError(_("Debes esperar a que tu oponente marque una casilla."))
 
         # Find the lowest empty row in this column
         for r in range(self.rows - 1, -1, -1):

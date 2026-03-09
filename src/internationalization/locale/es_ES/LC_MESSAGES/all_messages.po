@@ -286,6 +286,27 @@ msgstr "Selección: {}"
 msgid "It is not your turn! Wait for another player."
 msgstr "¡No es tu turno! Espera a otro jugador."
 
+msgid "- Connect 4"
+msgstr "- Conecta 4"
+
+msgid "Connect 4 MultiPlayer"
+msgstr "Conecta 4 Multijugador"
+
+msgid "Please choose 🔴 or 🟡"
+msgstr "Por favor, elige 🔴 o 🟡"
+
+msgid "Columna inválida."
+msgstr "Columna inválida."
+
+msgid "Esa columna ya está llena, por favor elige otra."
+msgstr "Esa columna ya está llena, por favor elige otra."
+
+msgid "Debes esperar a que tu oponente marque una casilla."
+msgstr "Debes esperar a que tu oponente marque una casilla."
+
+msgid " won"
+msgstr " ganó"
+
 msgid "The game has already finished."
 msgstr "El juego ya ha terminado."
 
